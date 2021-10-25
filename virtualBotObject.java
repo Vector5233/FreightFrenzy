@@ -11,6 +11,7 @@ class virtualBotObject {
     CRServo freightGrabber;
     LinearOpMode parent;
 
+    final double DUCKSPINNERPOWER = .5;
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
@@ -32,5 +33,18 @@ class virtualBotObject {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
         //Test of GitHub
+    }
+    public void turnOnDuckSpinner (){
+        leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
+        rightDuckSpinner.setPower(DUCKSPINNERPOWER);
+    }
+
+    public void turnOffDuckSpinner (){
+        leftDuckSpinner.setPower(0);
+        rightDuckSpinner.setPower(0);
+    }
+
+    public void turnOnLift(){
+
     }
 }
