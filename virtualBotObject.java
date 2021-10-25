@@ -32,6 +32,6 @@ class virtualBotObject {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
         //Test of GitHub
-        //Additional test of GitHub
+        //test of mac connection to github
     }
 }
