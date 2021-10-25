@@ -33,6 +33,7 @@ class virtualBotObject {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
         //Test of GitHub
+        //test of mac connection to github
     }
     public void turnOnDuckSpinner (){
         leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
