@@ -11,6 +11,7 @@ class virtualBotObject {
     CRServo freightGrabber;
     LinearOpMode parent;
 
+    final double DUCKSPINNERPOWER = .5;
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
@@ -34,5 +35,18 @@ class virtualBotObject {
         //Test of GitHub
         //test of mac connection to github
         // test of files 3
+    }
+    public void turnOnDuckSpinner (){
+        leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
+        rightDuckSpinner.setPower(DUCKSPINNERPOWER);
+    }
+
+    public void turnOffDuckSpinner (){
+        leftDuckSpinner.setPower(0);
+        rightDuckSpinner.setPower(0);
+    }
+
+    public void turnOnLift(){
+
     }
 }
