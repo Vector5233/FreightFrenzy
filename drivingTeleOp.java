@@ -24,6 +24,7 @@ public class drivingTeleOp extends OpMode {
         backRight = hardwareMap.dcMotor.get("backRight");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         freightLift = hardwareMap.dcMotor.get("freightLift");
+        freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
 
@@ -77,6 +78,7 @@ public class drivingTeleOp extends OpMode {
     public void setFreightLift(){
         double liftPower = trimPower(gamepad2.right_stick_y);
         freightLift.setPower(liftPower);
+        telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
     }
     public void setSlowApproach() {
         if (gamepad1.dpad_up) {

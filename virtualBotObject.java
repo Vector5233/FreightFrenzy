@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import java.util.function.LongUnaryOperator;
+
 class virtualBotObject {
 
     DcMotorEx backLeft, backRight, frontLeft, frontRight, leftDuckSpinner, rightDuckSpinner, freightLift;
@@ -12,6 +14,7 @@ class virtualBotObject {
     LinearOpMode parent;
 
     final double DUCKSPINNERPOWER = .5;
+    final double LIFTPOWER = 0;
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
@@ -46,6 +49,9 @@ class virtualBotObject {
     }
 
     public void turnOnLift(){
-
+    freightLift.setPower(LIFTPOWER);
+    }
+    public void turnOffLift(){
+        freightLift.setPower(0);
     }
 }
