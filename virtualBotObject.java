@@ -14,7 +14,7 @@ class virtualBotObject {
     LinearOpMode parent;
 
     final double DUCKSPINNERPOWER = .5;
-    final double LIFTPOWER = 0;
+    final double LIFTPOWER = .7;
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
@@ -49,8 +49,14 @@ class virtualBotObject {
         rightDuckSpinner.setPower(0);
     }
 
-    public void turnOnLift(){
-    freightLift.setPower(LIFTPOWER);
+    public void turnOnLift(int level) {
+        int[] ticks = {0, 10, 20, 30};
+        freightLift.setTargetPosition(ticks[level]);
+        freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        freightLift.setPower(LIFTPOWER);
+        while (freightLift.isBusy() && parent.opModeIsActive()) {
+            assert true;
+        }
     }
     public void turnOffLift(){
         freightLift.setPower(0);

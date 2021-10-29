@@ -8,5 +8,11 @@ public class VirtualBotTester extends LinearOpMode {
     public void runOpMode() {
         robot.init();
         waitForStart();
+        robot.turnOnDuckSpinner();
+        sleep(5000);
+        robot.turnOffDuckSpinner();
+        telemetry.addLine("done");
+        telemetry.update();
+        sleep(5000);
     }
 }
