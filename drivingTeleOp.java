@@ -29,7 +29,7 @@ public class drivingTeleOp extends OpMode {
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
 
-        freightGrabber = hardwareMap.crservo.get("freightGrabber");
+        freightGrabber = (DcMotorEx) hardwareMap.dcMotor.get("freightGrabber");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
