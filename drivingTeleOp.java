@@ -5,14 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Gru", group = "Red")
 
 public class drivingTeleOp extends OpMode {
-    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift;
+    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, freightGrabber;
 
-    CRServo freightGrabber;
+    Servo freightDoor;
 
     final double approachSpeed = .2;
 

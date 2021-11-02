@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -9,12 +10,13 @@ import java.util.function.LongUnaryOperator;
 
 class virtualBotObject {
 
-    DcMotorEx backLeft, backRight, frontLeft, frontRight, leftDuckSpinner, rightDuckSpinner, freightLift;
-    CRServo freightGrabber;
+    DcMotorEx backLeft, backRight, frontLeft, frontRight, leftDuckSpinner, rightDuckSpinner, freightLift, freightGrabber;
+    Servo freightDoor;
     LinearOpMode parent;
 
     final double DUCKSPINNERPOWER = .5;
-    final double LIFTPOWER = .7;
+    final double LIFTPOWER = 1;
+    final double DOORPOSITION = .25;
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
@@ -27,8 +29,8 @@ class virtualBotObject {
         leftDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("rightDuckSpinner");
         freightLift = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightLift");
-
-        freightGrabber = parent.hardwareMap.crservo.get("freightGrabber");
+        freightGrabber = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightGrabber");
+        freightDoor = parent.hardwareMap.servo.get("freightDoor");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -60,5 +62,9 @@ class virtualBotObject {
     }
     public void turnOffLift(){
         freightLift.setPower(0);
+    }
+
+    public void releaseDoor(){
+        freightDoor.setPosition(DOORPOSITION);
     }
 }
