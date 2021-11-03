@@ -8,9 +8,9 @@ public class VirtualBotTester extends LinearOpMode {
     public void runOpMode() {
         robot.init();
         waitForStart();
-        robot.driveForward (.2, 700);
+        robot.driveForward (.6, 700);
         sleep(5000);
-        robot.driveForward(.6, -700);
+        robot.driveForward(.01, -700);
     }
 }
 
