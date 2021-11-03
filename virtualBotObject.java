@@ -29,8 +29,8 @@ class virtualBotObject {
         leftDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("rightDuckSpinner");
         freightLift = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightLift");
-        freightGrabber = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightGrabber");
-        freightDoor = parent.hardwareMap.servo.get("freightDoor");
+        //freightGrabber = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightGrabber");
+        //freightDoor = parent.hardwareMap.servo.get("freightDoor");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -66,5 +66,28 @@ class virtualBotObject {
 
     public void releaseDoor(){
         freightDoor.setPosition(DOORPOSITION);
+    }
+
+    public void driveForward(double power, int ticks){
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        backRight.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(ticks);
+        frontRight.setTargetPosition(ticks);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setPower(power);
+        backRight.setPower(power);
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+
+        while(frontLeft.isBusy() && parent.opModeIsActive()){
+            //food;
+        }
     }
 }

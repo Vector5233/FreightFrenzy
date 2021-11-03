@@ -24,6 +24,7 @@ public class drivingTeleOp extends OpMode {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
         frontRight = hardwareMap.dcMotor.get("frontRight");
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freightLift = hardwareMap.dcMotor.get("freightLift");
         freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
@@ -41,6 +42,8 @@ public class drivingTeleOp extends OpMode {
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
+        telemetry.addData("Drive Position: ", backLeft.getCurrentPosition());
+
         double frontLeftPower = forward + strafe + turn;
         double frontRightPower = forward - strafe - turn;
         double backLeftPower = forward - strafe + turn;
