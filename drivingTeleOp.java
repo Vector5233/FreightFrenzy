@@ -5,14 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Gru", group = "Red")
 
 public class drivingTeleOp extends OpMode {
-    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift;
+    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, freightGrabber;
 
-    CRServo freightGrabber;
+    Servo freightDoor;
 
     final double APPROACHSPEED = .2;
     final double DUCKSPINNERPOWER = .5;
@@ -26,12 +27,13 @@ public class drivingTeleOp extends OpMode {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
         frontRight = hardwareMap.dcMotor.get("frontRight");
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freightLift = hardwareMap.dcMotor.get("freightLift");
         freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
 
-        freightGrabber = hardwareMap.crservo.get("freightGrabber");
+        freightGrabber = hardwareMap.dcMotor.get("freightGrabber");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -43,6 +45,8 @@ public class drivingTeleOp extends OpMode {
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
+        telemetry.addData("Drive Position: ", backLeft.getCurrentPosition());
+
         double frontLeftPower = forward + strafe + turn;
         double frontRightPower = forward - strafe - turn;
         double backLeftPower = forward - strafe + turn;

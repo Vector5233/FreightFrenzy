@@ -39,19 +39,18 @@ class virtualBotObject {
         //test of mac connection to github
         // test of files 3
     }
-//Turns on duck spinners
     public void turnOnDuckSpinner (){
         leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
         rightDuckSpinner.setPower(DUCKSPINNERPOWER);
     }
-//Turns off duck spinners
+
     public void turnOffDuckSpinner (){
         leftDuckSpinner.setPower(0);
         rightDuckSpinner.setPower(0);
     }
-//Method to turn on Lift and run to designated height provided by level
+
     public void turnOnLift(int level) {
-        int[] ticks = {0, 1211, 3750, 6357};
+        int[] ticks = {0, 10, 20, 30};
         freightLift.setTargetPosition(ticks[level]);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);
@@ -59,8 +58,6 @@ class virtualBotObject {
             assert true;
         }
     }
-
-    //method to turn off lift when completed
     public void turnOffLift(){
         freightLift.setPower(0);
     }
