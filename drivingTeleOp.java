@@ -14,7 +14,10 @@ public class drivingTeleOp extends OpMode {
 
     CRServo freightGrabber;
 
-    final double approachSpeed = .2;
+    final double APPROACHSPEED = .2;
+    final double DUCKSPINNERPOWER = .5;
+    final double LIFTPOWER = 1;
+    int level = (0);
 
     //Define Servos, Motors, set values
 
@@ -34,7 +37,7 @@ public class drivingTeleOp extends OpMode {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
-
+        freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
     public void loop(){
         double forward = -gamepad1.left_stick_y;
@@ -52,15 +55,14 @@ public class drivingTeleOp extends OpMode {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
-        setFreightGrabber();
+        //setFreightGrabber();
         setDuckSpinners();
+        //Stopped working
         setFreightLift();
+        setFreightLiftSpecific();
         setSlowApproach();
-
-
-
-
     }
+
     public double trimPower(double Power) {
         final double THRESHOLD = .1;
         if (Math.abs(Power) < THRESHOLD) {
@@ -79,17 +81,38 @@ public class drivingTeleOp extends OpMode {
         double liftPower = trimPower(gamepad2.right_stick_y);
         freightLift.setPower(liftPower);
         telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
+
     }
+
+    public int setFreightLiftSpecific() {
+        int[] ticks = {0, 1211, 3750, 6357};
+        freightLift.setTargetPosition(ticks[level]);
+        freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        freightLift.setPower(LIFTPOWER);
+        if (gamepad2.x) {
+            level = 0;
+        }
+        else if (gamepad2.y) {
+            level = 1;
+        }
+        else if (gamepad2.b) {
+            level = 2;
+        }
+        else if (gamepad2.a) {
+            level = 3;
+        }
+        return level;
+    }
+
     public void setSlowApproach() {
         if (gamepad1.dpad_up) {
-            frontLeft.setPower(approachSpeed);
-            frontRight.setPower(approachSpeed);
-            backLeft.setPower(approachSpeed);
-            backRight.setPower(approachSpeed);
+            frontLeft.setPower(APPROACHSPEED);
+            frontRight.setPower(APPROACHSPEED);
+            backLeft.setPower(APPROACHSPEED);
+            backRight.setPower(APPROACHSPEED);
         }
     }
 
-    final double DUCKSPINNERPOWER = .5;
     public void setDuckSpinners(){
         if (gamepad2.left_bumper) {
             leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
