@@ -14,5 +14,6 @@ public class VirtualBotTester extends LinearOpMode {
         telemetry.addLine("done");
         telemetry.update();
         sleep(5000);
+        robot.deliverBlock(3);
     }
 }

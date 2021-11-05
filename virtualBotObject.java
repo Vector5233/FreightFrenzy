@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -9,12 +10,15 @@ import java.util.function.LongUnaryOperator;
 
 class virtualBotObject {
 
-    DcMotorEx backLeft, backRight, frontLeft, frontRight, leftDuckSpinner, rightDuckSpinner, freightLift;
-    CRServo freightGrabber;
+    DcMotorEx backLeft, backRight, frontLeft, frontRight, leftDuckSpinner, rightDuckSpinner, freightLift, freightGrabber;
+    Servo freightDoor, bucketDeliver;
     LinearOpMode parent;
 
     final double DUCKSPINNERPOWER = .5;
-    final double LIFTPOWER = .7;
+    final double LIFTPOWER = 1;
+    final double DOORPOSITION = .25;
+    final double BUCKETPOSITION = .5;
+
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
@@ -27,8 +31,8 @@ class virtualBotObject {
         leftDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("rightDuckSpinner");
         freightLift = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightLift");
-
-        freightGrabber = parent.hardwareMap.crservo.get("freightGrabber");
+        //freightGrabber = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightGrabber");
+        //freightDoor = parent.hardwareMap.servo.get("freightDoor");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -39,18 +43,19 @@ class virtualBotObject {
         //test of mac connection to github
         // test of files 3
     }
-    public void turnOnDuckSpinner (){
+
+    public void turnOnDuckSpinner() {
         leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
         rightDuckSpinner.setPower(DUCKSPINNERPOWER);
     }
 
-    public void turnOffDuckSpinner (){
+    public void turnOffDuckSpinner() {
         leftDuckSpinner.setPower(0);
         rightDuckSpinner.setPower(0);
     }
 
     public void turnOnLift(int level) {
-        int[] ticks = {0, 10, 20, 30};
+        int[] ticks = {0, 1211, 3750, 6357};
         freightLift.setTargetPosition(ticks[level]);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);
@@ -58,7 +63,76 @@ class virtualBotObject {
             assert true;
         }
     }
-    public void turnOffLift(){
+
+    public void turnOffLift() {
         freightLift.setPower(0);
+    }
+
+    public void releaseDoor() {
+        freightDoor.setPosition(DOORPOSITION);
+    }
+
+    public void driveForward(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        backRight.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setPower(power);
+        backRight.setPower(power);
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+
+        while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
+            assert true;
+        }
+    }
+
+    public void setModeAll(DcMotor.RunMode mode) {
+        backLeft.setMode(mode);
+        backRight.setMode(mode);
+        frontLeft.setMode(mode);
+        frontRight.setMode(mode);
+    }
+
+    public void setPowerAll(double power) {
+        backLeft.setPower(power);
+        backRight.setPower(power);
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+    }
+
+    public void autoStrafe(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(-ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+
+        while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
+        }
+    }
+
+    public void autoTurn(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(-ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+
+        while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
+            assert true;
+        }
+    }
+
+    public void deliverBlock(int level){
+        turnOnLift(level);
+        bucketDeliver.setPosition(BUCKETPOSITION);
+        turnOffLift();
     }
 }

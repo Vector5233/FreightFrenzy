@@ -61,9 +61,8 @@ public class drivingTeleOp extends OpMode {
         backRight.setPower(backRightPower);
         //setFreightGrabber();
         setDuckSpinners();
-        //Stopped working
-        setFreightLift();
         setFreightLiftSpecific();
+        setFreightLift();
         setSlowApproach();
     }
 
