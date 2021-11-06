@@ -1,19 +1,24 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Sensor;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Gru", group = "Red")
 
 public class drivingTeleOp extends OpMode {
-    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, freightGrabber;
+    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, grabberMotor;
 
-    Servo freightDoor;
+    Servo intakeServo, cameraServo, bucketServo;
+
+    DigitalChannel touchSensor;
 
     final double APPROACHSPEED = .2;
     final double DUCKSPINNERPOWER = .5;
@@ -32,14 +37,18 @@ public class drivingTeleOp extends OpMode {
         freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
-
-        freightGrabber = hardwareMap.dcMotor.get("freightGrabber");
+        grabberMotor = hardwareMap.dcMotor.get("grabberMotor");
+        intakeServo = hardwareMap.servo.get("intakeServo");
+        cameraServo = hardwareMap.servo.get("cameraServo");
+        bucketServo = hardwareMap.servo.get("bucketServo");
+        touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
     }
     public void loop(){
         double forward = -gamepad1.left_stick_y;
@@ -77,7 +86,7 @@ public class drivingTeleOp extends OpMode {
 
     public void setFreightGrabber(){
         double freightPower = trimPower(-gamepad2.left_stick_y);
-        freightGrabber.setPower(freightPower);
+        //freightGrabber.setPower(freightPower);
     }
 
     public void setFreightLift(){
@@ -129,5 +138,9 @@ public class drivingTeleOp extends OpMode {
         else {
             rightDuckSpinner.setPower(0);
         }
+    }
+
+    public void setBucketServo(){
+
     }
 }
