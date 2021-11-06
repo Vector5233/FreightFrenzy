@@ -43,17 +43,17 @@ class virtualBotObject {
         //test of mac connection to github
         // test of files 3
     }
-
+//Turns on the duck spinners
     public void turnOnDuckSpinner() {
         leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
         rightDuckSpinner.setPower(DUCKSPINNERPOWER);
     }
-
+//Turns off the duck spinners
     public void turnOffDuckSpinner() {
         leftDuckSpinner.setPower(0);
         rightDuckSpinner.setPower(0);
     }
-
+//Moves lift to specific level specified by int
     public void turnOnLift(int level) {
         int[] ticks = {0, 1211, 3750, 6357};
         freightLift.setTargetPosition(ticks[level]);
@@ -63,15 +63,15 @@ class virtualBotObject {
             assert true;
         }
     }
-
+// Turns off the lift
     public void turnOffLift() {
         freightLift.setPower(0);
     }
 
-    public void releaseDoor() {
+    /*public void releaseDoor() {
         freightDoor.setPosition(DOORPOSITION);
-    }
-
+    }*/
+//Makes the robot drive forward specified by int ticks
     public void driveForward(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
@@ -79,30 +79,31 @@ class virtualBotObject {
         frontLeft.setTargetPosition(ticks);
         frontRight.setTargetPosition(ticks);
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setPower(power);
+        setPowerAll(power);
+        /*backLeft.setPower(power);
         backRight.setPower(power);
         frontLeft.setPower(power);
-        frontRight.setPower(power);
+        frontRight.setPower(power);*/
 
         while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
             assert true;
         }
     }
-
+//Sets the modes to specified mode
     public void setModeAll(DcMotor.RunMode mode) {
         backLeft.setMode(mode);
         backRight.setMode(mode);
         frontLeft.setMode(mode);
         frontRight.setMode(mode);
     }
-
+//Sets power to specified power
     public void setPowerAll(double power) {
         backLeft.setPower(power);
         backRight.setPower(power);
         frontLeft.setPower(power);
         frontRight.setPower(power);
     }
-
+//Strafes to location specified by int ticks
     public void autoStrafe(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
@@ -115,7 +116,7 @@ class virtualBotObject {
         while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
         }
     }
-
+//Turns to location specified by int ticks
     public void autoTurn(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
@@ -129,7 +130,7 @@ class virtualBotObject {
             assert true;
         }
     }
-
+//Delivers the block after setting lift to specified location
     public void deliverBlock(int level){
         turnOnLift(level);
         bucketDeliver.setPosition(BUCKETPOSITION);
