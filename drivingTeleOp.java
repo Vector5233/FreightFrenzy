@@ -23,6 +23,12 @@ public class drivingTeleOp extends OpMode {
     final double APPROACHSPEED = .2;
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
+    final double SAFETYBUCKET = 0;
+    final double BUCKETCOLLECT = .5;
+    final double BUCKETDUMP = .75;
+    final double THRESHOLD = .1;
+    final double GRABBERSPEED = 1;
+    final double GRABBERSERVO = 1;
     int level = (0);
 
     //Define Servos, Motors, set values
@@ -49,13 +55,15 @@ public class drivingTeleOp extends OpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
+
+        setGrabberServo();
     }
     public void loop(){
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
         telemetry.addData("Drive Position: ", backLeft.getCurrentPosition());
-
+        telemetry.update();
         double frontLeftPower = forward + strafe + turn;
         double frontRightPower = forward - strafe - turn;
         double backLeftPower = forward - strafe + turn;
@@ -68,25 +76,22 @@ public class drivingTeleOp extends OpMode {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
-        //setFreightGrabber();
+
+
         setDuckSpinners();
-        setFreightLiftSpecific();
+        //setFreightLiftSpecific();
         setFreightLift();
         setSlowApproach();
+        setBucketGrabber();
+        setBucketServo();
     }
 
     public double trimPower(double Power) {
-        final double THRESHOLD = .1;
         if (Math.abs(Power) < THRESHOLD) {
             Power = 0;
         }
         return Power;
 
-    }
-
-    public void setFreightGrabber(){
-        double freightPower = trimPower(-gamepad2.left_stick_y);
-        //freightGrabber.setPower(freightPower);
     }
 
     public void setFreightLift(){
@@ -141,6 +146,30 @@ public class drivingTeleOp extends OpMode {
     }
 
     public void setBucketServo(){
+        if (gamepad2.left_stick_y > THRESHOLD) {
+            bucketServo.setPosition(BUCKETCOLLECT);
+        }
+          else if (gamepad2.left_stick_button){
+              bucketServo.setPosition(BUCKETDUMP);
+        }
+          else {
+              bucketServo.setPosition(SAFETYBUCKET);
+        }
+    }
 
+    public void setBucketGrabber(){
+        if (gamepad2.left_trigger > THRESHOLD){
+            grabberMotor.setPower(GRABBERSPEED);
+        }
+        else if (gamepad2.right_trigger > THRESHOLD){
+            grabberMotor.setPower(-GRABBERSPEED);
+        }
+        else{
+            grabberMotor.setPower(0);
+        }
+    }
+
+    public void setGrabberServo(){
+        intakeServo.setPosition(GRABBERSERVO);
     }
 }
