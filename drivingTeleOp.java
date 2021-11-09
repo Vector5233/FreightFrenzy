@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.vuforia.CameraDevice;
 
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Gru", group = "Red")
@@ -16,7 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class drivingTeleOp extends OpMode {
     DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, grabberMotor;
 
-    Servo intakeServo, cameraServo, bucketServo;
+    Servo grabberServo, cameraServo, bucketServo;
 
     DigitalChannel touchSensor;
 
@@ -30,6 +31,7 @@ public class drivingTeleOp extends OpMode {
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 1;
     int level = (0);
+    final double CAMERASERVO = 0;
 
     //Define Servos, Motors, set values
 
@@ -44,7 +46,7 @@ public class drivingTeleOp extends OpMode {
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
         grabberMotor = hardwareMap.dcMotor.get("grabberMotor");
-        intakeServo = hardwareMap.servo.get("intakeServo");
+        grabberServo = hardwareMap.servo.get("grabberServo");
         cameraServo = hardwareMap.servo.get("cameraServo");
         bucketServo = hardwareMap.servo.get("bucketServo");
         touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
@@ -57,8 +59,11 @@ public class drivingTeleOp extends OpMode {
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         setGrabberServo();
+        // also initialize cameraServo and grabberServo
     }
-    public void loop(){
+
+    public void loop() {
+        // recommend: place in method from here...
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
@@ -76,7 +81,7 @@ public class drivingTeleOp extends OpMode {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
-
+        // ... to here
 
         setDuckSpinners();
         //setFreightLiftSpecific();
@@ -94,7 +99,7 @@ public class drivingTeleOp extends OpMode {
 
     }
 
-    public void setFreightLift(){
+    public void setFreightLift() {
         double liftPower = trimPower(gamepad2.right_stick_y);
         freightLift.setPower(liftPower);
         telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
@@ -108,14 +113,11 @@ public class drivingTeleOp extends OpMode {
         freightLift.setPower(LIFTPOWER);
         if (gamepad2.x) {
             level = 0;
-        }
-        else if (gamepad2.y) {
+        } else if (gamepad2.y) {
             level = 1;
-        }
-        else if (gamepad2.b) {
+        } else if (gamepad2.b) {
             level = 2;
-        }
-        else if (gamepad2.a) {
+        } else if (gamepad2.a) {
             level = 3;
         }
         return level;
@@ -130,46 +132,45 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
-    public void setDuckSpinners(){
+    public void setDuckSpinners() {
         if (gamepad2.left_bumper) {
             leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
-        }
-        else {
+        } else {
             leftDuckSpinner.setPower(0);
         }
         if (gamepad2.right_bumper) {
             rightDuckSpinner.setPower(DUCKSPINNERPOWER);
-        }
-        else {
+        } else {
             rightDuckSpinner.setPower(0);
         }
     }
 
-    public void setBucketServo(){
+    public void setBucketServo() {
         if (gamepad2.left_stick_y > THRESHOLD) {
             bucketServo.setPosition(BUCKETCOLLECT);
-        }
-          else if (gamepad2.left_stick_button){
-              bucketServo.setPosition(BUCKETDUMP);
-        }
-          else {
-              bucketServo.setPosition(SAFETYBUCKET);
+        } else if (gamepad2.left_stick_button) {
+            bucketServo.setPosition(BUCKETDUMP);
+        } else {
+            bucketServo.setPosition(SAFETYBUCKET);
         }
     }
 
-    public void setBucketGrabber(){
-        if (gamepad2.left_trigger > THRESHOLD){
+    public void setBucketGrabber() {
+        if (gamepad2.left_trigger > THRESHOLD) {
             grabberMotor.setPower(GRABBERSPEED);
-        }
-        else if (gamepad2.right_trigger > THRESHOLD){
+        } else if (gamepad2.right_trigger > THRESHOLD) {
             grabberMotor.setPower(-GRABBERSPEED);
-        }
-        else{
+        } else {
             grabberMotor.setPower(0);
         }
     }
 
-    public void setGrabberServo(){
-        intakeServo.setPosition(GRABBERSERVO);
+    public void setGrabberServo() {
+        grabberServo.setPosition(GRABBERSERVO);
     }
+
+    public void cameraServo() {
+        cameraServo.setPosition(CAMERASERVO);
+    }
+
 }
