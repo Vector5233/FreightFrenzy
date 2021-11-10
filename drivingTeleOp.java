@@ -24,14 +24,15 @@ public class drivingTeleOp extends OpMode {
     final double APPROACHSPEED = .2;
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
-    final double SAFETYBUCKET = 0;
-    final double BUCKETCOLLECT = .5;
-    final double BUCKETDUMP = .75;
+    final double SAFETYBUCKET = 1;
+    final double BUCKETCOLLECT = .75;
+    final double BUCKETDUMP = .2;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
-    final double GRABBERSERVO = 1;
+    final double GRABBERSERVO = 0;
     int level = (0);
     final double CAMERASERVO = 0;
+    final double BUCKETSERVO = 1;
 
     //Define Servos, Motors, set values
 
@@ -59,7 +60,9 @@ public class drivingTeleOp extends OpMode {
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         setGrabberServo();
-        // also initialize cameraServo and grabberServo
+        setCameraServo();
+        setBucketServo();
+
     }
 
     public void loop() {
@@ -88,7 +91,7 @@ public class drivingTeleOp extends OpMode {
         setFreightLift();
         setSlowApproach();
         setBucketGrabber();
-        setBucketServo();
+        setBucketPosition();
     }
 
     public double trimPower(double Power) {
@@ -145,7 +148,7 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
-    public void setBucketServo() {
+    public void setBucketPosition() {
         if (gamepad2.left_stick_y > THRESHOLD) {
             bucketServo.setPosition(BUCKETCOLLECT);
         } else if (gamepad2.left_stick_button) {
@@ -169,8 +172,12 @@ public class drivingTeleOp extends OpMode {
         grabberServo.setPosition(GRABBERSERVO);
     }
 
-    public void cameraServo() {
+    public void setCameraServo() {
         cameraServo.setPosition(CAMERASERVO);
+    }
+
+    public void setBucketServo() {
+        bucketServo.setPosition(BUCKETSERVO);
     }
 
 }
