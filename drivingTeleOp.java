@@ -180,5 +180,5 @@ public class drivingTeleOp extends OpMode {
     public void setBucketServo() {
         bucketServo.setPosition(BUCKETSERVO);
     }
-
+    //add limits for lift minimum and maximum
 }
