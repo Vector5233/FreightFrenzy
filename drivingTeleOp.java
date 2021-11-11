@@ -21,11 +21,11 @@ public class drivingTeleOp extends OpMode {
 
     DigitalChannel touchSensor;
 
-    final double APPROACHSPEED = .2;
+    final double APPROACHSPEED = .3;
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .75;
+    final double BUCKETCOLLECT = .83;
     final double BUCKETDUMP = .2;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
@@ -41,9 +41,9 @@ public class drivingTeleOp extends OpMode {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
         frontRight = hardwareMap.dcMotor.get("frontRight");
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freightLift = hardwareMap.dcMotor.get("freightLift");
-        freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
         grabberMotor = hardwareMap.dcMotor.get("grabberMotor");
@@ -56,7 +56,7 @@ public class drivingTeleOp extends OpMode {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
-        freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         setGrabberServo();
@@ -106,6 +106,7 @@ public class drivingTeleOp extends OpMode {
         double liftPower = trimPower(gamepad2.right_stick_y);
         freightLift.setPower(liftPower);
         telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
+        telemetry.addData("Lift Power: ", freightLift.getPower());
 
     }
 
@@ -149,7 +150,7 @@ public class drivingTeleOp extends OpMode {
     }
 
     public void setBucketPosition() {
-        if (gamepad2.left_stick_y > THRESHOLD) {
+        if (gamepad2.left_stick_y < -THRESHOLD) {
             bucketServo.setPosition(BUCKETCOLLECT);
         } else if (gamepad2.left_stick_button) {
             bucketServo.setPosition(BUCKETDUMP);
