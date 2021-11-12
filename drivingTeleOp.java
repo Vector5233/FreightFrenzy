@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.CameraDevice;
@@ -25,17 +26,17 @@ public class drivingTeleOp extends OpMode {
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .83;
-    final double BUCKETDUMP = .2;
+    final double BUCKETCOLLECT = .7;
+    final double BUCKETDUMP = .45;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
     int level = (0);
     final double CAMERASERVO = 0;
     final double BUCKETSERVO = 1;
-    final double MAXTICKS = 1554;
+    final double MAXTICKS = 8500;
     final double HOLDINGPOWER = 0;
-    final double SAFETICKS = 1100;
+    final double SAFETICKS = 1528;
 
     //Define Servos, Motors, set values
 
@@ -59,6 +60,7 @@ public class drivingTeleOp extends OpMode {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
+        freightLift.setDirection(DcMotorSimple.Direction.REVERSE);
         //freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
@@ -113,7 +115,7 @@ public class drivingTeleOp extends OpMode {
             freightLift.setPower(0);
         }
         else{
-            double liftPower = trimPower(gamepad2.right_stick_y);
+            double liftPower = trimPower(-gamepad2.right_stick_y);
             freightLift.setPower(liftPower);
             telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
             telemetry.addData("Lift Power: ", freightLift.getPower());
