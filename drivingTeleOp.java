@@ -31,6 +31,12 @@ public class drivingTeleOp extends OpMode {
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
     int level = (0);
+    int[] ticks = {0, 1211, 3750, 6357};
+    final int levelZero = 0;
+    final int firstLevel = 1;
+    final int secondLevel = 2;
+    final int thirdLevel = 3;
+    final int manualLevel = -1;
     final double CAMERASERVO = 0;
     final double BUCKETSERVO = 1;
     final double MAXTICKS = 1554;
@@ -69,29 +75,10 @@ public class drivingTeleOp extends OpMode {
     }
 
     public void loop() {
-        // recommend: place in method from here...
-        double forward = -gamepad1.left_stick_y;
-        double strafe = gamepad1.left_stick_x;
-        double turn = gamepad1.right_stick_x;
-        telemetry.addData("Drive Position: ", backLeft.getCurrentPosition());
-        telemetry.update();
-        double frontLeftPower = forward + strafe + turn;
-        double frontRightPower = forward - strafe - turn;
-        double backLeftPower = forward - strafe + turn;
-        double backRightPower = forward + strafe - turn;
-        frontLeftPower = trimPower(frontLeftPower);
-        frontRightPower = trimPower(frontRightPower);
-        backLeftPower = trimPower(backLeftPower);
-        backRightPower = trimPower(backRightPower);
-        frontLeft.setPower(frontLeftPower);
-        frontRight.setPower(frontRightPower);
-        backLeft.setPower(backLeftPower);
-        backRight.setPower(backRightPower);
-        // ... to here
-
+        setDrive();
         setDuckSpinners();
         //setFreightLiftSpecific();
-        setFreightLift();
+        //setFreightLift();
         setSlowApproach();
         setBucketGrabber();
         setBucketPosition();
@@ -106,6 +93,8 @@ public class drivingTeleOp extends OpMode {
     }
 
     public void setFreightLift() {
+
+        //DETERMINE POWER OFF OF LIFT LEVELS
         if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
             freightLift.setPower(HOLDINGPOWER);
         }
@@ -121,25 +110,23 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
-    public int setFreightLiftSpecific() {
+
+    public int setFreightLiftLevel() {
         double liftPower = trimPower(gamepad2.right_stick_y);
         int[] ticks = {0, 1211, 3750, 6357};
-        freightLift.setTargetPosition(ticks[level]);
-        freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        freightLift.setPower(LIFTPOWER);
         if (gamepad2.x) {
-            level = 0;
+            level = levelZero;
         } else if (gamepad2.y) {
-            level = 1;
+            level = firstLevel;
         } else if (gamepad2.b) {
-            level = 2;
+            level = secondLevel;
         } else if (gamepad2.a) {
-            level = 3;
+            level = thirdLevel;
+        } else if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
+            level = manualLevel;
+        } else if (freightLift.getCurrentPosition()<= 0 && gamepad2.right_stick_y > THRESHOLD) {
+            level = manualLevel;
         }
-        else if (gamepad2.right_stick_y > -THRESHOLD){
-            freightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            freightLift.setPower(liftPower);
-            }
         return level;
     }
 
@@ -182,6 +169,25 @@ public class drivingTeleOp extends OpMode {
         } else {
             grabberMotor.setPower(0);
         }
+    }
+    public void setDrive(){
+        double forward = -gamepad1.left_stick_y;
+        double strafe = gamepad1.left_stick_x;
+        double turn = gamepad1.right_stick_x;
+        telemetry.addData("Drive Position: ", backLeft.getCurrentPosition());
+        telemetry.update();
+        double frontLeftPower = forward + strafe + turn;
+        double frontRightPower = forward - strafe - turn;
+        double backLeftPower = forward - strafe + turn;
+        double backRightPower = forward + strafe - turn;
+        frontLeftPower = trimPower(frontLeftPower);
+        frontRightPower = trimPower(frontRightPower);
+        backLeftPower = trimPower(backLeftPower);
+        backRightPower = trimPower(backRightPower);
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
     }
 
     public void initGrabberServo() {
