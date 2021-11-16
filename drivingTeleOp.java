@@ -26,8 +26,8 @@ public class drivingTeleOp extends OpMode {
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .7;
-    final double BUCKETDUMP = .45;
+    final double BUCKETCOLLECT = .83;
+    final double BUCKETDUMP = .6;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
@@ -53,6 +53,7 @@ public class drivingTeleOp extends OpMode {
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freightLift = hardwareMap.dcMotor.get("freightLift");
+        freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = hardwareMap.dcMotor.get("rightDuckSpinner");
@@ -67,7 +68,6 @@ public class drivingTeleOp extends OpMode {
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         freightLift.setDirection(DcMotorSimple.Direction.REVERSE);
-        //freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         initGrabberServo();
@@ -80,7 +80,7 @@ public class drivingTeleOp extends OpMode {
         setDrive();
         setDuckSpinners();
         //setFreightLiftSpecific();
-        //setFreightLift();
+        setFreightLift();
         setSlowApproach();
         setBucketGrabber();
         setBucketPosition();
