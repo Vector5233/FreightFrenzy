@@ -24,20 +24,20 @@ public class drivingTeleOp extends OpMode {
 
     final double APPROACHSPEED = .3;
     final double DUCKSPINNERPOWER = .5;
-    final double LIFTPOWER = 1;
+    final double FREIGHTLIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
     final double BUCKETCOLLECT = .83;
     final double BUCKETDUMP = .6;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
-    int level = (0);
     int[] ticks = {0, 1211, 3750, 6357};
     final int levelZero = 0;
     final int firstLevel = 1;
     final int secondLevel = 2;
     final int thirdLevel = 3;
     final int manualLevel = -1;
+    int level = (manualLevel);
     final double CAMERASERVO = 0;
     final double BUCKETSERVO = 1;
     final double MAXTICKS = 8500;
@@ -51,6 +51,7 @@ public class drivingTeleOp extends OpMode {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
         frontRight = hardwareMap.dcMotor.get("frontRight");
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freightLift = hardwareMap.dcMotor.get("freightLift");
         freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -79,8 +80,9 @@ public class drivingTeleOp extends OpMode {
     public void loop() {
         setDrive();
         setDuckSpinners();
-        //setFreightLiftSpecific();
-        setFreightLift();
+        setFreightLiftLevel();
+        setFreightLiftPower();
+        //setFreightLift();
         setSlowApproach();
         setBucketGrabber();
         setBucketPosition();
@@ -112,10 +114,18 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
+    public void setFreightLiftPower() {
+        double liftPower = trimPower(gamepad2.right_stick_y);
+        if (level == manualLevel) {
+            freightLift.setPower(liftPower);
+        } else {
+            freightLift.setTargetPosition(ticks[level]);
+            freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            freightLift.setPower(FREIGHTLIFTPOWER);
+        }
+    }
 
     public int setFreightLiftLevel() {
-        double liftPower = trimPower(gamepad2.right_stick_y);
-        int[] ticks = {0, 1211, 3750, 6357};
         if (gamepad2.x) {
             level = levelZero;
         } else if (gamepad2.y) {
@@ -138,6 +148,11 @@ public class drivingTeleOp extends OpMode {
             frontRight.setPower(APPROACHSPEED);
             backLeft.setPower(APPROACHSPEED);
             backRight.setPower(APPROACHSPEED);
+        } else if (gamepad1.dpad_down) {
+            frontLeft.setPower(-APPROACHSPEED);
+            frontRight.setPower(-APPROACHSPEED);
+            backLeft.setPower(-APPROACHSPEED);
+            backRight.setPower(-APPROACHSPEED);
         }
     }
 
