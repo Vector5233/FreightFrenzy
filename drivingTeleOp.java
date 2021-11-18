@@ -40,7 +40,7 @@ public class drivingTeleOp extends OpMode {
     int level = (manualLevel);
     final double CAMERASERVO = 0;
     final double BUCKETSERVO = 1;
-    final double MAXTICKS = 8500;
+    final double MAXTICKS = 8000;
     final double HOLDINGPOWER = 0;
     final double SAFETICKS = 1528;
 
@@ -115,10 +115,19 @@ public class drivingTeleOp extends OpMode {
     }
 
     public void setFreightLiftPower() {
-        double liftPower = trimPower(gamepad2.right_stick_y);
+        double liftPower = trimPower(-gamepad2.right_stick_y);
+        telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
         if (level == manualLevel) {
-            freightLift.setPower(liftPower);
-        } else {
+            if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD){
+            freightLift.setPower(0);
+            }
+            else if (freightLift.getCurrentPosition()<= 0 && gamepad2.right_stick_y > THRESHOLD){
+                freightLift.setPower(0);
+                } else {
+                freightLift.setPower(liftPower);
+            }
+        }
+            else {
             freightLift.setTargetPosition(ticks[level]);
             freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             freightLift.setPower(FREIGHTLIFTPOWER);
@@ -134,9 +143,9 @@ public class drivingTeleOp extends OpMode {
             level = secondLevel;
         } else if (gamepad2.a) {
             level = thirdLevel;
-        } else if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
+        } else if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD){
             level = manualLevel;
-        } else if (freightLift.getCurrentPosition()<= 0 && gamepad2.right_stick_y > THRESHOLD) {
+        } else if (freightLift.getCurrentPosition()<= 0 && gamepad2.right_stick_y > THRESHOLD){
             level = manualLevel;
         }
         return level;
