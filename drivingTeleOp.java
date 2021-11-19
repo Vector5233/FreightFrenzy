@@ -22,7 +22,7 @@ public class drivingTeleOp extends OpMode {
 
     DigitalChannel touchSensor;
 
-    final double APPROACHSPEED = .3;
+    final double APPROACHSPEED = .4;
     final double DUCKSPINNERPOWER = .5;
     final double FREIGHTLIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
