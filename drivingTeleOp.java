@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Sensor;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -22,12 +18,14 @@ public class drivingTeleOp extends OpMode {
 
     DigitalChannel touchSensor;
 
+                //ADD JAVADOC?
+
     final double APPROACHSPEED = .4;
     final double DUCKSPINNERPOWER = .5;
     final double FREIGHTLIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
     final double BUCKETCOLLECT = .83;
-    final double BUCKETDUMP = .6;
+    final double BUCKETDUMP = .7;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
@@ -39,21 +37,24 @@ public class drivingTeleOp extends OpMode {
     final int manualLevel = -1;
     int level = (manualLevel);
     final double CAMERASERVO = 0;
-    final double BUCKETSERVO = 1;
     final double MAXTICKS = 8200;
-    final double HOLDINGPOWER = 0;
-    final double SAFETICKS = 1528;
+    final double SAFETICKS = 1200;
+    final double LIFTGRABBER = .5;
+    final double FIRSTLEVELGRABBER = 1;
 
     //Define Servos, Motors, set values
 
+    //initializes all motors and servos, run modes, and sets direction
     public void init() {
         backLeft = hardwareMap.dcMotor.get("backLeft");
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
         frontRight = hardwareMap.dcMotor.get("frontRight");
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         freightLift = hardwareMap.dcMotor.get("freightLift");
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         freightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDuckSpinner = hardwareMap.dcMotor.get("leftDuckSpinner");
@@ -79,15 +80,17 @@ public class drivingTeleOp extends OpMode {
 
     public void loop() {
         setDrive();
+        resetMotors();
         setDuckSpinners();
         setFreightLiftLevel();
         setFreightLiftPower();
-        //setFreightLift();
         setSlowApproach();
         setBucketGrabber();
         setBucketPosition();
+        liftGrabber();
     }
 
+    //called to trim power of driving joystick to ensure the robot does not move unintentionally
     public double trimPower(double Power) {
         if (Math.abs(Power) < THRESHOLD) {
             Power = 0;
@@ -96,13 +99,32 @@ public class drivingTeleOp extends OpMode {
 
     }
 
-    public void setTurbo(){
-
+    public void resetMotors() {
+        if (gamepad1.a) {
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        } else{
+            backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
     }
 
-    public void setFreightLift() {
+    //Allows the grabber to be lifted, so robot can deliver blocks to first and second level
+    public void liftGrabber(){
+        if(gamepad1.b){
+            grabberServo.setPosition(LIFTGRABBER);
+        } else if (gamepad1.x){
+            grabberServo.setPosition(GRABBERSERVO);
+        } else if (gamepad1.a){
+            grabberServo.setPosition(FIRSTLEVELGRABBER);
+        }
+    }
 
-        //DETERMINE POWER OFF OF LIFT LEVELS
+    /*public void setFreightLift() {
         if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
             freightLift.setPower(HOLDINGPOWER);
         } else if (freightLift.getCurrentPosition() <= 0 && gamepad2.right_stick_y > THRESHOLD) {
@@ -112,10 +134,10 @@ public class drivingTeleOp extends OpMode {
             freightLift.setPower(liftPower);
             telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
             telemetry.addData("Lift Power: ", freightLift.getPower());
-
         }
-    }
+    }*/
 
+    //sets power to freight lift motor determined from level
     public void setFreightLiftPower() {
         double liftPower = trimPower(-gamepad2.right_stick_y);
         telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
@@ -135,6 +157,7 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
+    //takes button input to set level of lift and allows manual input
     public int setFreightLiftLevel() {
         if (gamepad2.x) {
             level = levelZero;
@@ -150,6 +173,7 @@ public class drivingTeleOp extends OpMode {
         return level;
     }
 
+    //sets slow speed for drive motors if dpad is pressed (forwards and backwards)
     public void setSlowApproach() {
         if (gamepad1.dpad_up) {
             frontLeft.setPower(APPROACHSPEED);
@@ -164,6 +188,7 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
+    //sets speed and orientation of each duck spinner
     public void setDuckSpinners() {
         if (gamepad2.left_bumper) {
             leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
@@ -176,16 +201,18 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
+    //sets Bucket position to collect and dump, then returns to the safety position
     public void setBucketPosition() {
         if(gamepad2.left_stick_y < -THRESHOLD) {
             bucketServo.setPosition(BUCKETCOLLECT);
-        } else if ((freightLift.getCurrentPosition() >= SAFETICKS) && (gamepad2.left_stick_button == true)) {
+        } else if ((freightLift.getCurrentPosition() >= SAFETICKS) && (gamepad2.left_stick_button)) {
             bucketServo.setPosition(BUCKETDUMP);
         } else {
             bucketServo.setPosition(SAFETYBUCKET);
         }
     }
 
+    //sets grabber motor speed
     public void setBucketGrabber() {
         if (gamepad2.left_trigger > THRESHOLD) {
             grabberMotor.setPower(GRABBERSPEED);
@@ -195,11 +222,16 @@ public class drivingTeleOp extends OpMode {
             grabberMotor.setPower(0);
         }
     }
+
+    //sets direction and power of all drive motors (frontLeft, frontRight, backLeft, backRight)
     public void setDrive(){
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
-        telemetry.addData("Drive Position: ", backLeft.getCurrentPosition());
+        telemetry.addData("Back Right Position: ", backRight.getCurrentPosition());
+        telemetry.addData("Back Left Position: ", backLeft.getCurrentPosition());
+        telemetry.addData("Front Right Position: ", frontRight.getCurrentPosition());
+        telemetry.addData("Front Left Position: ", frontLeft.getCurrentPosition());
         telemetry.update();
         double frontLeftPower = forward + strafe + turn;
         double frontRightPower = forward - strafe - turn;
@@ -215,16 +247,19 @@ public class drivingTeleOp extends OpMode {
         backRight.setPower(backRightPower);
     }
 
+    //sets grabber servo position
     public void initGrabberServo() {
         grabberServo.setPosition(GRABBERSERVO);
     }
 
+    //sets fixed camera position
     public void initCameraServo() {
         cameraServo.setPosition(CAMERASERVO);
     }
 
+    //sets bucket servo to Safety position
     public void initBucketServo() {
-        bucketServo.setPosition(BUCKETSERVO);
+        bucketServo.setPosition(SAFETYBUCKET);
     }
 }
 

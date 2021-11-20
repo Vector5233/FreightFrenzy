@@ -10,14 +10,16 @@ import java.util.function.LongUnaryOperator;
 
 class virtualBotObject {
 
-    DcMotorEx backLeft, backRight, frontLeft, frontRight, leftDuckSpinner, rightDuckSpinner, freightLift, freightGrabber;
-    Servo freightDoor, bucketDeliver;
+    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift;
+    Servo grabberServo, bucketServo;
     LinearOpMode parent;
 
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
-    final double DOORPOSITION = .25;
-    final double BUCKETPOSITION = .5;
+    final double SAFETYBUCKET = 1;
+    final double BUCKETCOLLECT = .83;
+    final double BUCKETDUMP = .6;
+    final double GRABBERSERVO = 0;
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;
@@ -68,10 +70,10 @@ class virtualBotObject {
         freightLift.setPower(0);
     }
 
-    /*public void releaseDoor() {
-        freightDoor.setPosition(DOORPOSITION);
-    }*/
-//Makes the robot drive forward specified by int ticks
+    public void initGrabberServo() {
+        grabberServo.setPosition(GRABBERSERVO);
+    }
+    //Makes the robot drive forward specified by int ticks
     public void driveForward(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
@@ -133,7 +135,7 @@ class virtualBotObject {
 //Delivers the block after setting lift to specified location
     public void deliverBlock(int level){
         turnOnLift(level);
-        bucketDeliver.setPosition(BUCKETPOSITION);
+        bucketServo.setPosition(BUCKETDUMP);
         turnOffLift();
     }
 }
