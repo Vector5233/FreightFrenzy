@@ -56,7 +56,7 @@ public class DuckDetector extends OpenCvPipeline {
                 position = "ONE";
                 Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
             } else {
-                if (centerTotal > leftTotal) {
+                 if (centerTotal > leftTotal) {
                     if (centerTotal > rightTotal) {
                         //level is 2
                         position = "TWO";
