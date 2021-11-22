@@ -87,7 +87,7 @@ public class drivingTeleOp extends OpMode {
         setSlowApproach();
         setBucketGrabber();
         setBucketPosition();
-        liftGrabber();
+        //liftGrabber();
     }
 
     //called to trim power of driving joystick to ensure the robot does not move unintentionally
@@ -114,7 +114,7 @@ public class drivingTeleOp extends OpMode {
     }
 
     //Allows the grabber to be lifted, so robot can deliver blocks to first and second level
-    public void liftGrabber(){
+    /*public void liftGrabber(){
         if(gamepad1.b){
             grabberServo.setPosition(LIFTGRABBER);
         } else if (gamepad1.x){
@@ -123,7 +123,7 @@ public class drivingTeleOp extends OpMode {
             grabberServo.setPosition(FIRSTLEVELGRABBER);
         }
     }
-
+*/
     /*public void setFreightLift() {
         if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
             freightLift.setPower(HOLDINGPOWER);
