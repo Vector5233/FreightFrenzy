@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,8 +19,9 @@ class virtualBotObject {
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
     final double BUCKETCOLLECT = .83;
-    final double BUCKETDUMP = .6;
+    final double BUCKETDUMP = .8;
     final double GRABBERSERVO = 0;
+    int[] ticks = {0, 4812, 6255, 8200};
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;
@@ -33,13 +35,16 @@ class virtualBotObject {
         leftDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("rightDuckSpinner");
         freightLift = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightLift");
-        //freightGrabber = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightGrabber");
-        //freightDoor = parent.hardwareMap.servo.get("freightDoor");
+        grabberServo = parent.hardwareMap.servo.get("grabberServo");
+        bucketServo = parent.hardwareMap.servo.get("bucketServo");
+        bucketServo.setPosition(SAFETYBUCKET);
+
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
+        freightLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Test of GitHub
         //test of mac connection to github
@@ -55,9 +60,10 @@ class virtualBotObject {
         leftDuckSpinner.setPower(0);
         rightDuckSpinner.setPower(0);
     }
+
 //Moves lift to specific level specified by int
     public void turnOnLift(int level) {
-        int[] ticks = {0, 1211, 3750, 6357};
+        int[] ticks = {0, 4812, 6255, 8200};
         freightLift.setTargetPosition(ticks[level]);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);
@@ -70,9 +76,16 @@ class virtualBotObject {
         freightLift.setPower(0);
     }
 
+    public void lowerLift(){
+        freightLift.setTargetPosition(0);
+        freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        freightLift.setPower(LIFTPOWER);
+    }
+
     public void initGrabberServo() {
         grabberServo.setPosition(GRABBERSERVO);
     }
+
     //Makes the robot drive forward specified by int ticks
     public void driveForward(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -132,10 +145,13 @@ class virtualBotObject {
             assert true;
         }
     }
+
 //Delivers the block after setting lift to specified location
     public void deliverBlock(int level){
         turnOnLift(level);
         bucketServo.setPosition(BUCKETDUMP);
-        turnOffLift();
+        bucketServo.setPosition(SAFETYBUCKET);
+        lowerLift();
+
     }
 }

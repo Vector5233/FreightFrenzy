@@ -73,7 +73,19 @@ public class DuckDetector extends OpenCvPipeline {
         }
         return workingMatrix;
     }
+
     public String getPosition() {
         return position;
+    }
+
+    public int duckLevel() {
+        if (getPosition().equals("ONE")) {
+            int level = 1;
+        } else if (getPosition().equals("TWO")) {
+            int level = 2;
+        } else if (getPosition().equals("THREE")) {
+            int level = 3;
+        }
+    return duckLevel();
     }
 }

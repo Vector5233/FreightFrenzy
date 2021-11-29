@@ -25,11 +25,11 @@ public class drivingTeleOp extends OpMode {
     final double FREIGHTLIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
     final double BUCKETCOLLECT = .83;
-    final double BUCKETDUMP = .7;
+    final double BUCKETDUMP = .77;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
-    int[] ticks = {0, 1211, 4964, 8075};
+    int[] ticks = {0, 4812, 6255, 8200};
     final int levelZero = 0;
     final int firstLevel = 1;
     final int secondLevel = 2;
@@ -37,7 +37,7 @@ public class drivingTeleOp extends OpMode {
     final int manualLevel = -1;
     int level = (manualLevel);
     final double CAMERASERVO = 0;
-    final double MAXTICKS = 8200;
+    final double MAXTICKS = 8205;
     final double SAFETICKS = 1200;
     final double LIFTGRABBER = .5;
     final double FIRSTLEVELGRABBER = 1;
