@@ -12,7 +12,7 @@ import java.util.function.LongUnaryOperator;
 class virtualBotObject {
 
     DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift;
-    Servo grabberServo, bucketServo;
+    Servo grabberServo, bucketServo, cameraServo;
     LinearOpMode parent;
 
     final double DUCKSPINNERPOWER = .5;
@@ -36,8 +36,10 @@ class virtualBotObject {
         rightDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("rightDuckSpinner");
         freightLift = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightLift");
         grabberServo = parent.hardwareMap.servo.get("grabberServo");
+        cameraServo = parent.hardwareMap.servo.get("cameraServo");
         bucketServo = parent.hardwareMap.servo.get("bucketServo");
         bucketServo.setPosition(SAFETYBUCKET);
+        initGrabberServo();
 
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -78,6 +80,7 @@ class virtualBotObject {
 
     public void lowerLift(){
         freightLift.setTargetPosition(0);
+        bucketServo.setPosition(SAFETYBUCKET);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);
     }
@@ -95,10 +98,6 @@ class virtualBotObject {
         frontRight.setTargetPosition(ticks);
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerAll(power);
-        /*backLeft.setPower(power);
-        backRight.setPower(power);
-        frontLeft.setPower(power);
-        frontRight.setPower(power);*/
 
         while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
             assert true;
@@ -149,8 +148,7 @@ class virtualBotObject {
 //Delivers the block after setting lift to specified location
     public void deliverBlock(int level){
         turnOnLift(level);
-        bucketServo.setPosition(BUCKETDUMP);
-        bucketServo.setPosition(SAFETYBUCKET);
+        bucketServo.setPosition(.6);
         lowerLift();
 
     }
