@@ -124,19 +124,6 @@ public class drivingTeleOp extends OpMode {
         }
     }
 
-    /*public void setFreightLift() {
-        if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
-            freightLift.setPower(HOLDINGPOWER);
-        } else if (freightLift.getCurrentPosition() <= 0 && gamepad2.right_stick_y > THRESHOLD) {
-            freightLift.setPower(0);
-        } else {
-            double liftPower = trimPower(-gamepad2.right_stick_y);
-            freightLift.setPower(liftPower);
-            telemetry.addData("Lift Position: ", freightLift.getCurrentPosition());
-            telemetry.addData("Lift Power: ", freightLift.getPower());
-        }
-    }*/
-
     //sets power to freight lift motor determined from level
     public void setFreightLiftPower() {
         double liftPower = trimPower(-gamepad2.right_stick_y);

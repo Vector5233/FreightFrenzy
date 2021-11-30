@@ -19,7 +19,7 @@ class virtualBotObject {
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
     final double BUCKETCOLLECT = .83;
-    final double BUCKETDUMP = .8;
+    final double BUCKETDUMP = .77;
     final double GRABBERSERVO = 0;
     int[] ticks = {0, 4812, 6255, 8200};
 
@@ -39,7 +39,6 @@ class virtualBotObject {
         cameraServo = parent.hardwareMap.servo.get("cameraServo");
         bucketServo = parent.hardwareMap.servo.get("bucketServo");
         bucketServo.setPosition(SAFETYBUCKET);
-        initGrabberServo();
 
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -62,7 +61,10 @@ class virtualBotObject {
         leftDuckSpinner.setPower(0);
         rightDuckSpinner.setPower(0);
     }
-
+    public void initCameraServo(double CAMERAPOSITION){
+        cameraServo.setPosition(CAMERAPOSITION);
+        parent.sleep(300);
+    }
 //Moves lift to specific level specified by int
     public void turnOnLift(int level) {
         int[] ticks = {0, 4812, 6255, 8200};
@@ -81,6 +83,7 @@ class virtualBotObject {
     public void lowerLift(){
         freightLift.setTargetPosition(0);
         bucketServo.setPosition(SAFETYBUCKET);
+        parent.sleep(300);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);
     }
@@ -148,7 +151,8 @@ class virtualBotObject {
 //Delivers the block after setting lift to specified location
     public void deliverBlock(int level){
         turnOnLift(level);
-        bucketServo.setPosition(.6);
+        bucketServo.setPosition(BUCKETDUMP);
+        parent.sleep(2000);
         lowerLift();
 
     }

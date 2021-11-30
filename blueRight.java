@@ -11,17 +11,18 @@ public class blueRight extends LinearOpMode {
     public void runOpMode() {
         robot.init();
         waitForStart();
-        robot.driveForward(.4, 85);
+        robot.initGrabberServo();
         robot.turnOnDuckSpinner();
+        robot.driveForward(.4, 80);
+        robot.autoStrafe(.2,-30);
         sleep(3000);
         robot.turnOffDuckSpinner();
         robot.driveForward(.4, -100);
-        robot.autoTurn(.2, -600);
-        sleep(300);
-        robot.driveForward(.3, 450);
+        robot.autoTurn(.2, 620);
+        sleep(100);
+        robot.driveForward(.3, 375);
         robot.deliverBlock(2);
-        robot.autoTurn(.3, 650);
-        robot.driveForward(.4, -800);
-
+        robot.autoTurn(.2,650);
+        robot.driveForward(.5,-800);
     }
 }
