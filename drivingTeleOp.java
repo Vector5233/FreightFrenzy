@@ -24,7 +24,7 @@ public class drivingTeleOp extends OpMode {
     final double DUCKSPINNERPOWER = .5;
     final double FREIGHTLIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .83;
+    final double BUCKETCOLLECT = .86;
     final double BUCKETDUMP = .77;
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;

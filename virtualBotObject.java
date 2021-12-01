@@ -18,7 +18,7 @@ class virtualBotObject {
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .83;
+    final double BUCKETCOLLECT = .86;
     final double BUCKETDUMP = .77;
     final double GRABBERSERVO = 0;
     int[] ticks = {0, 4812, 6255, 8200};
