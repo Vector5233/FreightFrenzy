@@ -21,6 +21,7 @@ class virtualBotObject {
     final double BUCKETCOLLECT = .86;
     final double BUCKETDUMP = .77;
     final double GRABBERSERVO = 0;
+    final double INITGRABBERSERVO = .6;
     int[] ticks = {0, 4812, 6255, 8200};
 
     public virtualBotObject(LinearOpMode p) {
@@ -88,8 +89,8 @@ class virtualBotObject {
         freightLift.setPower(LIFTPOWER);
     }
 
-    public void initGrabberServo() {
-        grabberServo.setPosition(GRABBERSERVO);
+    public void initGrabberServo(final double VALUE) {
+        grabberServo.setPosition(VALUE);
     }
 
     //Makes the robot drive forward specified by int ticks

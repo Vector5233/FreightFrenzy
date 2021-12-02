@@ -9,18 +9,18 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class DuckDetector extends OpenCvPipeline {
-    final int LEFTROWSTART = 200;
-    final int LEFTROWEND = 250;
-    final int LEFTCOLSTART = 10;
-    final int LEFTCOLEND = 50;
-    final int CENTERROWSTART = 200;
-    final int CENTERROWEND = 250;
-    final int CENTERCOLSTART = 100;
-    final int CENTERCOLEND = 50;
-    final int RIGHTROWSTART = 150;
-    final int RIGHTTROWEND = 250;
-    final int RIGHTCOLSTART = 200;
-    final int RIGHTCOLEND = 250;
+    final int LEFTROWSTART = 10;
+    final int LEFTROWEND = 100;
+    final int LEFTCOLSTART = 5;
+    final int LEFTCOLEND = 100;
+    final int CENTERROWSTART = 110;
+    final int CENTERROWEND = 210;
+    final int CENTERCOLSTART = 5;
+    final int CENTERCOLEND = 100;
+    final int RIGHTROWSTART = 210;
+    final int RIGHTTROWEND = 310;
+    final int RIGHTCOLSTART = 5;
+    final int RIGHTCOLEND = 100;
 
 
     private Mat workingMatrix = new Mat();

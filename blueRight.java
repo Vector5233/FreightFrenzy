@@ -11,7 +11,7 @@ public class blueRight extends LinearOpMode {
     public void runOpMode() {
         robot.init();
         waitForStart();
-        robot.initGrabberServo();
+        robot.initGrabberServo(0);
         robot.turnOnDuckSpinner();
         robot.driveForward(.4, 80);
         robot.autoStrafe(.2,-30);

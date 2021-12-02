@@ -24,5 +24,6 @@ public class DuckIdentifier extends LinearOpMode {
         telemetry.addLine(detector.getPosition());
         telemetry.update();
         sleep(5000);
+        waitForStart();
     }
 }
