@@ -28,64 +28,66 @@ public class DuckDetector extends OpenCvPipeline {
     private String position;
 
     public DuckDetector() {
-
+        getPosition();
+        duckLevel();
     }
 
-    @Override
-    public final Mat processFrame(Mat input) {
-        input.copyTo(workingMatrix);
 
-        if (workingMatrix.empty()) {
-            return input;
-        }
+        @Override
+        public final Mat processFrame (Mat input){
+            input.copyTo(workingMatrix);
 
-        Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
-
-        Mat matRight = workingMatrix.submat(RIGHTROWSTART, RIGHTTROWEND, RIGHTCOLSTART, RIGHTCOLEND);
-        Mat matCenter = workingMatrix.submat(CENTERROWSTART, CENTERROWEND, CENTERCOLSTART, CENTERCOLEND);
-        Mat matLeft = workingMatrix.submat(LEFTROWSTART, LEFTROWEND, LEFTCOLSTART, LEFTCOLEND);
-
-
-        double leftTotal = Core.sumElems(matLeft).val[0];
-        double centerTotal = Core.sumElems(matCenter).val[0];
-        double rightTotal = Core.sumElems(matRight).val[0];
-
-        if (leftTotal > centerTotal) {
-            if (leftTotal > rightTotal) {
-                //level is 1
-                position = "ONE";
-                Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
-            } else {
-                if (centerTotal > leftTotal) {
-                    if (centerTotal > rightTotal) {
-                        //level is 2
-                        position = "TWO";
-                        Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
-                    } else {
-                        //level is 3
-                        position = "THREE";
-                        Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTTROWEND), new Scalar(247, 181, 0));
-                    }
-                }
-
-
+            if (workingMatrix.empty()) {
+                return input;
             }
-        }
-        return workingMatrix;
-    }
 
-    public String getPosition() {
-        return position;
-    }
+            Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
 
-    public int duckLevel() {
-        if (getPosition().equals("ONE")) {
-            int level = 1;
-        } else if (getPosition().equals("TWO")) {
-            int level = 2;
-        } else if (getPosition().equals("THREE")) {
-            int level = 3;
+            Mat matRight = workingMatrix.submat(RIGHTROWSTART, RIGHTTROWEND, RIGHTCOLSTART, RIGHTCOLEND);
+            Mat matCenter = workingMatrix.submat(CENTERROWSTART, CENTERROWEND, CENTERCOLSTART, CENTERCOLEND);
+            Mat matLeft = workingMatrix.submat(LEFTROWSTART, LEFTROWEND, LEFTCOLSTART, LEFTCOLEND);
+
+
+            double leftTotal = Core.sumElems(matLeft).val[0];
+            double centerTotal = Core.sumElems(matCenter).val[0];
+            double rightTotal = Core.sumElems(matRight).val[0];
+
+            if (leftTotal > centerTotal) {
+                if (leftTotal > rightTotal) {
+                    //level is 1
+                    position = "ONE";
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
+                } else {
+                    if (centerTotal > leftTotal) {
+                        if (centerTotal > rightTotal) {
+                            //level is 2
+                            position = "TWO";
+                            Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
+                        } else {
+                            //level is 3
+                            position = "THREE";
+                            Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTTROWEND), new Scalar(247, 181, 0));
+                        }
+                    }
+
+
+                }
+            }
+            return workingMatrix;
         }
-    return duckLevel();
+
+        public String getPosition () {
+            return position;
+        }
+
+        public int duckLevel () {
+            if (getPosition().equals("ONE")) {
+                int level = 1;
+            } else if (getPosition().equals("TWO")) {
+                int level = 2;
+            } else if (getPosition().equals("THREE")) {
+                int level = 3;
+            }
+            return duckLevel();
+        }
     }
-}
