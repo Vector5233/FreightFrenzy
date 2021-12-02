@@ -9,7 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class DuckDetector extends OpenCvPipeline {
-    final int LEFTROWSTART = 10;
+    /*final int LEFTROWSTART = 10;
     final int LEFTROWEND = 100;
     final int LEFTCOLSTART = 5;
     final int LEFTCOLEND = 100;
@@ -20,7 +20,22 @@ public class DuckDetector extends OpenCvPipeline {
     final int RIGHTROWSTART = 210;
     final int RIGHTTROWEND = 310;
     final int RIGHTCOLSTART = 5;
-    final int RIGHTCOLEND = 100;
+    final int RIGHTCOLEND = 100;*/
+
+    final int LEFTCOLSTART = 10;
+    final int LEFTCOLEND = 100;
+    final int LEFTROWSTART = 90;
+    final int LEFTROWEND = 185;
+    final int CENTERCOLSTART = 110;
+    final int CENTERCOLEND = 210;
+    final int CENTERROWSTART = 90;
+    final int CENTERROWEND = 185;
+    final int RIGHTCOLSTART = 210;
+    final int RIGHTCOLEND = 310;
+    final int RIGHTROWSTART = 90;
+    final int RIGHTROWEND = 185;
+
+
 
 
     private Mat workingMatrix = new Mat();
@@ -28,8 +43,8 @@ public class DuckDetector extends OpenCvPipeline {
     private String position;
 
     public DuckDetector() {
-        getPosition();
-        duckLevel();
+        //getPosition();
+        //duckLevel();
     }
 
 
@@ -43,7 +58,7 @@ public class DuckDetector extends OpenCvPipeline {
 
             Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
 
-            Mat matRight = workingMatrix.submat(RIGHTROWSTART, RIGHTTROWEND, RIGHTCOLSTART, RIGHTCOLEND);
+            Mat matRight = workingMatrix.submat(RIGHTROWSTART, RIGHTROWEND, RIGHTCOLSTART, RIGHTCOLEND);
             Mat matCenter = workingMatrix.submat(CENTERROWSTART, CENTERROWEND, CENTERCOLSTART, CENTERCOLEND);
             Mat matLeft = workingMatrix.submat(LEFTROWSTART, LEFTROWEND, LEFTCOLSTART, LEFTCOLEND);
 
@@ -52,26 +67,19 @@ public class DuckDetector extends OpenCvPipeline {
             double centerTotal = Core.sumElems(matCenter).val[0];
             double rightTotal = Core.sumElems(matRight).val[0];
 
-            if (leftTotal > centerTotal) {
-                if (leftTotal > rightTotal) {
+            if ((leftTotal > centerTotal) && (leftTotal > rightTotal)) {
                     //level is 1
                     position = "ONE";
                     Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
-                } else {
-                    if (centerTotal > leftTotal) {
-                        if (centerTotal > rightTotal) {
-                            //level is 2
-                            position = "TWO";
-                            Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
-                        } else {
-                            //level is 3
-                            position = "THREE";
-                            Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTTROWEND), new Scalar(247, 181, 0));
-                        }
-                    }
 
-
-                }
+            } else if ((centerTotal > leftTotal) && (centerTotal > rightTotal)){
+                    //level is 2
+                    position = "TWO";
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
+            } else {
+                    //level is 3
+                    position = "THREE";
+                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 181, 0));
             }
             return workingMatrix;
         }
@@ -80,7 +88,7 @@ public class DuckDetector extends OpenCvPipeline {
             return position;
         }
 
-        public int duckLevel () {
+        public int duckLevel() {
             if (getPosition().equals("ONE")) {
                 int level = 1;
             } else if (getPosition().equals("TWO")) {
@@ -88,6 +96,6 @@ public class DuckDetector extends OpenCvPipeline {
             } else if (getPosition().equals("THREE")) {
                 int level = 3;
             }
-            return duckLevel();
+            return duckLevel();  // should be return level
         }
     }
