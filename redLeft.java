@@ -23,10 +23,11 @@ public class redLeft extends LinearOpMode {
         robot.driveForward(.4, -100);
         robot.autoTurn(.2, 600);
         sleep(100);
-        robot.driveForward(.2, 600);
+        robot.driveForward(.2, 575);
         sleep(100);
         robot.deliverBlock(3);
         robot.autoTurn(.2,-650);
-        robot.driveForward(.5,-1400);
+        robot.driveForward(.5,400);
+
     }
 }

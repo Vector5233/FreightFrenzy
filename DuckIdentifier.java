@@ -27,6 +27,11 @@ public class DuckIdentifier extends LinearOpMode {
         phoneCam.setPipeline(detector);
         phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
 
+        telemetry.addLine(detector.printCenter());
+        telemetry.addLine(detector.printLeft());
+        telemetry.addLine(detector.printRight());
+
+        //telemetry.addData();
         detector.getPosition();
 
         waitForStart();

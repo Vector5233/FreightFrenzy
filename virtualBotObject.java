@@ -22,7 +22,7 @@ class virtualBotObject {
     final double BUCKETDUMP = .77;
     final double GRABBERSERVO = 0;
     final double INITGRABBERSERVO = .6;
-    int[] ticks = {0, 4812, 6255, 8200};
+    int[] ticks = {0, 4812, 6255, 8500};
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;
@@ -68,7 +68,7 @@ class virtualBotObject {
     }
 //Moves lift to specific level specified by int
     public void turnOnLift(int level) {
-        int[] ticks = {0, 4812, 6255, 8200};
+        int[] ticks = {0, 4812, 6255, 8500};
         freightLift.setTargetPosition(ticks[level]);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);

@@ -9,18 +9,6 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class DuckDetector extends OpenCvPipeline {
-    /*final int LEFTROWSTART = 10;
-    final int LEFTROWEND = 100;
-    final int LEFTCOLSTART = 5;
-    final int LEFTCOLEND = 100;
-    final int CENTERROWSTART = 110;
-    final int CENTERROWEND = 210;
-    final int CENTERCOLSTART = 5;
-    final int CENTERCOLEND = 100;
-    final int RIGHTROWSTART = 210;
-    final int RIGHTTROWEND = 310;
-    final int RIGHTCOLSTART = 5;
-    final int RIGHTCOLEND = 100;*/
 
     final int LEFTCOLSTART = 10;
     final int LEFTCOLEND = 100;
@@ -47,7 +35,9 @@ public class DuckDetector extends OpenCvPipeline {
         //duckLevel();
     }
 
-
+        public double leftTotal;
+        public double centerTotal;
+        public double rightTotal;
         @Override
         public final Mat processFrame (Mat input){
             input.copyTo(workingMatrix);
@@ -63,23 +53,36 @@ public class DuckDetector extends OpenCvPipeline {
             Mat matLeft = workingMatrix.submat(LEFTROWSTART, LEFTROWEND, LEFTCOLSTART, LEFTCOLEND);
 
 
-            double leftTotal = Core.sumElems(matLeft).val[0];
-            double centerTotal = Core.sumElems(matCenter).val[0];
-            double rightTotal = Core.sumElems(matRight).val[0];
+            leftTotal = Core.sumElems(matLeft).val[0];
+            centerTotal = Core.sumElems(matCenter).val[0];
+            rightTotal = Core.sumElems(matRight).val[0];
 
-            if ((leftTotal > centerTotal) && (leftTotal > rightTotal)) {
-                    //level is 1
-                    position = "ONE";
-                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
+             boolean moreCtrThanLft = centerTotal > leftTotal;
+             boolean moreCtrThanRt = centerTotal > rightTotal;
+             boolean moreLftThanCtr = leftTotal > centerTotal;
+             boolean moreLftThanRt = leftTotal > rightTotal;
+             boolean moreRtThanCtr = rightTotal > centerTotal;
+             boolean moreRtThanLft = rightTotal > leftTotal;
 
-            } else if ((centerTotal > leftTotal) && (centerTotal > rightTotal)){
+
+
+            if (moreCtrThanLft && moreCtrThanRt){
                     //level is 2
                     position = "TWO";
-                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
-            } else {
-                    //level is 3
-                    position = "THREE";
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 50, 0));
                     Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 181, 0));
+            } else if (moreLftThanCtr && moreLftThanRt) {
+                    //level is 1
+                    position = "ONE";
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 50, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 181, 0));
+            } else {
+                    position = "THREE";
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 50, 0));
             }
             return workingMatrix;
         }
@@ -87,6 +90,14 @@ public class DuckDetector extends OpenCvPipeline {
         public String getPosition () {
             return position;
         }
+
+        public String printCenter () {
+            return "Center" + centerTotal;
+        }
+
+        public String printLeft () { return "Left" + leftTotal; }
+
+         public String printRight () { return "Right" + rightTotal; }
 
         public int duckLevel() {
             if (getPosition().equals("ONE")) {
