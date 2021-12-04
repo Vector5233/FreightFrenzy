@@ -41,6 +41,7 @@ public class drivingTeleOp extends OpMode {
     final double SAFETICKS = 1200;
     final double LIFTGRABBER = .5;
     final double FIRSTLEVELGRABBER = 1;
+    final double BOTTOM = 139;
 
     //Define Servos, Motors, set values
 
@@ -131,7 +132,7 @@ public class drivingTeleOp extends OpMode {
         if (level == manualLevel) {
             if (freightLift.getCurrentPosition() >= MAXTICKS && gamepad2.right_stick_y < -THRESHOLD) {
                 freightLift.setPower(0);
-            } else if (freightLift.getCurrentPosition() <= 0 && gamepad2.right_stick_y > THRESHOLD) {
+            } else if (freightLift.getCurrentPosition() <= BOTTOM && gamepad2.right_stick_y > THRESHOLD) {
                 freightLift.setPower(0);
             } else {
                 freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

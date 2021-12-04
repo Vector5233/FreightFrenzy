@@ -100,13 +100,14 @@ public class DuckDetector extends OpenCvPipeline {
          public String printRight () { return "Right" + rightTotal; }
 
         public int duckLevel() {
+            int level;
             if (getPosition().equals("ONE")) {
-                int level = 1;
+                level = 1;
             } else if (getPosition().equals("TWO")) {
-                int level = 2;
-            } else if (getPosition().equals("THREE")) {
-                int level = 3;
+                level = 2;
+            } else {
+                level = 3;
             }
-            return duckLevel();  // should be return level
+            return level;  // should be return level
         }
     }
