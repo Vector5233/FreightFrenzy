@@ -13,6 +13,11 @@ public class redLeft extends LinearOpMode {
     private DuckDetector detector = new DuckDetector();
     final double BOB = 0;
     int duckLevel = 3;
+    final double DRIVEPOWER = .4;
+    int FORWARDTICKS = 80;
+    int STRAFETICKS = 30;
+    long SLEEPYTIME = 3000;
+    final double TURNPOWER =.2;
     //int duckLevel = duckDetector.duckLevel();
     final double INITGRABBERSERVOPOSITION = 1;
 
@@ -32,23 +37,40 @@ public class redLeft extends LinearOpMode {
         duckLevel = detector.duckLevel();
 
         waitForStart();
+        duckSpinnerDrive();
+        driveToHub();
+        robot.deliverBlock(duckLevel);
+        parkInStorage();
+
+    }
+
+    public void duckSpinnerDrive(){
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
         robot.initGrabberServo(0);
         robot.turnOnDuckSpinner();
-        robot.driveForward(.4, 80);
-        robot.autoStrafe(.2,30);
-        sleep(3000);
+        robot.driveForward(DRIVEPOWER, FORWARDTICKS);
+        robot.autoStrafe(TURNPOWER,STRAFETICKS);
+        sleep(SLEEPYTIME);
         robot.turnOffDuckSpinner();
-        robot.driveForward(.4, -50);
-        robot.autoTurn(.2, 600);
-        sleep(100);
-        robot.driveForward(.2, 600);
-        sleep(100);
-        robot.deliverBlock(duckLevel);
-        robot.autoTurn(.2,175);
-        robot.driveForward(.2,-475);
+    }
+
+    public void driveToHub(){
+        int DRIVETICKS = -50;
+        long HUBSLEEP = 100;
+        int TICKFORWARD = 600;
+        robot.driveForward(DRIVEPOWER, DRIVETICKS);
+        robot.autoTurn(TURNPOWER, TICKFORWARD);
+        sleep(HUBSLEEP);
+        robot.driveForward(TURNPOWER, TICKFORWARD);
+        sleep(HUBSLEEP);
+    }
+    public void parkInStorage(){
+        int TURNTICKS = 175;
+        int DRIVEBACKWARDS = -475;
+        robot.autoTurn(TURNPOWER,TURNTICKS);
+        robot.driveForward(TURNPOWER,DRIVEBACKWARDS);
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        sleep(600);
+        sleep(SLEEPYTIME);
     }
 }
