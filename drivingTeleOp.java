@@ -16,7 +16,6 @@ public class drivingTeleOp extends OpMode {
 
     Servo grabberServo, cameraServo, bucketServo;
 
-    DigitalChannel touchSensor;
 
                 //ADD JAVADOC?
 
@@ -64,14 +63,12 @@ public class drivingTeleOp extends OpMode {
         grabberServo = hardwareMap.servo.get("grabberServo");
         cameraServo = hardwareMap.servo.get("cameraServo");
         bucketServo = hardwareMap.servo.get("bucketServo");
-        touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         freightLift.setDirection(DcMotorSimple.Direction.REVERSE);
-        touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         initGrabberServo();
         initCameraServo();

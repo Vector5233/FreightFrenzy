@@ -18,30 +18,18 @@ public class redLeft extends LinearOpMode {
     int STRAFETICKS = 30;
     long SLEEPYTIME = 3000;
     final double TURNPOWER =.2;
-    //int duckLevel = duckDetector.duckLevel();
     final double INITGRABBERSERVOPOSITION = 1;
 
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
+
     public void runOpMode() {
-        robot.init();
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        robot.initCameraServo(BOB);
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        phoneCam.openCameraDevice();
-
-        phoneCam.setPipeline(detector);
-        phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
-        sleep(3000);
-        duckLevel = detector.duckLevel();
-
+        initRobot();
+        identifyDuck();
         waitForStart();
         duckSpinnerDrive();
         driveToHub();
         robot.deliverBlock(duckLevel);
         parkInStorage();
-
     }
 
     public void duckSpinnerDrive(){
@@ -72,5 +60,22 @@ public class redLeft extends LinearOpMode {
         robot.driveForward(TURNPOWER,DRIVEBACKWARDS);
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
         sleep(SLEEPYTIME);
+    }
+
+    public void identifyDuck(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        phoneCam.openCameraDevice();
+
+        phoneCam.setPipeline(detector);
+        phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
+        sleep(SLEEPYTIME);
+        duckLevel = detector.duckLevel();
+    }
+
+    public void initRobot(){
+        robot.init();
+        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        robot.initCameraServo(BOB);
     }
 }

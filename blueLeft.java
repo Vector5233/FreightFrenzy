@@ -1,55 +1,57 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="blueRight", group = "GROUP_NAME")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "blueLeft", group = "GROUP_NAME")
 
-public class blueRight extends LinearOpMode {
+class blueLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
-    final double BLUERIGHT = .6;
+    final double BLUELEFT = 0;
     int duckLevel = 3;
-    //int duckLevel = duckDetector.duckLevel();
     final double INITGRABBERSERVOPOSITION = 1;
+    final double POWER2 = .2;
 
 
-    //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
     public void runOpMode() {
         robot.init();
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        robot.initCameraServo(BLUERIGHT);
-
+        robot.initCameraServo(BLUELEFT);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();
-
         phoneCam.setPipeline(detector);
         phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
         sleep(3000);
         duckLevel = detector.duckLevel();
 
         waitForStart();
+
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
         robot.initGrabberServo(0);
-        robot.turnOnDuckSpinner();
-        robot.driveForward(.3, 90);
-        robot.autoStrafe(.2,-25);
-        sleep(2000);
-        robot.turnOffDuckSpinner();
-        robot.autoStrafe(.2,100);
-        robot.autoTurn(.2, -600);
-        sleep(100);
-        robot.driveForward(.2, 600);
-        sleep(100);
+        driveToHub();
         robot.deliverBlock(duckLevel);
-        robot.autoTurn(.2,-175);
-        robot.driveForward(.2,-700);
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        sleep(6000);
+        parkInWarehouse();
+    }
+
+    public void driveToHub(){
+        int TURNTOHUB = -290;
+        int DRIVETOHUB = 150;
+        robot.autoTurn(POWER2, TURNTOHUB);
+        robot.driveForward(POWER2, DRIVETOHUB);
+    }
+
+    public void parkInWarehouse(){
+        long SLEEPYTIME = 6000;
+        int TURNTOW = 280;
+        int DRIVETOW = 600;
+        robot.autoTurn(POWER2,TURNTOW);
+        robot.driveForward(POWER2, DRIVETOW);
+        sleep(SLEEPYTIME);
     }
 }
