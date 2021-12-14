@@ -13,7 +13,6 @@ public class blueRight extends LinearOpMode {
     private DuckDetector detector = new DuckDetector();
     final double BLUERIGHT = .6;
     int duckLevel = 3;
-    //int duckLevel = duckDetector.duckLevel();
     final double INITGRABBERSERVOPOSITION = 1;
 
 
@@ -22,34 +21,52 @@ public class blueRight extends LinearOpMode {
         robot.init();
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
         robot.initCameraServo(BLUERIGHT);
+        identifyDuck();
 
+        waitForStart();
+
+        telemetry.addData("Duck Level:", duckLevel);
+        telemetry.update();
+
+        robot.initGrabberServo(0);
+        driveToDuckSpinner();
+
+        robot.deliverBlock(duckLevel);
+        robot.autoTurn(.2, -175);
+        robot.driveForward(.2, -700);
+        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        sleep(6000);
+    }
+
+    public void identifyDuck() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();
-
         phoneCam.setPipeline(detector);
         phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
         sleep(3000);
         duckLevel = detector.duckLevel();
+    }
 
-        waitForStart();
-        telemetry.addData("Duck Level:", duckLevel);
-        telemetry.update();
-        robot.initGrabberServo(0);
+    public void driveToDuckSpinner(){
+        final double POWER3 = .3;
+        int DRIVETICKS = 90;
+        int STRAFETICKS = -25;
+        long SLEEP = 2000;
         robot.turnOnDuckSpinner();
-        robot.driveForward(.3, 90);
-        robot.autoStrafe(.2,-25);
-        sleep(2000);
+        robot.driveForward(POWER3, DRIVETICKS);
+        robot.autoStrafe(POWER3, STRAFETICKS);
+        sleep(SLEEP);
         robot.turnOffDuckSpinner();
-        robot.autoStrafe(.2,100);
+    }
+
+    public void driveToShippingHub(){
+        final double POWER2 = .2;
+
+        robot.autoStrafe(.2, 100);
         robot.autoTurn(.2, -600);
         sleep(100);
         robot.driveForward(.2, 600);
         sleep(100);
-        robot.deliverBlock(duckLevel);
-        robot.autoTurn(.2,-175);
-        robot.driveForward(.2,-700);
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        sleep(6000);
     }
 }

@@ -11,7 +11,7 @@ class blueLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
-    final double BLUELEFT = 0;
+    final double BLUELEFT = .7;
     int duckLevel = 3;
     final double INITGRABBERSERVOPOSITION = 1;
     final double POWER2 = .2;
@@ -21,14 +21,7 @@ class blueLeft extends LinearOpMode {
         robot.init();
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
         robot.initCameraServo(BLUELEFT);
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        phoneCam.openCameraDevice();
-        phoneCam.setPipeline(detector);
-        phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
-        sleep(3000);
-        duckLevel = detector.duckLevel();
-
+        duckIdentifier();
         waitForStart();
 
         telemetry.addData("Duck Level:", duckLevel);
@@ -53,5 +46,14 @@ class blueLeft extends LinearOpMode {
         robot.autoTurn(POWER2,TURNTOW);
         robot.driveForward(POWER2, DRIVETOW);
         sleep(SLEEPYTIME);
+    }
+    public void duckIdentifier(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        phoneCam.openCameraDevice();
+        phoneCam.setPipeline(detector);
+        phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
+        sleep(3000);
+        duckLevel = detector.duckLevel();
     }
 }
