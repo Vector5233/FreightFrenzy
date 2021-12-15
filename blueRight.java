@@ -14,28 +14,21 @@ public class blueRight extends LinearOpMode {
     final double BLUERIGHT = .6;
     int duckLevel = 3;
     final double INITGRABBERSERVOPOSITION = 1;
+    final double POWER2 = .2;
 
 
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
     public void runOpMode() {
-        robot.init();
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        robot.initCameraServo(BLUERIGHT);
+        initBlueRight();
         identifyDuck();
-
         waitForStart();
-
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
-
         robot.initGrabberServo(0);
         driveToDuckSpinner();
-
+        driveToShippingHub();
         robot.deliverBlock(duckLevel);
-        robot.autoTurn(.2, -175);
-        robot.driveForward(.2, -700);
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        sleep(6000);
+        parkInBox();
     }
 
     public void identifyDuck() {
@@ -61,12 +54,30 @@ public class blueRight extends LinearOpMode {
     }
 
     public void driveToShippingHub(){
-        final double POWER2 = .2;
+        long SLEEP = 100;
+        int TURNTICKS = 600;
+        int STRAFETICKS = 100;
 
-        robot.autoStrafe(.2, 100);
-        robot.autoTurn(.2, -600);
-        sleep(100);
-        robot.driveForward(.2, 600);
-        sleep(100);
+        robot.autoStrafe(POWER2, STRAFETICKS);
+        robot.autoTurn(POWER2, -TURNTICKS);
+        sleep(SLEEP);
+        robot.driveForward(POWER2, TURNTICKS);
+        sleep(SLEEP);
+    }
+
+    public void parkInBox(){
+        long ENDSLEEP = 6000;
+        int RIGHTTURN = -175;
+        int DRIVEFORWARD = -700;
+        robot.autoTurn(POWER2, RIGHTTURN);
+        robot.driveForward(POWER2, DRIVEFORWARD);
+        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        sleep(ENDSLEEP);
+    }
+
+    public void initBlueRight (){
+        robot.init();
+        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        robot.initCameraServo(BLUERIGHT);
     }
 }

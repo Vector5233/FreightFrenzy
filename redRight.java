@@ -17,14 +17,41 @@ class redRight extends LinearOpMode {
     final double POWER2 = .2;
 
     public void runOpMode(){
-    robot.init();
-    robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-    robot.initCameraServo(REDRIGHT);
-    turnToHub();
+        initRobot();
+        duckIdentifier();
+        waitForStart();
+        telemetry.addData("Duck Level:", duckLevel);
+        telemetry.update();
+        robot.initGrabberServo(0);
+        turnToHub();
+        driveToHub();
+        parkInWarehouse();
 
     }
 
+    public void initRobot(){
+        robot.init();
+        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        robot.initCameraServo(REDRIGHT);
+    }
+    public void duckIdentifier(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        phoneCam.openCameraDevice();
+        phoneCam.setPipeline(detector);
+        phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
+        sleep(3000);
+        duckLevel = detector.duckLevel();
+    }
     public void turnToHub(){
+
+    }
+
+    public void driveToHub(){
+
+    }
+
+    public void parkInWarehouse(){
 
     }
 }
