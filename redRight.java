@@ -7,7 +7,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "redRight", group = "GROUP_NAME")
 
-class redRight extends LinearOpMode {
+public class redRight extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
