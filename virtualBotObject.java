@@ -18,11 +18,11 @@ class virtualBotObject {
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .84;
-    final double BUCKETDUMP = .69;
+    final double BUCKETCOLLECT = .8;
+    final double BUCKETDUMP = .7;
     final double GRABBERSERVO = 0;
     final double INITGRABBERSERVO = .6;
-    int[] ticks = {0, 4812, 6255, 8500};
+    int[] ticks = {0, 2355, 3485, 4560};
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;

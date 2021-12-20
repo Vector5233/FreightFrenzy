@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.CameraDevice;
 
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Gru", group = "Red")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Gru", group = "GROUP_NAME")
 
 public class drivingTeleOp extends OpMode {
     DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, grabberMotor;
@@ -28,7 +28,7 @@ public class drivingTeleOp extends OpMode {
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
-    int[] ticks = {0, 4812, 6255, 8500};
+    int[] ticks = {0, 2355, 3485, 4560};
     final int levelZero = 0;
     final int firstLevel = 1;
     final int secondLevel = 2;
@@ -36,7 +36,7 @@ public class drivingTeleOp extends OpMode {
     final int manualLevel = -1;
     int level = (manualLevel);
     final double CAMERASERVO = 0;
-    final double MAXTICKS = 8500;
+    final double MAXTICKS = 4570;
     final double SAFETICKS = 1200;
     final double LIFTGRABBER = .5;
     final double FIRSTLEVELGRABBER = 1;
