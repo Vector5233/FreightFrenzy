@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="redLeftVuforia", group = "GROUP_NAME")
 
@@ -15,7 +21,7 @@ public class redLeftVuforia extends LinearOpMode {
     int duckLevel = 3;
     final double DRIVEPOWER = .4;
     int FORWARDTICKS = 80;
-    int STRAFETICKS = 30;
+    int STRAFETICKS = 10;
     long SLEEPYTIME = 3000;
     final double TURNPOWER =.2;
     final double INITGRABBERSERVOPOSITION = 1;
@@ -28,7 +34,8 @@ public class redLeftVuforia extends LinearOpMode {
         waitForStart();
         duckSpinnerDrive();
         driveToMeasureSpot();
-        robot.deliverBlock(duckLevel);
+        robot.initVuforia();
+        //robot.deliverBlock(duckLevel);
     }
 
     public void duckSpinnerDrive(){
@@ -43,12 +50,13 @@ public class redLeftVuforia extends LinearOpMode {
     }
 
     public void driveToMeasureSpot(){
-        int DRIVETICKS = -50;
+        int DRIVETICKS = -70;
         long HUBSLEEP = 100;
-        int TICKFORWARD = 300;
+        int TICKTURN = 600;
+        int TICKFORWARD = 450;
         final double VUFORIA = .5;
         robot.driveForward(DRIVEPOWER, DRIVETICKS);
-        robot.autoTurn(TURNPOWER, TICKFORWARD);
+        robot.autoTurn(TURNPOWER, TICKTURN);
         sleep(HUBSLEEP);
         robot.driveForward(TURNPOWER, TICKFORWARD);
         robot.initCameraServo(VUFORIA);
@@ -73,4 +81,5 @@ public class redLeftVuforia extends LinearOpMode {
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
         robot.initCameraServo(BOB);
     }
+
 }
