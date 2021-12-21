@@ -204,10 +204,13 @@ class virtualBotObject {
         identifyTarget(1, "Blue Alliance Wall");
         identifyTarget(2, "Red Storage");
         identifyTarget(3, "Red Alliance Wall");
+        targets.activate();
     }
 
     void identifyTarget(int targetIndex, String targetName) {
         VuforiaTrackable aTarget = targets.get(targetIndex);
         aTarget.setName(targetName);
     }
+        //for (VuforiaTrackable trackable : allTrackables) {
+          //  ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(parameters.cameraName, cameraLocationOnRobot);
 }
