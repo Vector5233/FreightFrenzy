@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -10,6 +14,9 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -33,7 +40,9 @@ class virtualBotObject {
     final double BUCKETDUMP = .7;
     final double GRABBERSERVO = 0;
     final double INITGRABBERSERVO = .6;
-    int[] ticks = {0, 2355, 3485, 4560};
+    //int[] ticksForLevels = {0, 2355, 3485, 4560};
+    //testing ticksForLevels needed
+    int[] ticksForLevels = {0, 4812, 6255, 8500};
     private static String key = "AS5UxdP/////AAABmZv/KolYbkR8t/E1p/1N2dZifB38Q6w246S+wdKgUHvMduk79gG/5YxVVCYH/vKImXzh4IDRLARYXOOZOr66s/yrfEl56XMShywG/YnHi2xef8sBx0hG6GQFVmYCtf6BzVsiOR8llrFrn03ZrgysAFZZIFnwKyYGH31rqrhlIYU0W0uRCoeenefItA5c/7hlRRXgl+cPIIFc1LG3T19Y7j1K201S0rZAIL+B5fmso8WXT4BmRIirVXhaqGhFVyQlwSX3Z45iNgNvDW+rVF71KRaMwqq8A6ap3rYllr3MAB4w1avggu687SV9Z540feYIJ8HCHuU2M41vLWj7F/qBvaQ2V7u6ImkWBdiuvAVKn6fB";
     private VuforiaLocalizer vuforia = null;
     private VuforiaTrackables targets = null;
@@ -89,8 +98,7 @@ class virtualBotObject {
 
     //Moves lift to specific level specified by int
     public void turnOnLift(int level) {
-        int[] ticks = {0, 4812, 6255, 8500};
-        freightLift.setTargetPosition(ticks[level]);
+        freightLift.setTargetPosition(ticksForLevels[level]);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         freightLift.setPower(LIFTPOWER);
         while (freightLift.isBusy() && parent.opModeIsActive()) {
@@ -171,7 +179,9 @@ class virtualBotObject {
         setPowerAll(power);
 
         while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
-            assert true;
+            // assert True;
+            reportAllDriveMotors();
+            parent.telemetry.update();
         }
     }
 
@@ -183,6 +193,7 @@ class virtualBotObject {
         lowerLift();
 
     }
+
 
     public void initVuforia() {
         OpenGLMatrix targetPose = null;
@@ -207,10 +218,41 @@ class virtualBotObject {
         targets.activate();
     }
 
+    public void autoTurnDegrees (double power, double degrees) {
+        final double ticksPerDegrees = 4.5;
+        int ticks = (int) (degrees * ticksPerDegrees);
+        autoTurn(power,ticks);
+    }
+
     void identifyTarget(int targetIndex, String targetName) {
         VuforiaTrackable aTarget = targets.get(targetIndex);
         aTarget.setName(targetName);
     }
         //for (VuforiaTrackable trackable : allTrackables) {
           //  ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(parameters.cameraName, cameraLocationOnRobot);
+
+    void reportAllDriveMotors() {
+        // caller must update
+        parent.telemetry.addLine(String.format("Front Left: %d    Front Right: %d", frontLeft.getCurrentPosition(), frontRight.getCurrentPosition()));
+        parent.telemetry.addLine(String.format("Back Left: %d     Back Right: %d", backLeft.getCurrentPosition(), backRight.getCurrentPosition()));
+    }
+
+    public double findCurrentAngle() {
+        initVuforia();
+        VuforiaTrackable freightDuck = targets.get(0);
+        //needs telemetry to test
+        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)freightDuck.getListener()).getFtcCameraFromTarget();
+        //needs telemetry to test
+        Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        //needs telemetry
+        double rX = rot.firstAngle;
+        double rY = rot.secondAngle;
+        double rZ = rot.thirdAngle;
+        parent.telemetry.addData("Rotation of X:", rX);
+        parent.telemetry.addData("Rotation of Y:", rY);
+        parent.telemetry.addData("Rotation of Z:", rZ);
+        parent.telemetry.update();
+        return rot.thirdAngle;
+    }
+
 }
