@@ -265,7 +265,7 @@ class virtualBotObject {
             return REPLACECONSTANT;
         }
 
-        parent.sleep(5000);
+        parent.sleep(1000);
         //VuforiaTrackable pictureTarget = targets.get(0);
         parent.telemetry.addLine("Step One Complete");
         parent.telemetry.update();
@@ -283,7 +283,7 @@ class virtualBotObject {
         parent.telemetry.addData("Rotation of Y: ", rY);
         parent.telemetry.addData("Rotation of Z: ", rZ);
         parent.telemetry.update();
-        parent.sleep(5000);
+        parent.sleep(1000);
         return rot.thirdAngle;
     }
 }
