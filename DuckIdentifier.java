@@ -18,7 +18,7 @@ public class DuckIdentifier extends LinearOpMode {
     public void runOpMode() {
         virtualBotObject robot = new virtualBotObject(this);
         robot.init();
-        robot.initCameraServo(BOB);
+        //robot.initCameraServo(BOB);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);

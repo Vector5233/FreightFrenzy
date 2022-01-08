@@ -4,22 +4,22 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "CameraRotationFinder", group = "Experiments")
-
-public class CameraRotationFinder extends LinearOpMode {
+@Autonomous (name = "RobotRotator", group = "Experiments")
+public class RobotRotator extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     Servo cameraServo;
+
 
     @Override
     public void runOpMode() {
         robot.init();
         robot.initVuforia();
         cameraServo = hardwareMap.servo.get("cameraServo");
-        //sweet spot position = set camera servo to .38
-        cameraServo.setPosition(.38);
         waitForStart();
-        telemetry.addData("Camera Position", cameraServo.getPosition());
+        final double currentAngle = robot.findCurrentAngle();
+        final double correctAngle = -.5;
+        int rotate = (int) (currentAngle - correctAngle);
+        robot.autoTurnDegrees (.5, rotate);
         robot.findCurrentAngle();
     }
-
 }
