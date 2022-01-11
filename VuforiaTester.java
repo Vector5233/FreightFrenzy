@@ -59,5 +59,6 @@ public class VuforiaTester extends LinearOpMode {
         telemetry.addLine("Done");
         telemetry.update();
         sleep(2000);
+        vuforia.close();
     }
 }

@@ -75,6 +75,7 @@ public class redLeftVuforia extends LinearOpMode {
         sleep(SLEEPYTIME);
         duckLevel = detector.duckLevel();
         phoneCam.stopStreaming();
+        //phoneCam.closeCameraDevice();
     }
 
     public void initRobot(){
@@ -82,5 +83,4 @@ public class redLeftVuforia extends LinearOpMode {
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
         robot.initCameraServo(BOB);
     }
-
 }
