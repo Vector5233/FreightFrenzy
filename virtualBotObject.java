@@ -239,6 +239,51 @@ class virtualBotObject {
         parent.telemetry.addLine(String.format("Back Left: %d     Back Right: %d", backLeft.getCurrentPosition(), backRight.getCurrentPosition()));
     }
 
+    //needs testing
+    public void rotateToSweetSpot() {
+        init();
+        initVuforia();
+        cameraServo = parent.hardwareMap.servo.get("cameraServo");
+        parent.waitForStart();
+        final double currentAngleOne = findCurrentAngle();
+        final double correctAngle = -.5;
+        int rotateOne = (int) (currentAngleOne - correctAngle);
+        parent.telemetry.addData("Rotate by ", rotateOne);
+        parent.telemetry.update();
+        autoTurnDegrees (1, rotateOne);
+        parent.sleep(500);
+        //second angle calculation
+        final double currentAngleTwo = findCurrentAngle();
+        int rotateTwo = (int) (currentAngleTwo - correctAngle);
+        parent.telemetry.addData("Second rotate by ", rotateTwo);
+        parent.telemetry.update();
+        autoTurnDegrees (1, rotateTwo);
+        parent.sleep(500);
+        //third angle calculation
+        final double currentAngleThree = findCurrentAngle();
+        int rotateThree = (int) (currentAngleThree - correctAngle);
+        parent.telemetry.addData("Third rotate by ", rotateThree);
+        parent.telemetry.update();
+        autoTurnDegrees (1, rotateThree);
+        parent.sleep(500);
+        //second angle calculation
+        final double currentAngleFour = findCurrentAngle();
+        int rotateFour = (int) (currentAngleFour - correctAngle);
+        parent.telemetry.addData("Fourth rotate by ", rotateFour);
+        parent.telemetry.update();
+        autoTurnDegrees (1, rotateFour);
+        parent.sleep(500);
+        //third angle calculation
+        final double currentAngleFive = findCurrentAngle();
+        int rotateFive = (int) (currentAngleFive - correctAngle);
+        parent.telemetry.addData("Fifth rotate by ", rotateFive);
+        parent.telemetry.update();
+        autoTurnDegrees (1, rotateFive);
+        parent.sleep(500);
+        parent.telemetry.addLine("Task Completed");
+        parent.telemetry.update();
+    }
+
     public double findCurrentAngle() {
         OpenGLMatrix pose = null;
         //caller must call init vuforia
