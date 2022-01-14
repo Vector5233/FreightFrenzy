@@ -4,9 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 
 public class redLeftVuforia extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
+    VuforiaLocalizer vuforia = null;
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
     final double BOB = 0;
@@ -30,11 +35,15 @@ public class redLeftVuforia extends LinearOpMode {
 
     public void runOpMode() {
         initRobot();
+        robot.initVuforia();
         identifyDuck();
         waitForStart();
         duckSpinnerDrive();
         driveToMeasureSpot();
-        robot.initVuforia();
+        phoneCam.stopStreaming();
+        phoneCam.closeCameraDevice();
+        robot.rotateToSweetSpot();
+
         //robot.deliverBlock(duckLevel);
     }
 
@@ -68,14 +77,22 @@ public class redLeftVuforia extends LinearOpMode {
     public void identifyDuck(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        phoneCam.openCameraDevice();
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                phoneCam.setPipeline(detector);
+                phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            }
 
-        phoneCam.setPipeline(detector);
-        phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            @Override
+            public void onError(int i) {
+
+            }
+        });
+
         sleep(SLEEPYTIME);
         duckLevel = detector.duckLevel();
-        phoneCam.stopStreaming();
-        //phoneCam.closeCameraDevice();
+
     }
 
     public void initRobot(){
