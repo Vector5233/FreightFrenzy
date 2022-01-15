@@ -6,7 +6,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="redLeft", group = "GROUP_NAME")
-
+//properties file
 public class redLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
@@ -44,18 +44,22 @@ public class redLeft extends LinearOpMode {
     }
 
     public void driveToHub(){
-        int DRIVETICKS = -50;
+        int STRAFEPOWER = 1;
+        int STRAFETICKS = -150;         //sign change
         long HUBSLEEP = 100;
-        int TICKFORWARD = 600;
-        robot.driveForward(DRIVEPOWER, DRIVETICKS);
-        robot.autoTurn(TURNPOWER, TICKFORWARD);
+        int TURNFORWARD = 625;
+        int TICKFORWARD = 480;
+        robot.autoStrafe(STRAFEPOWER, STRAFETICKS);
+        robot.autoTurn(TURNPOWER, TURNFORWARD);
         sleep(HUBSLEEP);
         robot.driveForward(TURNPOWER, TICKFORWARD);
         sleep(HUBSLEEP);
+        robot.setPowerAll(0);
     }
+
     public void parkInStorage(){
         int TURNTICKS = 175;
-        int DRIVEBACKWARDS = -475;
+        int DRIVEBACKWARDS = -550;
         robot.autoTurn(TURNPOWER,TURNTICKS);
         robot.driveForward(TURNPOWER,DRIVEBACKWARDS);
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);

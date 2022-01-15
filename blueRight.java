@@ -22,9 +22,6 @@ public class blueRight extends LinearOpMode {
         initBlueRight();
         identifyDuck();
         waitForStart();
-        telemetry.addData("Duck Level:", duckLevel);
-        telemetry.update();
-        robot.initGrabberServo(0);
         driveToDuckSpinner();
         driveToShippingHub();
         robot.deliverBlock(duckLevel);
@@ -46,7 +43,10 @@ public class blueRight extends LinearOpMode {
         int DRIVETICKS = 90;
         int STRAFETICKS = -25;
         long SLEEP = 2000;
+        telemetry.addData("Duck Level:", duckLevel);
+        telemetry.update();
         robot.turnOnDuckSpinner();
+        robot.initGrabberServo(0);
         robot.driveForward(POWER3, DRIVETICKS);
         robot.autoStrafe(POWER3, STRAFETICKS);
         sleep(SLEEP);
@@ -56,19 +56,20 @@ public class blueRight extends LinearOpMode {
     public void driveToShippingHub(){
         long SLEEP = 100;
         int TURNTICKS = 600;
-        int STRAFETICKS = 100;
+        int DRIVETICKS = 475;
+        int STRAFETICKS = 150;
 
         robot.autoStrafe(POWER2, STRAFETICKS);
         robot.autoTurn(POWER2, -TURNTICKS);
         sleep(SLEEP);
-        robot.driveForward(POWER2, TURNTICKS);
+        robot.driveForward(POWER2, DRIVETICKS);
         sleep(SLEEP);
     }
 
     public void parkInBox(){
         long ENDSLEEP = 6000;
         int RIGHTTURN = -175;
-        int DRIVEFORWARD = -700;
+        int DRIVEFORWARD = -650;
         robot.autoTurn(POWER2, RIGHTTURN);
         robot.driveForward(POWER2, DRIVEFORWARD);
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);

@@ -21,15 +21,9 @@ public class blueLeft extends LinearOpMode {
         robot.init();
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
         robot.initCameraServo(BLUELEFT);
-        duckIdentifier();
         waitForStart();
-
-        telemetry.addData("Duck Level:", duckLevel);
-        telemetry.update();
-        robot.initGrabberServo(0);
-        driveToHub();
-        robot.deliverBlock(duckLevel);
         parkInWarehouse();
+
     }
 
     public void driveToHub(){
@@ -40,12 +34,17 @@ public class blueLeft extends LinearOpMode {
     }
 
     public void parkInWarehouse(){
-        long SLEEPYTIME = 6000;
-        int TURNTOW = 280;
-        int DRIVETOW = 600;
-        robot.autoTurn(POWER2,TURNTOW);
-        robot.driveForward(POWER2, DRIVETOW);
-        sleep(SLEEPYTIME);
+        double TURNPOWER = .5;
+        double DEGREES = 90;
+        int  POWER = 1;
+        int DRIVETICKS = 850;
+        int DRIVE = 100;
+
+        robot.driveForward(TURNPOWER, DRIVE);
+        robot.autoTurnDegrees(TURNPOWER, -DEGREES);
+        robot.driveForward(POWER, DRIVETICKS);
+        robot.initGrabberServo(0);
+        sleep(3000);
     }
     public void duckIdentifier(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

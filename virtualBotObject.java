@@ -41,9 +41,7 @@ class virtualBotObject {
     final double GRABBERSERVO = 0;
     final double INITGRABBERSERVO = .6;
     final double REPLACECONSTANT = 0;
-    //int[] ticksForLevels = {0, 2355, 3485, 4560};
-    //testing ticksForLevels needed
-    int[] ticksForLevels = {0, 4812, 6255, 8500};
+    int[] ticksForLevels = {0, 2355, 3485, 4600};
     private static String key = "AS5UxdP/////AAABmZv/KolYbkR8t/E1p/1N2dZifB38Q6w246S+wdKgUHvMduk79gG/5YxVVCYH/vKImXzh4IDRLARYXOOZOr66s/yrfEl56XMShywG/YnHi2xef8sBx0hG6GQFVmYCtf6BzVsiOR8llrFrn03ZrgysAFZZIFnwKyYGH31rqrhlIYU0W0uRCoeenefItA5c/7hlRRXgl+cPIIFc1LG3T19Y7j1K201S0rZAIL+B5fmso8WXT4BmRIirVXhaqGhFVyQlwSX3Z45iNgNvDW+rVF71KRaMwqq8A6ap3rYllr3MAB4w1avggu687SV9Z540feYIJ8HCHuU2M41vLWj7F/qBvaQ2V7u6ImkWBdiuvAVKn6fB";
     private VuforiaLocalizer vuforia = null;
     private VuforiaTrackables targets = null;
@@ -135,7 +133,7 @@ class virtualBotObject {
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerAll(power);
 
-        while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
+        while ((frontLeft.isBusy()) && parent.opModeIsActive()) {
             assert true;
         }
     }
@@ -157,7 +155,9 @@ class virtualBotObject {
     }
 
     //Strafes to location specified by int ticks
+    //CHANGE SIGNS
     public void autoStrafe(double power, int ticks) {
+
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
         frontLeft.setTargetPosition(-ticks);
@@ -196,6 +196,11 @@ class virtualBotObject {
 
     }
 
+    public void autoTurnDegrees(double power, double degrees) {
+        final double ticksPerDegrees = 4.5;
+        int ticks = (int) (degrees * ticksPerDegrees);
+        autoTurn(power, ticks);
+    }
 
     public void initVuforia() {
         //OpenGLMatrix targetPose = null;
@@ -218,13 +223,6 @@ class virtualBotObject {
         identifyTarget(3, "Red Alliance Wall");
         targets.activate();
     }
-
-    public void autoTurnDegrees(double power, double degrees) {
-        final double ticksPerDegrees = 4.5;
-        int ticks = (int) (degrees * ticksPerDegrees);
-        autoTurn(power, ticks);
-    }
-
     void identifyTarget(int targetIndex, String targetName) {
         VuforiaTrackable aTarget = targets.get(targetIndex);
         aTarget.setName(targetName);

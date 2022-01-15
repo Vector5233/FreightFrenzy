@@ -18,13 +18,8 @@ public class redRight extends LinearOpMode {
 
     public void runOpMode(){
         initRobot();
-        duckIdentifier();
         waitForStart();
-        telemetry.addData("Duck Level:", duckLevel);
-        telemetry.update();
         robot.initGrabberServo(0);
-        turnToHub();
-        driveToHub();
         parkInWarehouse();
 
     }
@@ -52,7 +47,15 @@ public class redRight extends LinearOpMode {
     }
 
     public void parkInWarehouse(){
+       double TURNPOWER = .5;
+       double DEGREES = 90;
+       int  POWER = 1;
+       int DRIVETICKS = 700;
+       int DRIVE = 20;
 
+       robot.driveForward(TURNPOWER, DRIVE);
+       robot.autoTurnDegrees(TURNPOWER, DEGREES);
+       robot.driveForward(POWER, DRIVETICKS);
     }
 }
 
