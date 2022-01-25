@@ -28,7 +28,7 @@ public class drivingTeleOp extends OpMode {
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
-    int[] ticks = {0, 2355, 3485, 4560};
+    int[] ticks = {0, 680, 1190, 1840};
     final int levelZero = 0;
     final int firstLevel = 1;
     final int secondLevel = 2;
@@ -36,10 +36,8 @@ public class drivingTeleOp extends OpMode {
     final int manualLevel = -1;
     int level = (manualLevel);
     final double CAMERASERVO = 0;
-    final double MAXTICKS = 4570;
-    final double SAFETICKS = 1200;
-    final double LIFTGRABBER = .5;
-    final double FIRSTLEVELGRABBER = 1;
+    final double MAXTICKS = 1850;
+    final double SAFETICKS = 165;
 
     //Define Servos, Motors, set values
 
@@ -84,7 +82,6 @@ public class drivingTeleOp extends OpMode {
         setSlowApproach();
         setBucketGrabber();
         setBucketPosition();
-        liftGrabber();
     }
 
     //called to trim power of driving joystick to ensure the robot does not move unintentionally
@@ -107,17 +104,6 @@ public class drivingTeleOp extends OpMode {
             backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-    }
-
-    //Allows the grabber to be lifted, so robot can deliver blocks to first and second level
-    public void liftGrabber(){
-        if(gamepad1.b){
-            grabberServo.setPosition(LIFTGRABBER);
-        } else if (gamepad1.x){
-            grabberServo.setPosition(GRABBERSERVO);
-        } else if (gamepad1.a){
-            grabberServo.setPosition(FIRSTLEVELGRABBER);
         }
     }
 
