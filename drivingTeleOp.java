@@ -28,12 +28,14 @@ public class drivingTeleOp extends OpMode {
     final double THRESHOLD = .1;
     final double GRABBERSPEED = 1;
     final double GRABBERSERVO = 0;
-    int[] ticks = {0, 680, 1190, 1840};
+    final double HOLDPOWER = .07;
     final int levelZero = 0;
     final int firstLevel = 1;
     final int secondLevel = 2;
     final int thirdLevel = 3;
     final int manualLevel = -1;
+    final int holdLevel = 7;
+    int[] ticks = {0, 680, 1190, 1840};
     int level = (manualLevel);
     final double CAMERASERVO = 0;
     final double MAXTICKS = 1850;
@@ -120,7 +122,13 @@ public class drivingTeleOp extends OpMode {
                 freightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 freightLift.setPower(liftPower);
             }
-        } else {
+        }
+        else if(level == holdLevel){
+            freightLift.setTargetPosition(freightLift.getCurrentPosition());
+            freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            freightLift.setPower(HOLDPOWER);
+            }
+        else{
             freightLift.setTargetPosition(ticks[level]);
             freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             freightLift.setPower(FREIGHTLIFTPOWER);
@@ -139,6 +147,8 @@ public class drivingTeleOp extends OpMode {
             level = thirdLevel;
         } else if (gamepad2.right_stick_y < -THRESHOLD || gamepad2.right_stick_y > THRESHOLD) {
             level = manualLevel;
+        } else if (gamepad2.right_stick_y > -THRESHOLD || gamepad2.right_stick_y <= THRESHOLD) {
+            level = holdLevel;
         }
         return level;
     }
@@ -216,6 +226,8 @@ public class drivingTeleOp extends OpMode {
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
     }
+    
+
 
     //sets grabber servo position
     public void initGrabberServo() {
