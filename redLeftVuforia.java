@@ -23,7 +23,7 @@ import java.util.List;
 
 public class redLeftVuforia extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
-    VisionObject vision = new VisionObject(this);
+    VisionObject vision = new VisionObject();
     //VuforiaLocalizer vuforia = null;
     //private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
