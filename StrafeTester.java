@@ -25,7 +25,7 @@ public class StrafeTester extends LinearOpMode {
         MenuItem[] menuItems = {new MenuItem(0.0, "power", 1.0, 0.0, 0.1 ),
                                 new MenuItem(0.0, "distance", 144, -144, 0.5)};
         int i;
-        final int delay = 150;
+        final int delay = 75;
 
         robot.init();
 
@@ -53,14 +53,14 @@ public class StrafeTester extends LinearOpMode {
                 if (menuActiveItem >= menuItems.length) {
                     menuActiveItem = 0;
                 }
-                sleep(delay);
+                sleep(4*delay);
             }
             else if(gamepad1.left_stick_y < -joystickThreshold) {
                 menuActiveItem--;
                 if (menuActiveItem < 0) {
                     menuActiveItem = menuItems.length - 1;
                 }
-                sleep(delay);
+                sleep(4*delay);
             }
         }
         strafePower = menuItems[0].getValue();
@@ -72,11 +72,16 @@ public class StrafeTester extends LinearOpMode {
         initialize();
         telemetry.addLine("Strafing " + strafeDistance + " inches at " + strafePower + " power");
         telemetry.update();
+        robot.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sleep(250);
         robot.autoStrafe(strafePower, inchesToTicks(strafeDistance));
+        robot.reportAllDriveMotors();
+        telemetry.update();
+        sleep(3000);
     }
 
     public int inchesToTicks(double inches) {
-        final double TICKS_PER_INCH = 2.0;
+        final double TICKS_PER_INCH = 30;
         return (int)(inches * TICKS_PER_INCH);
     }
 }

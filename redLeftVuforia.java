@@ -24,8 +24,6 @@ import java.util.List;
 public class redLeftVuforia extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     VisionObject vision = new VisionObject();
-    //VuforiaLocalizer vuforia = null;
-    //private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
     final double BOB = 0;
     int duckLevel = 3;
@@ -35,18 +33,12 @@ public class redLeftVuforia extends LinearOpMode {
     long SLEEPYTIME = 3000;
     final double TURNPOWER =.2;
     final double INITGRABBERSERVOPOSITION = 1;
-    /*private static String key = "AS5UxdP/////AAABmZv/KolYbkR8t/E1p/1N2dZifB38Q6w246S+wdKgUHvMduk79gG/5YxVVCYH/vKImXzh4IDRLARYXOOZOr66s/yrfEl56XMShywG/YnHi2xef8sBx0hG6GQFVmYCtf6BzVsiOR8llrFrn03ZrgysAFZZIFnwKyYGH31rqrhlIYU0W0uRCoeenefItA5c/7hlRRXgl+cPIIFc1LG3T19Y7j1K201S0rZAIL+B5fmso8WXT4BmRIirVXhaqGhFVyQlwSX3Z45iNgNvDW+rVF71KRaMwqq8A6ap3rYllr3MAB4w1avggu687SV9Z540feYIJ8HCHuU2M41vLWj7F/qBvaQ2V7u6ImkWBdiuvAVKn6fB";
-    private VuforiaTrackables targets = null;
-    private WebcamName webcamName = null;
-    private boolean targetVisible = false;
-    private OpenGLMatrix lastLocation = null;
-*/
+
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
 
     public void runOpMode() {
         initRobot();
-        vision.initVuforia();
-        vision.identifyDuck();
+
         waitForStart();
         duckSpinnerDrive();
         driveToMeasureSpot();

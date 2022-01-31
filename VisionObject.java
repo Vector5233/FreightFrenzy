@@ -6,15 +6,12 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 
-public class VisionObject extends LinearOpMode {
-
+public class VisionObject {
+    LinearOpMode parent;
     VuforiaLocalizer vuforia = null;
     OpenCvCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
@@ -23,62 +20,39 @@ public class VisionObject extends LinearOpMode {
     private WebcamName webcamName = null;
     private boolean targetVisible = false;
     private OpenGLMatrix lastLocation = null;
-    int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    int cameraMonitorViewId = parent.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", parent.hardwareMap.appContext.getPackageName());
     int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
     VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-    int duckLevel = 3;
-    long SLEEPYTIME = 3000;
 
-    public void runOpMode(){
-        initVuforia();
 
-    }
-    public void identifyDuck(){
-        /*public void onOpened() {
-                phoneCam.setPipeline(detector);
-                phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
-            }
+    public void initVuforia(){
+        int cameraMonitorViewId = parent.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", parent.hardwareMap.appContext.getPackageName());
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
 
-            @Override
-            public void onError(int i) {
 
-            }*/
-
-        sleep(SLEEPYTIME);
-        duckLevel = detector.duckLevel();
-        }
-
-    public void initVuforia() {
-        //OpenGLMatrix targetPose = null;
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(viewportContainerIds[0]);
         parameters.vuforiaLicenseKey = key;
-        parameters.cameraName = webcamName;
-        parameters.useExtendedTracking = false;
+        parameters.cameraDirection   = VuforiaLocalizer.CameraDirection.BACK;
+
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        targets = this.vuforia.loadTrackablesFromAsset("FreightFrenzy");
-
-
-        targetVisible = false;
-        identifyTarget(0, "Blue Storage");
-        identifyTarget(1, "Blue Alliance Wall");
-        identifyTarget(2, "Red Storage");
-        identifyTarget(3, "Red Alliance Wall");
-        targets.activate();
     }
 
-    public void initBoth(){
-       initVuforia();
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    public void createPassThrough(){
         phoneCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, viewportContainerIds[1]);
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            public void onOpened(){
+                phoneCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+                //phoneCam.setPipeline(detector);
+                //phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            }
+            public void onError(int errorCode){
+                parent.telemetry.addLine("No Cam Opened");
+                parent.telemetry.update();
+            }
+        });
 
-
-        }
-
-    void identifyTarget(int targetIndex, String targetName) {
-        VuforiaTrackable aTarget = targets.get(targetIndex);
-        aTarget.setName(targetName);
     }
-
 
 
 }
