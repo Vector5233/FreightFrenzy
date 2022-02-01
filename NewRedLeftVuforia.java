@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="NewRedLeftVuforia", group = "GROUP_NAME")
 
 public class NewRedLeftVuforia extends LinearOpMode {
-    VisionObject vision = new VisionObject();
     virtualBotObject robot = new virtualBotObject(this);
+    VisionObject vision = new VisionObject(robot.parent);
     final double INITGRABBERSERVOPOSITION = 1;
     final double BOB = 0;
 
