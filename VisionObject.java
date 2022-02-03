@@ -59,4 +59,9 @@ public class VisionObject {
 
     }
 
+    public int duckLevel(){
+        int level = detector.duckLevel();
+        return level;
+    }
+
     }
