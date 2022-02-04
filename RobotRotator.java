@@ -13,7 +13,7 @@ public class RobotRotator extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init();
-        robot.initVuforia();
+        //robot.initVuforia();
         cameraServo = hardwareMap.servo.get("cameraServo");
         waitForStart();
         final double currentAngleOne = robot.findCurrentAngle();

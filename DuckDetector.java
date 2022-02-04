@@ -108,6 +108,6 @@ public class DuckDetector extends OpenCvPipeline {
             } else {
                 level = 3;
             }
-            return level;  // should be return level
+            return level;
         }
     }

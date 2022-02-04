@@ -36,12 +36,9 @@ class virtualBotObject {
     final double DUCKSPINNERPOWER = .5;
     final double LIFTPOWER = 1;
     final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .8;
     final double BUCKETDUMP = .7;
-    final double GRABBERSERVO = 0;
-    final double INITGRABBERSERVO = .6;
     final double REPLACECONSTANT = 0;
-    int[] ticksForLevels = {0, 2355, 3485, 4600};
+    int[] ticksForLevels = {0, 680, 1190, 1840};
     private static String key = "AS5UxdP/////AAABmZv/KolYbkR8t/E1p/1N2dZifB38Q6w246S+wdKgUHvMduk79gG/5YxVVCYH/vKImXzh4IDRLARYXOOZOr66s/yrfEl56XMShywG/YnHi2xef8sBx0hG6GQFVmYCtf6BzVsiOR8llrFrn03ZrgysAFZZIFnwKyYGH31rqrhlIYU0W0uRCoeenefItA5c/7hlRRXgl+cPIIFc1LG3T19Y7j1K201S0rZAIL+B5fmso8WXT4BmRIirVXhaqGhFVyQlwSX3Z45iNgNvDW+rVF71KRaMwqq8A6ap3rYllr3MAB4w1avggu687SV9Z540feYIJ8HCHuU2M41vLWj7F/qBvaQ2V7u6ImkWBdiuvAVKn6fB";
     private VuforiaLocalizer vuforia = null;
     private VuforiaTrackables targets = null;
@@ -53,6 +50,7 @@ class virtualBotObject {
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
+
 
     public void init() {
         backLeft = parent.hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -104,11 +102,6 @@ class virtualBotObject {
         while (freightLift.isBusy() && parent.opModeIsActive()) {
             assert true;
         }
-    }
-
-    // Turns off the lift
-    public void turnOffLift() {
-        freightLift.setPower(0);
     }
 
     public void lowerLift() {
@@ -202,34 +195,6 @@ class virtualBotObject {
         autoTurn(power, ticks);
     }
 
-    public void initVuforia() {
-        //OpenGLMatrix targetPose = null;
-        webcamName = parent.hardwareMap.get(WebcamName.class, "Webcam 1");
-        int cameraMonitorViewId = parent.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", parent.hardwareMap.appContext.getPackageName());
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        parameters.vuforiaLicenseKey = key;
-        parameters.cameraName = webcamName;
-        parameters.useExtendedTracking = false;
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        targets = this.vuforia.loadTrackablesFromAsset("FreightFrenzy");
-
-
-        targetVisible = false;
-        identifyTarget(0, "Blue Storage");
-        identifyTarget(1, "Blue Alliance Wall");
-        identifyTarget(2, "Red Storage");
-        identifyTarget(3, "Red Alliance Wall");
-        targets.activate();
-    }
-    void identifyTarget(int targetIndex, String targetName) {
-        VuforiaTrackable aTarget = targets.get(targetIndex);
-        aTarget.setName(targetName);
-    }
-    //for (VuforiaTrackable trackable : allTrackables) {
-    //  ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(parameters.cameraName, cameraLocationOnRobot);
-
     void reportAllDriveMotors() {
         // caller must update
         parent.telemetry.addLine(String.format("Front Left: %d    Front Right: %d", frontLeft.getCurrentPosition(), frontRight.getCurrentPosition()));
@@ -297,18 +262,15 @@ class virtualBotObject {
             }
         }
 
-        if (targetVisible == false) {
+        if (!targetVisible) {
             parent.telemetry.addLine("No Target Found");
             parent.telemetry.update();
             return REPLACECONSTANT;
         }
 
         parent.sleep(1000);
-        //VuforiaTrackable pictureTarget = targets.get(0);
         parent.telemetry.addLine("Step One Complete");
         parent.telemetry.update();
-        //MatrixF pose = (MatrixF)((VuforiaTrackableDefaultListener)freightDuck.getListener()).getFtcCameraFromTarget();
-        //OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)pictureTarget.getListener()).getFtcCameraFromTarget();
         parent.telemetry.addLine("Step Two Complete");
         parent.telemetry.update();
         Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
