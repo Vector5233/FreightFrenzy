@@ -23,6 +23,7 @@ public class VisionObject {
     private WebcamName webcamName = null;
     private boolean targetVisible = false;
     private OpenGLMatrix lastLocation = null;
+    int level = 3;
 
 
     public VisionObject(LinearOpMode p) {
@@ -56,11 +57,10 @@ public class VisionObject {
                 parent.telemetry.update();
             }
         });
-
     }
 
     public int duckLevel(){
-        int level = detector.duckLevel();
+        level = detector.duckLevel();
         return level;
     }
 

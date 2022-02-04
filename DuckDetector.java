@@ -30,10 +30,6 @@ public class DuckDetector extends OpenCvPipeline {
 
     private String position;
 
-    public DuckDetector() {
-        //getPosition();
-        //duckLevel();
-    }
 
         public double leftTotal;
         public double centerTotal;
@@ -45,17 +41,19 @@ public class DuckDetector extends OpenCvPipeline {
             if (workingMatrix.empty()) {
                 return input;
             }
-
+            //sets the color scheme needed to see yellow
             Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
 
+            //sets the squares on the drivers hub
             Mat matRight = workingMatrix.submat(RIGHTROWSTART, RIGHTROWEND, RIGHTCOLSTART, RIGHTCOLEND);
             Mat matCenter = workingMatrix.submat(CENTERROWSTART, CENTERROWEND, CENTERCOLSTART, CENTERCOLEND);
             Mat matLeft = workingMatrix.submat(LEFTROWSTART, LEFTROWEND, LEFTCOLSTART, LEFTCOLEND);
 
-
+            //adds up the concentration of yellow in each square
             leftTotal = Core.sumElems(matLeft).val[0];
             centerTotal = Core.sumElems(matCenter).val[0];
             rightTotal = Core.sumElems(matRight).val[0];
+
 
              boolean moreCtrThanLft = centerTotal > leftTotal;
              boolean moreCtrThanRt = centerTotal > rightTotal;
@@ -65,7 +63,8 @@ public class DuckDetector extends OpenCvPipeline {
              boolean moreRtThanLft = rightTotal > leftTotal;
 
 
-
+            //checks which square has the most concentration of yellow
+            //corresponds to each level
             if (moreCtrThanLft && moreCtrThanRt){
                     //level is 2
                     position = "TWO";
@@ -99,6 +98,7 @@ public class DuckDetector extends OpenCvPipeline {
 
          public String printRight () { return "Right" + rightTotal; }
 
+         //corresponds position to each level
         public int duckLevel() {
             int level;
             if (getPosition().equals("ONE")) {

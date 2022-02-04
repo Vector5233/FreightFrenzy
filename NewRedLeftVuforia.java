@@ -24,10 +24,10 @@ public class NewRedLeftVuforia extends LinearOpMode {
     vision.createPassThrough();
     sleep(1000); //necessary to avoid null pointer error
     waitForStart();
-    duckSpinnerDrive();
+    /*duckSpinnerDrive();
     driveToMeasureSpot();
 
-    robot.deliverBlock(vision.duckLevel());
+    robot.deliverBlock(vision.duckLevel());*/
     }
 
     public void initRobot(){
