@@ -163,6 +163,39 @@ class virtualBotObject {
         }
     }
 
+    public void autoStrafe2(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(-ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+
+        while (frontLeft.isBusy() && parent.opModeIsActive()) {
+        }
+    }
+
+    public void autoStrafe3(double power, int ticks) {
+        DcMotorEx BL=(DcMotorEx) backLeft;
+        DcMotorEx BR=(DcMotorEx) backRight;
+        DcMotorEx FL=(DcMotorEx) frontLeft;
+        DcMotorEx FR=(DcMotorEx) frontRight;
+
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FL.setTargetPosition(-ticks);
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FL.setPower(power);
+
+        while (FL.isBusy() && parent.opModeIsActive()) {
+            FR.setVelocity(FL.getVelocity());
+            BR.setVelocity(FL.getVelocity());
+            BL.setVelocity(FL.getVelocity());
+        }
+
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     //Turns to location specified by int ticks
     public void autoTurn(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
