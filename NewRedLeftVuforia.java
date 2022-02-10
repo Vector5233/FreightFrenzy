@@ -21,8 +21,9 @@ public class NewRedLeftVuforia extends LinearOpMode {
     vision.initVuforia();
     telemetry.addLine("done!");
     telemetry.update();
+    sleep(1000);
     vision.createPassThrough();
-    sleep(1000); //necessary to avoid null pointer error
+    //necessary to avoid null pointer error
     waitForStart();
     /*duckSpinnerDrive();
     driveToMeasureSpot();

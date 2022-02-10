@@ -49,7 +49,19 @@ public class VisionObject {
             public void onOpened(){
                 phoneCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
                 phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+
+
+                parent.telemetry.addLine("Before Pipeline");
+                parent.telemetry.update();
+                parent.sleep(1000);
+
+
                 phoneCam.setPipeline(detector);
+
+                parent.telemetry.addLine("After Pipeline");
+                parent.telemetry.update();
+                parent.sleep(1000);
+
                 phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
             public void onError(int errorCode){
