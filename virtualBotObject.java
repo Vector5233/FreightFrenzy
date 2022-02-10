@@ -188,9 +188,9 @@ class virtualBotObject {
         FL.setPower(power);
 
         while (FL.isBusy() && parent.opModeIsActive()) {
-            FR.setVelocity(FL.getVelocity());
+            FR.setVelocity(-FL.getVelocity());
             BR.setVelocity(FL.getVelocity());
-            BL.setVelocity(FL.getVelocity());
+            BL.setVelocity(-FL.getVelocity());
         }
 
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
