@@ -10,20 +10,23 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class DuckDetector extends OpenCvPipeline {
 
-    final int LEFTCOLSTART = 10;
-    final int LEFTCOLEND = 100;
-    final int LEFTROWSTART = 90;
-    final int LEFTROWEND = 185;
-    final int CENTERCOLSTART = 110;
-    final int CENTERCOLEND = 210;
-    final int CENTERROWSTART = 90;
-    final int CENTERROWEND = 185;
-    final int RIGHTCOLSTART = 210;
-    final int RIGHTCOLEND = 310;
-    final int RIGHTROWSTART = 90;
-    final int RIGHTROWEND = 185;
+    int LEFTCOLSTART = 10;
+    int LEFTCOLEND = 100;
+    int ROWSTART = 90;
+    int ROWEND = 185;
+    int CENTERCOLSTART = 110;
+    int CENTERCOLEND = 210;
+    int RIGHTCOLSTART = 210;
+    int RIGHTCOLEND = 310;
 
-
+    double LEFTSTARTHEIGHT = .25;
+    double LEFTENDHEIGHT = .28;
+    double CENTERSTARTHEIGHT = .28;
+    double CENTERENDHEIGHT = .55;
+    double RIGHTSTARTHEIGHT = .55;
+    double RIGHTENDHEIGHT = .89;
+    double FIRSTLEFTWIDTH = .29;
+    double ENDWIDTH = .64;
 
 
     private Mat workingMatrix = new Mat();
@@ -44,10 +47,22 @@ public class DuckDetector extends OpenCvPipeline {
             //sets the color scheme needed to see yellow
             Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
 
+            calculateBox();
+
+            if(RIGHTSTARTHEIGHT == 0){
+                LEFTCOLSTART = 10;
+                LEFTCOLEND = 100;
+                ROWSTART = 90;
+                ROWEND = 185;
+                CENTERCOLSTART = 110;
+                CENTERCOLEND = 210;
+                RIGHTCOLSTART = 210;
+                RIGHTCOLEND = 310;
+            }
             //sets the squares on the drivers hub
-            Mat matRight = workingMatrix.submat(RIGHTROWSTART, RIGHTROWEND, RIGHTCOLSTART, RIGHTCOLEND);
-            Mat matCenter = workingMatrix.submat(CENTERROWSTART, CENTERROWEND, CENTERCOLSTART, CENTERCOLEND);
-            Mat matLeft = workingMatrix.submat(LEFTROWSTART, LEFTROWEND, LEFTCOLSTART, LEFTCOLEND);
+            Mat matRight = workingMatrix.submat(ROWSTART, ROWEND, RIGHTCOLSTART, RIGHTCOLEND);
+            Mat matCenter = workingMatrix.submat(ROWSTART, ROWEND, CENTERCOLSTART, CENTERCOLEND);
+            Mat matLeft = workingMatrix.submat(ROWSTART, ROWEND, LEFTCOLSTART, LEFTCOLEND);
 
             //adds up the concentration of yellow in each square
             leftTotal = Core.sumElems(matLeft).val[0];
@@ -68,20 +83,20 @@ public class DuckDetector extends OpenCvPipeline {
             if (moreCtrThanLft && moreCtrThanRt){
                     //level is 2
                     position = "TWO";
-                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
-                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 50, 0));
-                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, ROWSTART), new Point(LEFTCOLEND, ROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, ROWSTART), new Point(CENTERCOLEND, ROWEND), new Scalar(247, 50, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, ROWSTART), new Point(RIGHTCOLEND, ROWEND), new Scalar(247, 181, 0));
             } else if (moreLftThanCtr && moreLftThanRt) {
                     //level is 1
                     position = "ONE";
-                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 50, 0));
-                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
-                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, ROWSTART), new Point(LEFTCOLEND, ROWEND), new Scalar(247, 50, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, ROWSTART), new Point(CENTERCOLEND, ROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, ROWSTART), new Point(RIGHTCOLEND, ROWEND), new Scalar(247, 181, 0));
             } else {
                     position = "THREE";
-                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, LEFTROWSTART), new Point(LEFTCOLEND, LEFTROWEND), new Scalar(247, 181, 0));
-                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, CENTERROWSTART), new Point(CENTERCOLEND, CENTERROWEND), new Scalar(247, 181, 0));
-                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, RIGHTROWSTART), new Point(RIGHTCOLEND, RIGHTROWEND), new Scalar(247, 50, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(LEFTCOLSTART, ROWSTART), new Point(LEFTCOLEND, ROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(CENTERCOLSTART, ROWSTART), new Point(CENTERCOLEND, ROWEND), new Scalar(247, 181, 0));
+                    Imgproc.rectangle(workingMatrix, new Point(RIGHTCOLSTART, ROWSTART), new Point(RIGHTCOLEND, ROWEND), new Scalar(247, 50, 0));
             }
             return workingMatrix;
         }
@@ -109,5 +124,16 @@ public class DuckDetector extends OpenCvPipeline {
                 level = 3;
             }
             return level;
+        }
+
+        private void calculateBox(){
+            ROWSTART = (int)(workingMatrix.width()*(FIRSTLEFTWIDTH));
+            ROWEND = (int)(workingMatrix.width() * (ENDWIDTH));
+            LEFTCOLSTART = (int)(workingMatrix.height()*(LEFTSTARTHEIGHT));
+            LEFTCOLEND = (int)(workingMatrix.height()*(LEFTENDHEIGHT));
+            CENTERCOLSTART = (int)(workingMatrix.height()*(CENTERSTARTHEIGHT));
+            CENTERCOLEND = (int)(workingMatrix.height()*(CENTERENDHEIGHT));
+            RIGHTCOLSTART = (int)(workingMatrix.height()*(RIGHTSTARTHEIGHT));
+            RIGHTCOLEND = (int)(workingMatrix.height()*(RIGHTENDHEIGHT));
         }
     }

@@ -76,7 +76,7 @@ public class StrafeTester extends LinearOpMode {
     }
 
     public int inchesToTicks(double inches) {
-        final double TICKS_PER_INCH = 2.0;
+        final double TICKS_PER_INCH = 30.0;
         return (int)(inches * TICKS_PER_INCH);
     }
 }
