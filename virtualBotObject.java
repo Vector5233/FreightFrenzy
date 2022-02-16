@@ -171,6 +171,7 @@ class virtualBotObject {
         frontRight.setTargetPosition(ticks);
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerAll(power);
+        frontRight.setPower(power*1.50); // total hack to compensate for frontRight dragging
 
         while (frontLeft.isBusy() && parent.opModeIsActive()) {
         }

@@ -39,6 +39,9 @@ public class StrafeTester2 extends LinearOpMode {
         telemetry.addLine("Strafing " + strafeDistance + " inches at " + strafePower + " power");
         telemetry.update();
         robot.autoStrafe2(strafePower, inchesToTicks(strafeDistance));
+        robot.reportAllDriveMotors();
+        telemetry.update();
+        sleep(10000);
     }
 
     public int inchesToTicks(double inches) {
