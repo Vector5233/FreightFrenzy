@@ -49,16 +49,6 @@ public class DuckDetector extends OpenCvPipeline {
 
             calculateBox();
 
-            if(RIGHTSTARTHEIGHT == 0){
-                LEFTCOLSTART = 10;
-                LEFTCOLEND = 100;
-                ROWSTART = 90;
-                ROWEND = 185;
-                CENTERCOLSTART = 110;
-                CENTERCOLEND = 210;
-                RIGHTCOLSTART = 210;
-                RIGHTCOLEND = 310;
-            }
             //sets the squares on the drivers hub
             Mat matRight = workingMatrix.submat(ROWSTART, ROWEND, RIGHTCOLSTART, RIGHTCOLEND);
             Mat matCenter = workingMatrix.submat(ROWSTART, ROWEND, CENTERCOLSTART, CENTERCOLEND);
@@ -135,5 +125,17 @@ public class DuckDetector extends OpenCvPipeline {
             CENTERCOLEND = (int)(workingMatrix.height()*(CENTERENDHEIGHT));
             RIGHTCOLSTART = (int)(workingMatrix.height()*(RIGHTSTARTHEIGHT));
             RIGHTCOLEND = (int)(workingMatrix.height()*(RIGHTENDHEIGHT));
+
+
+            if(RIGHTCOLSTART == 0){
+                LEFTCOLSTART = 10;
+                LEFTCOLEND = 100;
+                ROWSTART = 90;
+                ROWEND = 185;
+                CENTERCOLSTART = 110;
+                CENTERCOLEND = 210;
+                RIGHTCOLSTART = 210;
+                RIGHTCOLEND = 310;
+            }
         }
     }
