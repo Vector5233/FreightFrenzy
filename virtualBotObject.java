@@ -46,6 +46,8 @@ class virtualBotObject {
     private boolean targetVisible = false;
     private OpenGLMatrix lastLocation = null;
 
+    private int motorTolerance = 30;
+    private double motorAdjustment = 0.30;
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;
@@ -195,6 +197,47 @@ class virtualBotObject {
         }
 
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void autoStrafe4(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setTargetPosition(-ticks);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(-ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+
+        while(frontLeft.isBusy() && parent.opModeIsActive()) {
+            // Adjust power if any of the motors is substantially ahead or behind the average
+            frontLeft.setPower(powerAdjust(frontLeft, power));
+            frontRight.setPower(powerAdjust(frontRight, power));
+            backLeft.setPower(powerAdjust(backLeft, power));
+            backRight.setPower(powerAdjust(backRight, power));
+        }
+    }
+
+    public void setMotorTolerance(int tol) {
+        this.motorTolerance = tol;
+    }
+
+    public void setMotorAdjustment(double adj) {
+        this.motorAdjustment = adj;
+    }
+
+    public double powerAdjust(DcMotor motor, double basePower) {
+        int averageDistance = (frontLeft.getCurrentPosition() + frontRight.getCurrentPosition()
+        + backLeft.getCurrentPosition() + backRight.getCurrentPosition())/4;
+
+        if (motor.getCurrentPosition() - averageDistance > motorTolerance) {
+            return basePower * (1 - motorAdjustment);
+        }
+        else if (motor.getCurrentPosition() - averageDistance < -motorTolerance) {
+            return basePower * (1 + motorAdjustment);
+
+        }
+        else return basePower;
     }
 
     //Turns to location specified by int ticks
