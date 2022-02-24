@@ -9,6 +9,7 @@ public class Menu {
     LinearOpMode parent;
     ArrayList<MenuItem> items = new ArrayList<>();
     int menuActiveItem = 0;
+    boolean buttonPressed = false;
 
     public Menu(LinearOpMode p) {
         parent = p;
@@ -32,8 +33,8 @@ public class Menu {
     }
 
     public void update() {
-        double joystickThreshold = 0.10;
-        int delay = 150;
+        double joystickThreshold = 0.20;
+        int delay = 250;
         if ((parent.gamepad1.right_stick_y > joystickThreshold)||parent.gamepad1.a) {
             items.get(menuActiveItem).down();
             parent.sleep(delay);
@@ -42,19 +43,24 @@ public class Menu {
             items.get(menuActiveItem).up();
             parent.sleep(delay);
         }
-        else if(parent.gamepad1.b) {
+        else if(parent.gamepad1.b && !buttonPressed) {
             menuActiveItem++;
             if (menuActiveItem >= items.size()) {
                 menuActiveItem = 0;
             }
+            buttonPressed = true;
             parent.sleep(delay);
         }
-        else if(parent.gamepad1.x) {
+        else if(parent.gamepad1.x && !buttonPressed) {
             menuActiveItem--;
             if (menuActiveItem < 0) {
                 menuActiveItem = items.size() - 1;
             }
+            buttonPressed = true;
             parent.sleep(delay);
+        }
+        else {
+            buttonPressed = false;
         }
     }
 

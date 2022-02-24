@@ -4,6 +4,10 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
+import static java.lang.Math.abs;
+
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -25,6 +29,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.LongUnaryOperator;
 
 class virtualBotObject {
@@ -48,6 +53,8 @@ class virtualBotObject {
 
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
+
+    private double LAMBDA = 0.05;
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;
@@ -162,7 +169,9 @@ class virtualBotObject {
         setPowerAll(power);
 
         while ((frontLeft.isBusy() || backRight.isBusy()) && parent.opModeIsActive()) {
+
         }
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void autoStrafe2(double power, int ticks) {
@@ -176,7 +185,9 @@ class virtualBotObject {
         frontRight.setPower(power*1.50); // total hack to compensate for frontRight dragging
 
         while (frontLeft.isBusy() && parent.opModeIsActive()) {
+
         }
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void autoStrafe3(double power, int ticks) {
@@ -203,7 +214,6 @@ class virtualBotObject {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setTargetPosition(-ticks);
         backLeft.setTargetPosition(ticks);
-        frontLeft.setTargetPosition(-ticks);
         backRight.setTargetPosition(-ticks);
         frontRight.setTargetPosition(ticks);
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
@@ -211,13 +221,38 @@ class virtualBotObject {
 
         while(frontLeft.isBusy() && parent.opModeIsActive()) {
             // Adjust power if any of the motors is substantially ahead or behind the average
-            frontLeft.setPower(powerAdjust(frontLeft, power));
-            frontRight.setPower(powerAdjust(frontRight, power));
-            backLeft.setPower(powerAdjust(backLeft, power));
-            backRight.setPower(powerAdjust(backRight, power));
+            frontLeft.setPower(powerAdjust4(frontLeft, power));
+            frontRight.setPower(powerAdjust4(frontRight, power));
+            backLeft.setPower(powerAdjust4(backLeft, power));
+            backRight.setPower(powerAdjust4(backRight, power));
+            reportAllDriveMotors();
+            parent.telemetry.update();
         }
+        setPowerAll(0);
     }
 
+    public void loggingAutoStrafe4(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setTargetPosition(-ticks);
+        backLeft.setTargetPosition(ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+
+        while(frontLeft.isBusy() && parent.opModeIsActive()) {
+            // Adjust power if any of the motors is substantially ahead or behind the average
+            frontLeft.setPower(powerAdjust4(frontLeft, power));
+            frontRight.setPower(powerAdjust4(frontRight, power));
+            backLeft.setPower(powerAdjust4(backLeft, power));
+            backRight.setPower(powerAdjust4(backRight, power));
+            reportAllDriveMotors();
+            logAllDriveMotors();
+
+            parent.telemetry.update();
+        }
+        setPowerAll(0);
+    }
     public void setMotorTolerance(int tol) {
         this.motorTolerance = tol;
     }
@@ -226,20 +261,71 @@ class virtualBotObject {
         this.motorAdjustment = adj;
     }
 
-    public double powerAdjust(DcMotor motor, double basePower) {
-        int averageDistance = (frontLeft.getCurrentPosition() + frontRight.getCurrentPosition()
-        + backLeft.getCurrentPosition() + backRight.getCurrentPosition())/4;
+    public double powerAdjust4(DcMotor motor, double basePower) {
+        int averageDistance = (abs(frontLeft.getCurrentPosition()) + abs(frontRight.getCurrentPosition())
+        + abs(backLeft.getCurrentPosition()) + abs(backRight.getCurrentPosition()))/4;
 
-        if (motor.getCurrentPosition() - averageDistance > motorTolerance) {
+        if (abs(motor.getCurrentPosition()) - averageDistance > motorTolerance) {
             return basePower * (1 - motorAdjustment);
         }
-        else if (motor.getCurrentPosition() - averageDistance < -motorTolerance) {
+        else if (abs(motor.getCurrentPosition()) - averageDistance < -motorTolerance) {
             return basePower * (1 + motorAdjustment);
 
         }
         else return basePower;
     }
 
+    public void autoStrafe5(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(-ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+        frontRight.setPower(power*1.25); // total hack to compensate for frontRight dragging
+        backLeft.setPower(power*0.75);
+        while (parent.opModeIsActive() && frontRight.isBusy()) {
+            parent.sleep(10);
+            reportAllDriveMotors();
+            parent.telemetry.update();
+        }
+        setPowerAll(0);
+    }
+
+    //TODO: write StrafeTester6
+    public void autoStrafe6(double power, int ticks) {
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(-ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+
+        while (frontLeft.isBusy() && parent.opModeIsActive()) {
+            frontLeft.setPower(powerAdjust6(frontLeft, power));
+            frontRight.setPower(powerAdjust6(frontRight, power));
+            backLeft.setPower(powerAdjust6(backLeft, power));
+            backRight.setPower(powerAdjust6(backRight, power));
+            reportAllDriveMotors();
+
+            parent.telemetry.update();
+        }
+
+        setPowerAll(0);
+    }
+
+    public void setLambda(double val) {
+        LAMBDA = val;
+    }
+
+    public double powerAdjust6(DcMotor motor, double basePower) {
+        int averageDistance = (abs(frontLeft.getCurrentPosition()) + abs(frontRight.getCurrentPosition())
+                + abs(backLeft.getCurrentPosition()) + abs(backRight.getCurrentPosition()))/4;
+        return basePower * (1-LAMBDA*(abs(motor.getCurrentPosition()) - averageDistance));
+
+    }
     //Turns to location specified by int ticks
     public void autoTurn(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -274,10 +360,22 @@ class virtualBotObject {
 
     void reportAllDriveMotors() {
         // caller must update
-        parent.telemetry.addLine(String.format("Front Left: %d    Front Right: %d", frontLeft.getCurrentPosition(), frontRight.getCurrentPosition()));
-        parent.telemetry.addLine(String.format("Back Left: %d     Back Right: %d", backLeft.getCurrentPosition(), backRight.getCurrentPosition()));
+        parent.telemetry.addLine(String.format(Locale.US, "Front Left: %d    Front Right: %d", frontLeft.getCurrentPosition(), frontRight.getCurrentPosition()));
+        parent.telemetry.addLine(String.format(Locale.US, "Back Left: %d     Back Right: %d", backLeft.getCurrentPosition(), backRight.getCurrentPosition()));
     }
 
+    void logAllDriveMotors() {
+        Log.i("encoder: ", String.format("Front Left: %d    Front Right: %d    Back Left: %d    Back Right %d\n",
+                frontLeft.getCurrentPosition(),
+                frontRight.getCurrentPosition(),
+                backLeft.getCurrentPosition(),
+                backRight.getCurrentPosition()));
+        Log.i("power: ", String.format("Front Left: %.2f    Front Right: %.2f    Back Left: %.2f    Back Right %.2f\n",
+                frontLeft.getPower(),
+                frontRight.getPower(),
+                backLeft.getPower(),
+                backRight.getPower()));
+    }
     //needs testing
     public void rotateToSweetSpot() {
         final double currentAngleOne = findCurrentAngle();

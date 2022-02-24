@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Camera;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -47,7 +49,7 @@ public class DuckDetector extends OpenCvPipeline {
             //sets the color scheme needed to see yellow
             Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
 
-            calculateBox();
+            //calculateBox();
 
             //sets the squares on the drivers hub
             Mat matRight = workingMatrix.submat(ROWSTART, ROWEND, RIGHTCOLSTART, RIGHTCOLEND);
@@ -116,7 +118,9 @@ public class DuckDetector extends OpenCvPipeline {
             return level;
         }
 
-        private void calculateBox(){
+
+
+        /*private void calculateBox(){
             ROWSTART = (int)(workingMatrix.width()*(FIRSTLEFTWIDTH));
             ROWEND = (int)(workingMatrix.width() * (ENDWIDTH));
             LEFTCOLSTART = (int)(workingMatrix.height()*(LEFTSTARTHEIGHT));
@@ -137,5 +141,5 @@ public class DuckDetector extends OpenCvPipeline {
                 RIGHTCOLSTART = 210;
                 RIGHTCOLEND = 310;
             }
-        }
+        }*/
     }

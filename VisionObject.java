@@ -62,7 +62,7 @@ public class VisionObject {
                 parent.telemetry.update();
                 parent.sleep(1000);
 
-                phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT); // WHERE DID 352,288 COME FROM?
+                phoneCam.startStreaming(640, 480, OpenCvCameraRotation.SIDEWAYS_LEFT); // WHERE DID 352,288 COME FROM?
             }
             public void onError(int errorCode){
                 parent.telemetry.addLine("No Cam Opened");
