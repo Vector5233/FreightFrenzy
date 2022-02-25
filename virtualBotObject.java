@@ -293,7 +293,6 @@ class virtualBotObject {
         setPowerAll(0);
     }
 
-    //TODO: write StrafeTester6
     public void autoStrafe6(double power, int ticks) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
@@ -313,7 +312,7 @@ class virtualBotObject {
             parent.telemetry.update();
         }
 
-        setPowerAll(0);
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void setLambda(double val) {

@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Camera;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class DuckDetector extends OpenCvPipeline {
+import java.io.FileInputStream;
+
+public class PropertiesDuckDetector extends OpenCvPipeline {
+
+    private Properties duckProps; // dont forget to set properties
 
     int LEFTCOLSTART = 50;
     int LEFTCOLEND = 250;
@@ -20,6 +21,7 @@ public class DuckDetector extends OpenCvPipeline {
     int CENTERCOLEND = 560;
     int RIGHTCOLSTART = 550;
     int RIGHTCOLEND = 750;
+
 
 
     /*
@@ -34,7 +36,20 @@ public class DuckDetector extends OpenCvPipeline {
 */
 
     private Mat workingMatrix = new Mat();
+/*
+    public setProperties (String fileName) {
+        duckProps = newProperties ();
+        FileInputStream in = new FileInputStream(fileName);
+        duckProps.load(in);
+        in.close();
+    }
 
+    public int getProperty (String key) {
+
+        return Integer.getInteger(duckProps.getProperty (key));
+    }
+
+*/
     private String position;
 
 
