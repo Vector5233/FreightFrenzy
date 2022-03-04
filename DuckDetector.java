@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Camera;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -21,17 +18,6 @@ public class DuckDetector extends OpenCvPipeline {
     int RIGHTCOLSTART = 550;
     int RIGHTCOLEND = 750;
 
-
-    /*
-    double LEFTSTARTHEIGHT = .25;
-    double LEFTENDHEIGHT = .28;
-    double CENTERSTARTHEIGHT = .28;
-    double CENTERENDHEIGHT = .55;
-    double RIGHTSTARTHEIGHT = .55;
-    double RIGHTENDHEIGHT = .89;
-    double FIRSTLEFTWIDTH = .29;
-    double ENDWIDTH = .64;
-*/
 
     private Mat workingMatrix = new Mat();
 
@@ -68,8 +54,6 @@ public class DuckDetector extends OpenCvPipeline {
              boolean moreCtrThanRt = centerTotal > rightTotal;
              boolean moreLftThanCtr = leftTotal > centerTotal;
              boolean moreLftThanRt = leftTotal > rightTotal;
-             boolean moreRtThanCtr = rightTotal > centerTotal;
-             boolean moreRtThanLft = rightTotal > leftTotal;
 
 
             //checks which square has the most concentration of yellow
@@ -119,29 +103,4 @@ public class DuckDetector extends OpenCvPipeline {
             }
             return level;
         }
-
-
-
-        /*private void calculateBox(){
-            ROWSTART = (int)(workingMatrix.width()*(FIRSTLEFTWIDTH));
-            ROWEND = (int)(workingMatrix.width() * (ENDWIDTH));
-            LEFTCOLSTART = (int)(workingMatrix.height()*(LEFTSTARTHEIGHT));
-            LEFTCOLEND = (int)(workingMatrix.height()*(LEFTENDHEIGHT));
-            CENTERCOLSTART = (int)(workingMatrix.height()*(CENTERSTARTHEIGHT));
-            CENTERCOLEND = (int)(workingMatrix.height()*(CENTERENDHEIGHT));
-            RIGHTCOLSTART = (int)(workingMatrix.height()*(RIGHTSTARTHEIGHT));
-            RIGHTCOLEND = (int)(workingMatrix.height()*(RIGHTENDHEIGHT));
-
-
-            if(RIGHTCOLSTART == 0){
-                LEFTCOLSTART = 10;
-                LEFTCOLEND = 100;
-                ROWSTART = 90;
-                ROWEND = 185;
-                CENTERCOLSTART = 110;
-                CENTERCOLEND = 210;
-                RIGHTCOLSTART = 210;
-                RIGHTCOLEND = 310;
-            }
-        }*/
     }

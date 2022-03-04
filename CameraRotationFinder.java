@@ -19,7 +19,7 @@ public class CameraRotationFinder extends LinearOpMode {
         cameraServo.setPosition(.38);
         waitForStart();
         telemetry.addData("Camera Position", cameraServo.getPosition());
-        robot.findCurrentAngle();
+        //robot.findCurrentAngle();
     }
 
 }

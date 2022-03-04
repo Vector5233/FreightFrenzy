@@ -6,7 +6,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
-
+import java.util.Properties;
 import java.io.FileInputStream;
 
 public class PropertiesDuckDetector extends OpenCvPipeline {

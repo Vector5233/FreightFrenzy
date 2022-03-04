@@ -14,19 +14,25 @@ public class NewRedLeftVuforia extends LinearOpMode {
     int STRAFETICKS = 10;
     long SLEEPYTIME = 3000;
     final double TURNPOWER =.2;
+    final double VUFORIA = .5;
+    int level = 3;
 
 
     public void runOpMode() {
     initRobot();
+    robot.initCameraServo(VUFORIA);
     vision.initVuforia();
     vision.createPassThrough();
-
-    //necessary to avoid null pointer error
     waitForStart();
-    /*duckSpinnerDrive();
-    driveToMeasureSpot();
+    level = detector.duckLevel();
+    vision.closePassthrough();
+    //duckSpinnerDrive();
+    //driveToMeasureSpot();
+    robot.rotateToSweetSpot();
+    driveToHub();
 
-    robot.deliverBlock(vision.duckLevel());*/
+    telemetry.addData("Deliver to:",level);
+    //robot.deliverBlock(level);
     }
 
     public void initRobot(){
@@ -36,7 +42,7 @@ public class NewRedLeftVuforia extends LinearOpMode {
     }
 
     public void duckSpinnerDrive(){
-        telemetry.addData("Duck Level:", vision.duckLevel());
+        telemetry.addData("Duck Level:", level);
         telemetry.update();
         robot.initGrabberServo(0);
         robot.turnOnDuckSpinner();
@@ -52,12 +58,17 @@ public class NewRedLeftVuforia extends LinearOpMode {
         int TICKTURN = 600;
         int TICKFORWARD = 450;
         double DRIVESLOW = .2;
-        final double VUFORIA = .5;
         robot.driveForward(DRIVESLOW, DRIVETICKS);
         robot.autoTurn(TURNPOWER, TICKTURN);
         sleep(HUBSLEEP);
         robot.driveForward(TURNPOWER, TICKFORWARD);
         robot.initCameraServo(VUFORIA);
         sleep(HUBSLEEP);
+    }
+
+    public void driveToHub(){
+        double POWERDRIVE = 0;
+        int TICKDRIVE = 0;
+        robot.driveForward(.3, 110);
     }
 }

@@ -5,7 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -19,8 +25,9 @@ public class VisionObject {
     private int[] viewportContainerIds = null;
     private VuforiaLocalizer.Parameters parameters = null;
     private static String KEY = "AS5UxdP/////AAABmZv/KolYbkR8t/E1p/1N2dZifB38Q6w246S+wdKgUHvMduk79gG/5YxVVCYH/vKImXzh4IDRLARYXOOZOr66s/yrfEl56XMShywG/YnHi2xef8sBx0hG6GQFVmYCtf6BzVsiOR8llrFrn03ZrgysAFZZIFnwKyYGH31rqrhlIYU0W0uRCoeenefItA5c/7hlRRXgl+cPIIFc1LG3T19Y7j1K201S0rZAIL+B5fmso8WXT4BmRIirVXhaqGhFVyQlwSX3Z45iNgNvDW+rVF71KRaMwqq8A6ap3rYllr3MAB4w1avggu687SV9Z540feYIJ8HCHuU2M41vLWj7F/qBvaQ2V7u6ImkWBdiuvAVKn6fB";
-    private VuforiaTrackables targets = null;
+    public VuforiaTrackables targets = null;
     private WebcamName webcamName = null;
+    final double REPLACECONSTANT = 0;
     private boolean targetVisible = false;
     private OpenGLMatrix lastLocation = null;
     int level = 3;
@@ -39,8 +46,22 @@ public class VisionObject {
         parent.telemetry.addLine("Set Cam Direction");
         parent.telemetry.update();
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        parent.telemetry.addLine("Done");
+        targets = this.vuforia.loadTrackablesFromAsset("FreightFrenzy");
+
+
+        targetVisible = false;
+        identifyTarget(0, "Blue Storage");
+        identifyTarget(1, "Blue Alliance Wall");
+        identifyTarget(2, "Red Storage");
+        identifyTarget(3, "Red Alliance Wall");
+        targets.activate();
+        parent.telemetry.addLine("After Trackables activated");
         parent.telemetry.update();
+    }
+
+    void identifyTarget(int targetIndex, String targetName) {
+        VuforiaTrackable aTarget = targets.get(targetIndex);
+        aTarget.setName(targetName);
     }
 
     public void createPassThrough() {
@@ -50,19 +71,12 @@ public class VisionObject {
                 phoneCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
                 phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
-
-                parent.telemetry.addLine("Before Pipeline");
-                parent.telemetry.update();
-                parent.sleep(1000);
-
-
                 phoneCam.setPipeline(detector);
 
-                parent.telemetry.addLine("After Pipeline");
-                parent.telemetry.update();
-                parent.sleep(1000);
+                parent.sleep(600);
 
                 phoneCam.startStreaming(640, 480, OpenCvCameraRotation.SIDEWAYS_LEFT); // WHERE DID 352,288 COME FROM?
+                parent.sleep(600);
             }
             public void onError(int errorCode){
                 parent.telemetry.addLine("No Cam Opened");
@@ -71,9 +85,55 @@ public class VisionObject {
         });
     }
 
-    public int duckLevel(){
-        level = detector.duckLevel();
-        return level;
+
+    public double findCurrentAngle() {
+        OpenGLMatrix pose = null;
+        //caller must call init vuforia
+
+        //parent.sleep(3000);
+
+        for (VuforiaTrackable target : targets) {
+
+            parent.telemetry.addLine("BEFORE 'IF' IN VBO-FCA");
+            parent.telemetry.update();
+
+
+            if (((VuforiaTrackableDefaultListener) target.getListener()).isVisible()) {
+                pose = ((VuforiaTrackableDefaultListener) target.getListener()).getVuforiaCameraFromTarget();
+                parent.telemetry.addData("Target Found: ", target.getName());
+                targetVisible = true;
+                parent.telemetry.update();
+                break;
+            }
+        }
+
+        if (!targetVisible) {
+            parent.telemetry.addLine("No Target Found");
+            parent.telemetry.update();
+            return REPLACECONSTANT;
+        }
+
+        parent.sleep(1000);
+        parent.telemetry.addLine("Step One Complete");
+        parent.telemetry.update();
+        parent.telemetry.addLine("Step Two Complete");
+        parent.telemetry.update();
+        Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        parent.telemetry.addLine("Step Three Complete");
+        parent.telemetry.update();
+        double rX = rot.firstAngle;
+        double rY = rot.secondAngle;
+        double rZ = rot.thirdAngle;
+        parent.telemetry.addData("Rotation of X: ", rX);
+        parent.telemetry.addData("Rotation of Y: ", rY);
+        parent.telemetry.addData("Rotation of Z: ", rZ);
+        parent.telemetry.update();
+        parent.sleep(1000);
+        return rot.thirdAngle;
+    }
+
+    public void closePassthrough(){
+        phoneCam.closeCameraDevice();
     }
 
     }
