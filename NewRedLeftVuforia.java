@@ -25,13 +25,16 @@ public class NewRedLeftVuforia extends LinearOpMode {
     vision.createPassThrough();
     waitForStart();
     level = detector.duckLevel();
+
+    telemetry.addData("Deliver to:", level);
+    telemetry.update();
+
     vision.closePassthrough();
     //duckSpinnerDrive();
     //driveToMeasureSpot();
     robot.rotateToSweetSpot();
     driveToHub();
 
-    telemetry.addData("Deliver to:",level);
     //robot.deliverBlock(level);
     }
 

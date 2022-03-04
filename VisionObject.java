@@ -49,7 +49,6 @@ public class VisionObject {
         targets = this.vuforia.loadTrackablesFromAsset("FreightFrenzy");
 
 
-        targetVisible = false;
         identifyTarget(0, "Blue Storage");
         identifyTarget(1, "Blue Alliance Wall");
         identifyTarget(2, "Red Storage");
@@ -133,7 +132,13 @@ public class VisionObject {
     }
 
     public void closePassthrough(){
-        phoneCam.closeCameraDevice();
+        phoneCam.closeCameraDeviceAsync(new OpenCvCamera.AsyncCameraCloseListener() {
+            @Override
+            public void onClose() {
+               phoneCam.stopStreaming();
+            }
+        });
+
     }
 
     }

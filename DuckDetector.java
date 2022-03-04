@@ -94,7 +94,12 @@ public class DuckDetector extends OpenCvPipeline {
          //corresponds position to each level
         public int duckLevel() {
             int level;
-            if (getPosition().equals("ONE")) {
+            if (getPosition() == null){
+
+
+                level = 3;
+            }
+            else if (getPosition().equals("ONE")) {
                 level = 1;
             } else if (getPosition().equals("TWO")) {
                 level = 2;
