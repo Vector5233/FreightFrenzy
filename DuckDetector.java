@@ -21,7 +21,7 @@ public class DuckDetector extends OpenCvPipeline {
 
     private Mat workingMatrix = new Mat();
 
-    private String position;
+    private String position = "nothing yet";
 
 
         public double leftTotal;
@@ -97,7 +97,7 @@ public class DuckDetector extends OpenCvPipeline {
             if (getPosition() == null){
 
 
-                level = 3;
+                level = 2;
             }
             else if (getPosition().equals("ONE")) {
                 level = 1;

@@ -1,36 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-
 import static java.lang.Math.abs;
-
 import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.function.LongUnaryOperator;
+
 
 class virtualBotObject {
 
@@ -46,13 +24,13 @@ class virtualBotObject {
     private boolean targetVisible = false;
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
+    VisionObject vision = new VisionObject(this);
 
     private double LAMBDA = 0.05;
 
     public virtualBotObject(LinearOpMode p) {
         parent = p;
     }
-    VisionObject vision = new VisionObject(parent);
 
     public void init() {
         backLeft = parent.hardwareMap.get(DcMotorEx.class, "backLeft");

@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class NewRedLeftVuforia extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
-    VisionObject vision = new VisionObject(robot.parent);
-    DuckDetector detector = new DuckDetector();
+
     final double INITGRABBERSERVOPOSITION = 1;
     final double BOB = 0;
     final double DRIVEPOWER = .4;
@@ -21,15 +20,16 @@ public class NewRedLeftVuforia extends LinearOpMode {
     public void runOpMode() {
     initRobot();
     robot.initCameraServo(VUFORIA);
-    vision.initVuforia();
-    vision.createPassThrough();
+    robot.vision.initVuforia();
+    robot.vision.createPassThrough();
+    sleep(1000);
     waitForStart();
-    level = detector.duckLevel();
+    level = robot.vision.getLevel();
 
     telemetry.addData("Deliver to:", level);
     telemetry.update();
 
-    vision.closePassthrough();
+    robot.vision.closePassthrough();
     //duckSpinnerDrive();
     //driveToMeasureSpot();
     robot.rotateToSweetSpot();
