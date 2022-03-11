@@ -13,13 +13,13 @@ public class NewRedLeftVuforia extends LinearOpMode {
     int STRAFETICKS = 10;
     long SLEEPYTIME = 3000;
     final double TURNPOWER =.2;
-    final double VUFORIA = .5;
+    final double VUFORIATURN = .5;
     int level = 3;
 
 
     public void runOpMode() {
     initRobot();
-    robot.initCameraServo(VUFORIA);
+    robot.initCameraServo(BOB);
     robot.vision.initVuforia();
     robot.vision.createPassThrough();
     sleep(1000);
@@ -30,12 +30,19 @@ public class NewRedLeftVuforia extends LinearOpMode {
     telemetry.update();
 
     robot.vision.closePassthrough();
-    //duckSpinnerDrive();
-    //driveToMeasureSpot();
+    duckSpinnerDrive();
+    robot.vision.activateTarget();
+    driveToMeasureSpot();
     robot.rotateToSweetSpot();
     driveToHub();
 
-    //robot.deliverBlock(level);
+    robot.deliverBlock(level);
+
+    robot.driveForward(.4, -40);
+    robot.autoTurnDegrees(.4,60);
+    robot.driveForward(.2,-150);
+    telemetry.speak("beep beep");
+    telemetry.update();
     }
 
     public void initRobot(){
@@ -65,13 +72,13 @@ public class NewRedLeftVuforia extends LinearOpMode {
         robot.autoTurn(TURNPOWER, TICKTURN);
         sleep(HUBSLEEP);
         robot.driveForward(TURNPOWER, TICKFORWARD);
-        robot.initCameraServo(VUFORIA);
+        robot.initCameraServo(VUFORIATURN);
         sleep(HUBSLEEP);
     }
 
     public void driveToHub(){
         double POWERDRIVE = 0;
         int TICKDRIVE = 0;
-        robot.driveForward(.3, 110);
+        robot.driveForward(.3, 70);
     }
 }

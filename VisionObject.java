@@ -53,9 +53,6 @@ public class VisionObject {
         identifyTarget(1, "Blue Alliance Wall");
         identifyTarget(2, "Red Storage");
         identifyTarget(3, "Red Alliance Wall");
-        targets.activate();
-        parent.parent.telemetry.addLine("After Trackables activated");
-        parent.parent.telemetry.update();
     }
 
     void identifyTarget(int targetIndex, String targetName) {
@@ -144,6 +141,12 @@ public class VisionObject {
     public int getLevel(){
         level = detector.duckLevel();
         return level;
+    }
+
+    public void activateTarget(){
+        targets.activate();
+        parent.parent.telemetry.addLine("After Trackables activated");
+        parent.parent.telemetry.update();
     }
 
     }
