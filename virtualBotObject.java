@@ -21,10 +21,10 @@ class virtualBotObject {
     final double SAFETYBUCKET = 1;
     final double BUCKETDUMP = .7;
     int[] ticksForLevels = {0, 680, 1190, 1840};
-    private boolean targetVisible = false;
+    //private boolean targetVisible = false;
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
-    VisionObject vision = new VisionObject(this);
+    //VisionObject vision = new VisionObject(this);
 
     private double LAMBDA = 0.05;
 
@@ -128,7 +128,7 @@ class virtualBotObject {
     }
     //needs testing
 
-    public void rotateToSweetSpot() {
+    /*public void rotateToSweetSpot() {
         final double currentAngleOne = vision.findCurrentAngle();
         final double correctAngle = -.5;
         int rotateOne = (int) (currentAngleOne - correctAngle);
@@ -167,7 +167,7 @@ class virtualBotObject {
         parent.telemetry.addLine("Task Completed");
         parent.telemetry.update();
     }
-
+*/
     //Strafes to location specified by int ticks
     //CHANGE SIGNS
     public void autoStrafe(double power, int ticks) {
