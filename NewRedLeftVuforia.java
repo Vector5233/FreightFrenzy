@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="NewRedLeftVuforia", group = "GROUP_NAME")
-
+@Disabled
 public class NewRedLeftVuforia extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
 
@@ -10,26 +11,31 @@ public class NewRedLeftVuforia extends LinearOpMode {
     final double BOB = 0;
     final double DRIVEPOWER = .4;
     int FORWARDTICKS = 80;
-    int STRAFETICKS = 10;
+    int STRAFETICKS = 40;
     long SLEEPYTIME = 3000;
-    final double TURNPOWER =.2;
+    final double TURNPOWER =.3;
     final double VUFORIATURN = .5;
     int level = 3;
 
 
     public void runOpMode() {
     initRobot();
-    robot.initCameraServo(BOB);
     robot.vision.initVuforia();
+
     robot.vision.createPassThrough();
+
     sleep(1000);
     waitForStart();
+    robot.initGrabberServo(0);
     level = robot.vision.getLevel();
+
+    //level = 1;
 
     telemetry.addData("Deliver to:", level);
     telemetry.update();
 
     robot.vision.closePassthrough();
+    //robot.vision.activateTarget();
     duckSpinnerDrive();
     robot.vision.activateTarget();
     driveToMeasureSpot();
@@ -40,9 +46,10 @@ public class NewRedLeftVuforia extends LinearOpMode {
 
     robot.driveForward(.4, -40);
     robot.autoTurnDegrees(.4,60);
-    robot.driveForward(.2,-150);
+    robot.driveForward(.2,-400);
     telemetry.speak("beep beep");
     telemetry.update();
+
     }
 
     public void initRobot(){
@@ -66,9 +73,10 @@ public class NewRedLeftVuforia extends LinearOpMode {
         int DRIVETICKS = -70;
         long HUBSLEEP = 100;
         int TICKTURN = 600;
-        int TICKFORWARD = 450;
+        int TICKFORWARD = 400;
         double DRIVESLOW = .2;
         robot.driveForward(DRIVESLOW, DRIVETICKS);
+        robot.autoStrafe(.4, -200);
         robot.autoTurn(TURNPOWER, TICKTURN);
         sleep(HUBSLEEP);
         robot.driveForward(TURNPOWER, TICKFORWARD);
@@ -79,6 +87,6 @@ public class NewRedLeftVuforia extends LinearOpMode {
     public void driveToHub(){
         double POWERDRIVE = 0;
         int TICKDRIVE = 0;
-        robot.driveForward(.3, 70);
+        robot.driveForward(.3, 68);
     }
 }

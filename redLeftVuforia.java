@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="redLeftVuforia", group = "GROUP_NAME")
-
+@Disabled
 public class redLeftVuforia extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private DuckDetector detector = new DuckDetector();
