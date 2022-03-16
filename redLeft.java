@@ -59,7 +59,7 @@ public class redLeft extends LinearOpMode {
 
     public void parkInStorage(){
         int TURNTICKS = 175;
-        int DRIVEBACKWARDS = -550;
+        int DRIVEBACKWARDS = -600;
         robot.autoTurn(TURNPOWER,TURNTICKS);
         robot.driveForward(TURNPOWER,DRIVEBACKWARDS);
         robot.initGrabberServo(INITGRABBERSERVOPOSITION);
