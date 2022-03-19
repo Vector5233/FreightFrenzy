@@ -16,15 +16,13 @@ class virtualBotObject {
     Servo grabberServo, bucketServo, cameraServo;
     LinearOpMode parent;
 
-    final double DUCKSPINNERPOWER = .5;
-    final double LIFTPOWER = 1;
-    final double SAFETYBUCKET = 1;
-    final double BUCKETDUMP = .7;
-    int[] ticksForLevels = {0, 680, 1190, 1840};
-    //private boolean targetVisible = false;
+    final double SPINNER = .5;
+    final double LIFT = 1;
+    final double SAFETY = 1;
+    final double DUMP = .7;
+    int[] ticksForLevels = {0, 680, 1200, 1840};
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
-    //VisionObject vision = new VisionObject(this);
 
     private double LAMBDA = 0.05;
 
@@ -34,16 +32,16 @@ class virtualBotObject {
 
     public void init() {
         backLeft = parent.hardwareMap.get(DcMotorEx.class, "backLeft");
-        backRight = (DcMotorEx) parent.hardwareMap.dcMotor.get("backRight");
+        backRight = parent.hardwareMap.dcMotor.get("backRight");
         frontLeft = parent.hardwareMap.get(DcMotorEx.class, "frontLeft");
-        frontRight = (DcMotorEx) parent.hardwareMap.dcMotor.get("frontRight");
-        leftDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("leftDuckSpinner");
-        rightDuckSpinner = (DcMotorEx) parent.hardwareMap.dcMotor.get("rightDuckSpinner");
-        freightLift = (DcMotorEx) parent.hardwareMap.dcMotor.get("freightLift");
+        frontRight = parent.hardwareMap.dcMotor.get("frontRight");
+        leftDuckSpinner = parent.hardwareMap.dcMotor.get("leftDuckSpinner");
+        rightDuckSpinner = parent.hardwareMap.dcMotor.get("rightDuckSpinner");
+        freightLift = parent.hardwareMap.dcMotor.get("freightLift");
         grabberServo = parent.hardwareMap.servo.get("grabberServo");
         cameraServo = parent.hardwareMap.servo.get("cameraServo");
         bucketServo = parent.hardwareMap.servo.get("bucketServo");
-        bucketServo.setPosition(SAFETYBUCKET);
+        bucketServo.setPosition(SAFETY);
 
 
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -59,8 +57,8 @@ class virtualBotObject {
 
     //Turns on the duck spinners
     public void turnOnDuckSpinner() {
-        leftDuckSpinner.setPower(-DUCKSPINNERPOWER);
-        rightDuckSpinner.setPower(DUCKSPINNERPOWER);
+        leftDuckSpinner.setPower(-SPINNER);
+        rightDuckSpinner.setPower(SPINNER);
     }
 
     //Turns off the duck spinners
@@ -69,8 +67,8 @@ class virtualBotObject {
         rightDuckSpinner.setPower(0);
     }
 
-    public void initCameraServo(double CAMERAPOSITION) {
-        cameraServo.setPosition(CAMERAPOSITION);
+    public void initCameraServo(double CAMERA_POSITION) {
+        cameraServo.setPosition(CAMERA_POSITION);
         parent.sleep(300);
     }
 
@@ -78,7 +76,7 @@ class virtualBotObject {
     public void turnOnLift(int level) {
         freightLift.setTargetPosition(ticksForLevels[level]);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        freightLift.setPower(LIFTPOWER);
+        freightLift.setPower(LIFT);
         while (freightLift.isBusy() && parent.opModeIsActive()) {
             assert true;
         }
@@ -86,10 +84,10 @@ class virtualBotObject {
 
     public void lowerLift() {
         freightLift.setTargetPosition(0);
-        bucketServo.setPosition(SAFETYBUCKET);
+        bucketServo.setPosition(SAFETY);
         parent.sleep(300);
         freightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        freightLift.setPower(LIFTPOWER);
+        freightLift.setPower(LIFT);
     }
 
     public void initGrabberServo(final double VALUE) {
@@ -126,48 +124,7 @@ class virtualBotObject {
         frontLeft.setPower(power);
         frontRight.setPower(power);
     }
-    //needs testing
 
-    /*public void rotateToSweetSpot() {
-        final double currentAngleOne = vision.findCurrentAngle();
-        final double correctAngle = -.5;
-        int rotateOne = (int) (currentAngleOne - correctAngle);
-        parent.telemetry.addData("Rotate by ", rotateOne);
-        parent.telemetry.update();
-        autoTurnDegrees (1, rotateOne);
-        parent.sleep(500);
-        //second angle calculation
-        final double currentAngleTwo = vision.findCurrentAngle();
-        int rotateTwo = (int) (currentAngleTwo - correctAngle);
-        parent.telemetry.addData("Second rotate by ", rotateTwo);
-        parent.telemetry.update();
-        autoTurnDegrees (1, rotateTwo);
-        parent.sleep(500);
-        //third angle calculation
-        final double currentAngleThree = vision.findCurrentAngle();
-        int rotateThree = (int) (currentAngleThree - correctAngle);
-        parent.telemetry.addData("Third rotate by ", rotateThree);
-        parent.telemetry.update();
-        autoTurnDegrees (1, rotateThree);
-        parent.sleep(500);
-        //second angle calculation
-        final double currentAngleFour = vision.findCurrentAngle();
-        int rotateFour = (int) (currentAngleFour - correctAngle);
-        parent.telemetry.addData("Fourth rotate by ", rotateFour);
-        parent.telemetry.update();
-        autoTurnDegrees (1, rotateFour);
-        parent.sleep(500);
-        //third angle calculation
-        final double currentAngleFive = vision.findCurrentAngle();
-        int rotateFive = (int) (currentAngleFive - correctAngle);
-        parent.telemetry.addData("Fifth rotate by ", rotateFive);
-        parent.telemetry.update();
-        autoTurnDegrees (1, rotateFive);
-        parent.sleep(500);
-        parent.telemetry.addLine("Task Completed");
-        parent.telemetry.update();
-    }
-*/
     //Strafes to location specified by int ticks
     //CHANGE SIGNS
     public void autoStrafe(double power, int ticks) {
@@ -357,7 +314,7 @@ class virtualBotObject {
     //Delivers the block after setting lift to specified location
     public void deliverBlock(int level) {
         turnOnLift(level);
-        bucketServo.setPosition(BUCKETDUMP);
+        bucketServo.setPosition(DUMP);
         parent.sleep(2000);
         lowerLift();
 

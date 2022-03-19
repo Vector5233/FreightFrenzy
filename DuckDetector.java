@@ -59,7 +59,6 @@ public class DuckDetector extends OpenCvPipeline {
             centerTotal = Core.sumElems(matCenter).val[0];
             rightTotal = Core.sumElems(matRight).val[0];
 
-
              boolean moreCtrThanLft = centerTotal > leftTotal;
              boolean moreCtrThanRt = centerTotal > rightTotal;
              boolean moreLftThanCtr = leftTotal > centerTotal;

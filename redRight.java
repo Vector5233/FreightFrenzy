@@ -11,9 +11,9 @@ public class redRight extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
-    final double REDRIGHT = .2;
+    final double RED_RIGHT = .2;
     int duckLevel = 3;
-    final double INITGRABBERSERVOPOSITION = 1;
+    final double G_SERVO_POSITION = 1;
     final double POWER2 = .2;
 
     public void runOpMode(){
@@ -26,8 +26,8 @@ public class redRight extends LinearOpMode {
 
     public void initRobot(){
         robot.init();
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        robot.initCameraServo(REDRIGHT);
+        robot.initGrabberServo(G_SERVO_POSITION);
+        robot.initCameraServo(RED_RIGHT);
     }
     public void duckIdentifier(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -47,15 +47,15 @@ public class redRight extends LinearOpMode {
     }
 
     public void parkInWarehouse(){
-       double TURNPOWER = .5;
+       double TURN_POWER = .5;
        double DEGREES = 90;
        int  POWER = 1;
-       int DRIVETICKS = 700;
+       int DRIVE_TICKS = 700;
        int DRIVE = 20;
 
-       robot.driveForward(TURNPOWER, DRIVE);
-       robot.autoTurnDegrees(TURNPOWER, DEGREES);
-       robot.driveForward(POWER, DRIVETICKS);
+       robot.driveForward(TURN_POWER, DRIVE);
+       robot.autoTurnDegrees(TURN_POWER, DEGREES);
+       robot.driveForward(POWER, DRIVE_TICKS);
     }
 }
 

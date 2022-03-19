@@ -10,21 +10,23 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class redLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
-    private DuckDetector detector = new DuckDetector();
-    final double BOB = 0;
+    private final DuckDetector detector = new DuckDetector();
+    Menu initMenu = new Menu(this);
+    final double BOB = .09;
     int duckLevel = 3;
-    final double DRIVEPOWER = .4;
-    int FORWARDTICKS = 80;
-    int STRAFETICKS = 30;
-    long SLEEPYTIME = 3000;
-    final double TURNPOWER =.2;
-    final double INITGRABBERSERVOPOSITION = 1;
+    final double DRIVE_POWER = .4;
+    int FORWARD_TICKS = 80;
+    int STRAFE_TICKS = 30;
+    long SLEEPY = 3000;
+    final double TURN_POWER =.2;
+    final double G_SERVO_POSITION = 1;
 
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
 
     public void runOpMode() {
         initRobot();
         identifyDuck();
+
         waitForStart();
         duckSpinnerDrive();
         driveToHub();
@@ -37,33 +39,49 @@ public class redLeft extends LinearOpMode {
         telemetry.update();
         robot.initGrabberServo(0);
         robot.turnOnDuckSpinner();
-        robot.driveForward(DRIVEPOWER, FORWARDTICKS);
-        robot.autoStrafe(TURNPOWER,STRAFETICKS);
-        sleep(SLEEPYTIME);
+        robot.driveForward(DRIVE_POWER, FORWARD_TICKS);
+        robot.autoStrafe(TURN_POWER, STRAFE_TICKS);
+        sleep(SLEEPY);
         robot.turnOffDuckSpinner();
     }
 
     public void driveToHub(){
-        int STRAFEPOWER = 1;
-        int STRAFETICKS = -150;         //sign change
-        long HUBSLEEP = 100;
-        int TURNFORWARD = 625;
-        int TICKFORWARD = 480;
-        robot.autoStrafe(STRAFEPOWER, STRAFETICKS);
-        robot.autoTurn(TURNPOWER, TURNFORWARD);
-        sleep(HUBSLEEP);
-        robot.driveForward(TURNPOWER, TICKFORWARD);
-        sleep(HUBSLEEP);
+        int STRAFE_POWER = 1;
+        int STRAFE_TICKS = -150;         //sign change
+        long SLEEP = 100;
+        int TURN_RIGHT = 625;
+        int TICK_FORWARD = 480;
+        int TICK_FORWARD_TWO = 412;
+        robot.autoStrafe(STRAFE_POWER, STRAFE_TICKS);
+        robot.autoTurn(TURN_POWER, TURN_RIGHT);
+        sleep(SLEEP);
+        if (duckLevel == 2) {
+            robot.driveForward(TURN_POWER, TICK_FORWARD_TWO);
+        } else {
+            robot.driveForward(TURN_POWER, TICK_FORWARD);
+        }
+        sleep(SLEEP);
         robot.setPowerAll(0);
     }
 
     public void parkInStorage(){
-        int TURNTICKS = 175;
-        int DRIVEBACKWARDS = -600;
-        robot.autoTurn(TURNPOWER,TURNTICKS);
-        robot.driveForward(TURNPOWER,DRIVEBACKWARDS);
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        sleep(SLEEPYTIME);
+        int TURN_TICKS = 175;
+        int STRAFE2 = 90;
+        int BACKWARDS = -700;
+        int STRAFE = 70;
+        double PARKING_POWER = .2;
+
+        robot.autoTurn(TURN_POWER,TURN_TICKS);
+
+        if (duckLevel == 2) {
+            robot.autoStrafe(TURN_POWER, STRAFE2);
+        } else {
+            robot.autoStrafe(TURN_POWER, STRAFE);
+        }
+        sleep(SLEEPY);
+        robot.driveForward(PARKING_POWER,BACKWARDS);
+        sleep(SLEEPY);
+
     }
 
     public void identifyDuck(){
@@ -73,13 +91,22 @@ public class redLeft extends LinearOpMode {
 
         phoneCam.setPipeline(detector);
         phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
-        sleep(SLEEPYTIME);
+        sleep(SLEEPY);
         duckLevel = detector.duckLevel();
     }
 
     public void initRobot(){
         robot.init();
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        robot.initGrabberServo(G_SERVO_POSITION);
         robot.initCameraServo(BOB);
+
+
+        /*initMenu.add(new MenuItem(0.0, "camera servo", 1.0, 0.0, 0.01 ));
+        while (!isStarted()) {
+            initMenu.update();
+            initMenu.display();
+        }
+        robot.initCameraServo(initMenu.get(0));*/
     }
+
 }

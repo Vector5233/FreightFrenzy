@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -15,12 +14,12 @@ public class newRedRight extends LinearOpMode {
 
     final double BOB = .07;
     int duckLevel = 3;
-    final double DRIVEPOWER = .4;
-    //int FORWARDTICKS = 80;
-    //int STRAFETICKS = 30;
-    long SLEEPYTIME = 3000;
-    final double TURNPOWER =.2;
-    final double INITGRABBERSERVOPOSITION = 1;
+    final double DRIVE_POWER = .4;
+    int FORWARD_TICKS = 80;
+    int STRAFE_TICKS = 30;
+    long SLEEPY_TIME = 3000;
+    final double TURN_POWER =.2;
+    final double G_SERVO_POSITION = 1;
 
     public void runOpMode() {
         initRobot();
@@ -33,11 +32,9 @@ public class newRedRight extends LinearOpMode {
         parkInWarehouse();
     }
 
-
-
     public void initRobot(){
         robot.init();
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
+        robot.initGrabberServo(G_SERVO_POSITION);
         robot.initCameraServo(BOB);
     }
 
@@ -48,41 +45,40 @@ public class newRedRight extends LinearOpMode {
 
         phoneCam.setPipeline(detector);
         phoneCam.startStreaming(352, 288, OpenCvCameraRotation.SIDEWAYS_LEFT);
-        sleep(SLEEPYTIME);
+        sleep(SLEEPY_TIME);
         duckLevel = detector.duckLevel();
     }
 
     public void turnAwayFromWall() {
-        int DRIVETICKS = 50;
-        int STRAFEPOWER = 1;
-        int STRAFETICKS = -90;
-        long HUBSLEEP = 100;
-        int TURNDEGREES = 90;
-        robot.autoStrafe(STRAFEPOWER, STRAFETICKS);
-        sleep(HUBSLEEP);
-        robot.autoTurnDegrees(TURNPOWER, TURNDEGREES);
-        sleep(HUBSLEEP);
+        int DRIVE_TICKS = 50;
+        int STRAFE_POWER = 1;
+        int STRAFE_TICKS = -90;
+        long SLEEP = 100;
+        int TURN_DEGREES = 90;
+        robot.autoStrafe(STRAFE_POWER, STRAFE_TICKS);
+        sleep(SLEEP);
+        robot.autoTurnDegrees(TURN_POWER, TURN_DEGREES);
+        sleep(SLEEP);
         robot.setPowerAll(0);
     }
 
 
     public void driveToHub () {
-        int DRIVETICKS = 240;
-        long HUBSLEEP = 100;
-        robot.driveForward(DRIVEPOWER, DRIVETICKS);
-        sleep(HUBSLEEP);
+        int DRIVE_TICKS = 240;
+        long SLEEP = 100;
+        robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
+        sleep(SLEEP);
     }
 
     public void parkInWarehouse (){
-        int DRIVETICKS = 1200;
-        long HUBSLEEP = 100;
-        int BACKWARDSDRIVETICKS = -100;
-        int TURNDEGREES = 90;
-        robot.driveForward(DRIVEPOWER, BACKWARDSDRIVETICKS);
-        sleep(HUBSLEEP);
-        robot.autoTurnDegrees(TURNPOWER, TURNDEGREES);
-        sleep(HUBSLEEP);
-        robot.driveForward(DRIVEPOWER, DRIVETICKS);
+        int DRIVE_TICKS = 1200;
+        long SLEEP = 100;
+        int BACKWARDS_DRIVE_TICKS = -100;
+        int TURN_DEGREES = 90;
+        robot.driveForward(DRIVE_POWER, BACKWARDS_DRIVE_TICKS);
+        sleep(SLEEP);
+        robot.autoTurnDegrees(TURN_POWER, TURN_DEGREES);
+        sleep(SLEEP);
+        robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
     }
-
 }

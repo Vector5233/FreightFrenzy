@@ -11,9 +11,9 @@ public class blueRight extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
-    final double BLUERIGHT = .6;
+    final double BLUE_RIGHT = .6;
     int duckLevel = 3;
-    final double INITGRABBERSERVOPOSITION = 1;
+    final double G_SERVO_POSITION = 1;
     final double POWER2 = .2;
 
 
@@ -40,45 +40,45 @@ public class blueRight extends LinearOpMode {
 
     public void driveToDuckSpinner(){
         final double POWER3 = .3;
-        int DRIVETICKS = 90;
-        int STRAFETICKS = -25;
+        int DRIVE_TICKS = 90;
+        int STRAFE_TICKS = -25;
         long SLEEP = 2000;
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
         robot.turnOnDuckSpinner();
         robot.initGrabberServo(0);
-        robot.driveForward(POWER3, DRIVETICKS);
-        robot.autoStrafe(POWER3, STRAFETICKS);
+        robot.driveForward(POWER3, DRIVE_TICKS);
+        robot.autoStrafe(POWER3, STRAFE_TICKS);
         sleep(SLEEP);
         robot.turnOffDuckSpinner();
     }
 
     public void driveToShippingHub(){
         long SLEEP = 100;
-        int TURNTICKS = 600;
-        int DRIVETICKS = 475;
-        int STRAFETICKS = 150;
+        int TURN_TICKS = 600;
+        int DRIVE_TICKS = 475;
+        int STRAFE_TICKS = 150;
 
-        robot.autoStrafe(POWER2, STRAFETICKS);
-        robot.autoTurn(POWER2, -TURNTICKS);
+        robot.autoStrafe(POWER2, STRAFE_TICKS);
+        robot.autoTurn(POWER2, -TURN_TICKS);
         sleep(SLEEP);
-        robot.driveForward(POWER2, DRIVETICKS);
+        robot.driveForward(POWER2, DRIVE_TICKS);
         sleep(SLEEP);
     }
 
     public void parkInBox(){
-        long ENDSLEEP = 6000;
-        int RIGHTTURN = -175;
-        int DRIVEFORWARD = -650;
-        robot.autoTurn(POWER2, RIGHTTURN);
-        robot.driveForward(POWER2, DRIVEFORWARD);
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        sleep(ENDSLEEP);
+        long END_SLEEP = 6000;
+        int RIGHT_TURN = -175;
+        int DRIVE_FORWARD = -650;
+        robot.autoTurn(POWER2, RIGHT_TURN);
+        robot.driveForward(POWER2, DRIVE_FORWARD);
+        robot.initGrabberServo(G_SERVO_POSITION);
+        sleep(END_SLEEP);
     }
 
     public void initBlueRight (){
         robot.init();
-        robot.initGrabberServo(INITGRABBERSERVOPOSITION);
-        robot.initCameraServo(BLUERIGHT);
+        robot.initGrabberServo(G_SERVO_POSITION);
+        robot.initCameraServo(BLUE_RIGHT);
     }
 }
