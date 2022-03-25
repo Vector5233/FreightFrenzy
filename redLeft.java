@@ -19,7 +19,7 @@ public class redLeft extends LinearOpMode {
     int STRAFE_TICKS = 30;
     long SLEEPY = 3000;
     final double TURN_POWER =.2;
-    final double G_SERVO_POSITION = 1;
+    final double G_SERVO_POSITION = .5;
 
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
 
@@ -37,10 +37,10 @@ public class redLeft extends LinearOpMode {
     public void duckSpinnerDrive(){
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
-        robot.initGrabberServo(0);
+        robot.initGrabberServo(G_SERVO_POSITION);
         robot.turnOnDuckSpinner();
         robot.driveForward(DRIVE_POWER, FORWARD_TICKS);
-        robot.autoStrafe(TURN_POWER, STRAFE_TICKS);
+        robot.autoStrafe6(TURN_POWER, STRAFE_TICKS);
         sleep(SLEEPY);
         robot.turnOffDuckSpinner();
     }
@@ -52,7 +52,7 @@ public class redLeft extends LinearOpMode {
         int TURN_RIGHT = 625;
         int TICK_FORWARD = 480;
         int TICK_FORWARD_TWO = 412;
-        robot.autoStrafe(STRAFE_POWER, STRAFE_TICKS);
+        robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
         robot.autoTurn(TURN_POWER, TURN_RIGHT);
         sleep(SLEEP);
         if (duckLevel == 2) {
@@ -74,9 +74,9 @@ public class redLeft extends LinearOpMode {
         robot.autoTurn(TURN_POWER,TURN_TICKS);
 
         if (duckLevel == 2) {
-            robot.autoStrafe(TURN_POWER, STRAFE2);
+            robot.autoStrafe6(TURN_POWER, STRAFE2);
         } else {
-            robot.autoStrafe(TURN_POWER, STRAFE);
+            robot.autoStrafe6(TURN_POWER, STRAFE);
         }
         sleep(SLEEPY);
         robot.driveForward(PARKING_POWER,BACKWARDS);
@@ -97,7 +97,6 @@ public class redLeft extends LinearOpMode {
 
     public void initRobot(){
         robot.init();
-        robot.initGrabberServo(G_SERVO_POSITION);
         robot.initCameraServo(BOB);
 
 

@@ -8,23 +8,26 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "newRedRight", group = "GROUP_NAME")
 public class newRedRight extends LinearOpMode {
+
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector();
 
-    final double BOB = .07;
+
+    final double BOB = .3;
     int duckLevel = 3;
     final double DRIVE_POWER = .4;
     int FORWARD_TICKS = 80;
     int STRAFE_TICKS = 30;
     long SLEEPY_TIME = 3000;
     final double TURN_POWER =.2;
-    final double G_SERVO_POSITION = 1;
+    final double G_SERVO_POSITION = .5;
+
 
     public void runOpMode() {
         initRobot();
         identifyDuck();
-        telemetry.addData("Level ", duckLevel);
+        telemetry.addData("Level: ", duckLevel);
         waitForStart();
         turnAwayFromWall();
         driveToHub();
@@ -32,11 +35,12 @@ public class newRedRight extends LinearOpMode {
         parkInWarehouse();
     }
 
+
     public void initRobot(){
         robot.init();
-        robot.initGrabberServo(G_SERVO_POSITION);
         robot.initCameraServo(BOB);
     }
+
 
     public void identifyDuck(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -49,13 +53,15 @@ public class newRedRight extends LinearOpMode {
         duckLevel = detector.duckLevel();
     }
 
+
     public void turnAwayFromWall() {
         int DRIVE_TICKS = 50;
         int STRAFE_POWER = 1;
         int STRAFE_TICKS = -90;
         long SLEEP = 100;
         int TURN_DEGREES = 90;
-        robot.autoStrafe(STRAFE_POWER, STRAFE_TICKS);
+        robot.initGrabberServo(G_SERVO_POSITION);
+        robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
         sleep(SLEEP);
         robot.autoTurnDegrees(TURN_POWER, TURN_DEGREES);
         sleep(SLEEP);
@@ -69,6 +75,7 @@ public class newRedRight extends LinearOpMode {
         robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
         sleep(SLEEP);
     }
+
 
     public void parkInWarehouse (){
         int DRIVE_TICKS = 1200;
