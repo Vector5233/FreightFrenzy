@@ -10,7 +10,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class blueLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
-    private DuckDetector detector = new DuckDetector();
+    private DuckDetector detector = new DuckDetector("blue");
     final double BLUE_LEFT = .7;
     int duckLevel = 3;
     final double G_SERVO_POSITION = 1;

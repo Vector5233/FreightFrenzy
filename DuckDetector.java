@@ -11,21 +11,49 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class DuckDetector extends OpenCvPipeline {
-
-    //final int ROWSTART = 50;
-    //final int ROWEND = 200;
-    final int LEFTROWSTART = 100;
-    final int LEFTROWEND = 200;
-    final int CENTERROWSTART = 75;
-    final int CENTERROWEND = 175;
-    final int RIGHTROWSTART = 70;
-    final int RIGHTROWEND = 170;
-    final int LEFTCOLSTART = 1;
-    final int LEFTCOLEND = 100;
-    final int CENTERCOLSTART = 105;
-    final int CENTERCOLEND = 205;
-    final int RIGHTCOLSTART = 205;
-    final int RIGHTCOLEND = 305;
+    int LEFTROWSTART;
+    int LEFTROWEND;
+    int CENTERROWSTART;
+    int CENTERROWEND;
+    int RIGHTROWSTART;
+    int RIGHTROWEND;
+    int LEFTCOLSTART;
+    int LEFTCOLEND;
+    int CENTERCOLSTART;
+    int CENTERCOLEND;
+    int RIGHTCOLSTART;
+    int RIGHTCOLEND;
+    public DuckDetector(String side){
+        if (side == "red") {
+            LEFTROWSTART = 100;
+            LEFTROWEND = 200;
+            CENTERROWSTART = 75;
+            CENTERROWEND = 175;
+            RIGHTROWSTART = 70;
+            RIGHTROWEND = 170;
+            LEFTCOLSTART = 1;
+            LEFTCOLEND = 100;
+            CENTERCOLSTART = 105;
+            CENTERCOLEND = 205;
+            RIGHTCOLSTART = 205;
+            RIGHTCOLEND = 305;
+        } else if (side == "blue") {
+            LEFTROWSTART = 25;
+            LEFTROWEND = 125;
+            CENTERROWSTART = 25;
+            CENTERROWEND = 125;
+            RIGHTROWSTART = 70;
+            RIGHTROWEND = 170;
+            LEFTCOLSTART = 1;
+            LEFTCOLEND = 100;
+            CENTERCOLSTART = 105;
+            CENTERCOLEND = 205;
+            RIGHTCOLSTART = 205;
+            RIGHTCOLEND = 305;
+        } else {
+            ;
+        }
+    }
 
 
     private Mat workingMatrix = new Mat();

@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 @Disabled
 public class DuckIdentifier extends LinearOpMode {
     private OpenCvInternalCamera phoneCam;
-    private DuckDetector detector = new DuckDetector();
+    private DuckDetector detector = new DuckDetector("red");
     final double BOB = 0;
 
     @Override

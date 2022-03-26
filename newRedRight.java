@@ -11,7 +11,7 @@ public class newRedRight extends LinearOpMode {
 
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
-    private DuckDetector detector = new DuckDetector();
+    private DuckDetector detector = new DuckDetector("red");
 
 
     final double BOB = .3;
