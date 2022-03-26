@@ -17,9 +17,10 @@ public class redLeft extends LinearOpMode {
     final double DRIVE_POWER = .4;
     int FORWARD_TICKS = 80;
     int STRAFE_TICKS = 30;
+    int GRABBER_SPEED= 20;
     long SLEEPY = 3000;
     final double TURN_POWER =.2;
-    final double G_SERVO_POSITION = 1;
+    final double G_SERVO_POSITION = .5;
 
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
 
@@ -80,6 +81,9 @@ public class redLeft extends LinearOpMode {
         }
         sleep(SLEEPY);
         robot.driveForward(PARKING_POWER,BACKWARDS);
+        robot.turnOnGrabberMotor();
+        sleep(500);
+        robot.turnOffGrabberMotor();
         sleep(SLEEPY);
 
     }

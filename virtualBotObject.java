@@ -12,7 +12,7 @@ import java.util.Locale;
 
 class virtualBotObject {
 
-    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift;
+    DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, grabberMotor;
     Servo grabberServo, bucketServo, cameraServo;
     LinearOpMode parent;
 
@@ -20,6 +20,7 @@ class virtualBotObject {
     final double LIFT = 1;
     final double SAFETY = 1;
     final double DUMP = .7;
+    final double MOTOR = .5;
     int[] ticksForLevels = {0, 680, 1200, 1840};
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
@@ -38,6 +39,7 @@ class virtualBotObject {
         leftDuckSpinner = parent.hardwareMap.dcMotor.get("leftDuckSpinner");
         rightDuckSpinner = parent.hardwareMap.dcMotor.get("rightDuckSpinner");
         freightLift = parent.hardwareMap.dcMotor.get("freightLift");
+        grabberMotor = parent.hardwareMap.dcMotor.get("grabberMotor");
         grabberServo = parent.hardwareMap.servo.get("grabberServo");
         cameraServo = parent.hardwareMap.servo.get("cameraServo");
         bucketServo = parent.hardwareMap.servo.get("bucketServo");
@@ -59,6 +61,13 @@ class virtualBotObject {
     public void turnOnDuckSpinner() {
         leftDuckSpinner.setPower(-SPINNER);
         rightDuckSpinner.setPower(SPINNER);
+    }
+
+    public void turnOnGrabberMotor() {
+        grabberMotor.setPower(MOTOR);
+    }
+    public void turnOffGrabberMotor() {
+        grabberMotor.setPower(0);
     }
 
     //Turns off the duck spinners
