@@ -14,7 +14,7 @@ public class newRedRight extends LinearOpMode {
     private DuckDetector detector = new DuckDetector("red");
 
 
-    final double BOB = .3;
+    final double BOB = .18;
     int duckLevel = 3;
     final double DRIVE_POWER = .4;
     int FORWARD_TICKS = 80;
@@ -57,7 +57,7 @@ public class newRedRight extends LinearOpMode {
     public void turnAwayFromWall() {
         int DRIVE_TICKS = 50;
         int STRAFE_POWER = 1;
-        int STRAFE_TICKS = -90;
+        int STRAFE_TICKS = -110;
         long SLEEP = 100;
         int TURN_DEGREES = 90;
         robot.initGrabberServo(G_SERVO_POSITION);
@@ -70,7 +70,7 @@ public class newRedRight extends LinearOpMode {
 
 
     public void driveToHub () {
-        int DRIVE_TICKS = 240;
+        int DRIVE_TICKS = 200;
         long SLEEP = 100;
         robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
         sleep(SLEEP);
