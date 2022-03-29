@@ -18,39 +18,39 @@ public class blueLeft extends LinearOpMode {
 
 
     public void runOpMode() {
-        robot.init();
-        robot.initGrabberServo(G_SERVO_POSITION);
-        robot.initCameraServo(BLUE_LEFT);
+        initRobot();
         duckIdentifier();
         waitForStart();
-        driveToHub();
-        robot.deliverBlock(duckLevel);
+        strafeOut();
 
-        parkInWarehouse();
+
+        //robot.deliverBlock(duckLevel);
+
+
+
+    }
+    public void initRobot(){
+        robot.init();
+        robot.initCameraServo(BLUE_LEFT);
+    }
+
+    public void strafeOut(){
+        int STRAFE_POWER = 1;
+        int STRAFE_TICKS = 110;
+        long SLEEP = 100;
+        int TURN_DEGREES = 270;
+        robot.initGrabberServo(G_SERVO_POSITION);
+        robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
+        sleep(SLEEP);
+        robot.autoTurnDegrees(.2, TURN_DEGREES);
+        sleep(SLEEP);
+        robot.setPowerAll(0);
+    }
+
+    public void strafeTimeout(double power, double ticks, long time){
 
     }
 
-    public void driveToHub(){
-        int TURN_TO_HUB = -290;
-        int DRIVE_TO_HUB = 150;
-        robot.autoStrafe(.3,-40);
-        robot.autoTurn(POWER2, TURN_TO_HUB);
-        robot.driveForward(POWER2, DRIVE_TO_HUB);
-    }
-
-    public void parkInWarehouse(){
-        double TURN_POWER = .5;
-        double DEGREES = 90;
-        int  POWER = 1;
-        int DRIVE_TICKS = 850;
-        int DRIVE = 100;
-
-        robot.driveForward(TURN_POWER, DRIVE);
-        robot.autoTurnDegrees(TURN_POWER, -DEGREES);
-        robot.driveForward(POWER, DRIVE_TICKS);
-        robot.initGrabberServo(0);
-        sleep(3000);
-    }
     public void duckIdentifier(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);

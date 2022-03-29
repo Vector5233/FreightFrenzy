@@ -6,8 +6,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "newRedRight", group = "GROUP_NAME")
-public class newRedRight extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "RedRight", group = "GROUP_NAME")
+public class RedRight extends LinearOpMode {
 
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
