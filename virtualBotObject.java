@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.internal.tfod.Timer;
+
 import java.util.Locale;
 
 
@@ -19,9 +23,9 @@ class virtualBotObject {
     final double SPINNER = .5;
     final double LIFT = 1;
     final double SAFETY = 1;
-    final double DUMP = .7;
+    final double DUMP = .65;
     final double MOTOR = .5;
-    int[] ticksForLevels = {0, 680, 1200, 1840};
+    int[] ticksForLevels = {0, 1050, 1480, 1840};
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
 
@@ -52,9 +56,6 @@ class virtualBotObject {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         freightLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //Test of GitHub
-        //test of mac connection to github
-        // test of files 3
     }
 
     //Turns on the duck spinners
@@ -272,6 +273,7 @@ class virtualBotObject {
     }
 
     public void autoStrafe6(double power, int ticks) {
+
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(ticks);
         frontLeft.setTargetPosition(-ticks);
@@ -279,7 +281,6 @@ class virtualBotObject {
         frontRight.setTargetPosition(ticks);
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerAll(power);
-
         while (frontLeft.isBusy() && parent.opModeIsActive()) {
             frontLeft.setPower(powerAdjust6(frontLeft, power));
             frontRight.setPower(powerAdjust6(frontRight, power));
@@ -292,7 +293,25 @@ class virtualBotObject {
 
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+    public void strafeTimeout(double power, int ticks, double THRESHOLD){
+        ElapsedTime time = new ElapsedTime();
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setTargetPosition(ticks);
+        frontLeft.setTargetPosition(-ticks);
+        backRight.setTargetPosition(-ticks);
+        frontRight.setTargetPosition(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        setPowerAll(power);
+       time.reset();
+        while (frontLeft.isBusy() && parent.opModeIsActive() && time.milliseconds() < THRESHOLD) {
+            frontLeft.setPower(powerAdjust6(frontLeft, power));
+            frontRight.setPower(powerAdjust6(frontRight, power));
+            backLeft.setPower(powerAdjust6(backLeft, power));
+            backRight.setPower(powerAdjust6(backRight, power));
+        }
 
+        setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
     public void setLambda(double val) {
         LAMBDA = val;
     }

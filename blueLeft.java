@@ -11,21 +11,22 @@ public class blueLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
     private DuckDetector detector = new DuckDetector("blue");
-    final double BLUE_LEFT = .7;
+    final double BLUE_LEFT = .69;
     int duckLevel = 3;
     final double G_SERVO_POSITION = 1;
     final double POWER2 = .2;
 
+    //does not read level one properly, black bar may be interfering. Either check put a different value or
+    // add an if statement to override
 
     public void runOpMode() {
         initRobot();
         duckIdentifier();
         waitForStart();
         strafeOut();
-
-
-        //robot.deliverBlock(duckLevel);
-
+        driveToHub();
+        robot.deliverBlock(duckLevel);
+        parkInWarehouse();
 
 
     }
@@ -36,9 +37,9 @@ public class blueLeft extends LinearOpMode {
 
     public void strafeOut(){
         int STRAFE_POWER = 1;
-        int STRAFE_TICKS = 110;
+        int STRAFE_TICKS = 120;
         long SLEEP = 100;
-        int TURN_DEGREES = 270;
+        int TURN_DEGREES = -75;
         robot.initGrabberServo(G_SERVO_POSITION);
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
         sleep(SLEEP);
@@ -47,9 +48,26 @@ public class blueLeft extends LinearOpMode {
         robot.setPowerAll(0);
     }
 
-    public void strafeTimeout(double power, double ticks, long time){
+    public void driveToHub(){
+            double DRIVE_POWER =.2;
+            int DRIVE_TICKS = 250;
+            long SLEEP = 100;
+            robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
+            sleep(SLEEP);
 
     }
+
+    public void parkInWarehouse(){
+        double DRIVE_POWER = .2;
+        double PARK_POWER = .5;
+        int TURN = -100;
+        int DRIVE = 1100;
+        robot.autoTurnDegrees(DRIVE_POWER, TURN);
+        robot.driveForward(PARK_POWER, DRIVE);
+        robot.autoStrafe6(DRIVE_POWER,50);
+    }
+
+
 
     public void duckIdentifier(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

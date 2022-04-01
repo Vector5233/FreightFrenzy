@@ -102,14 +102,6 @@ public class redLeft extends LinearOpMode {
     public void initRobot(){
         robot.init();
         robot.initCameraServo(BOB);
-
-
-        /*initMenu.add(new MenuItem(0.0, "camera servo", 1.0, 0.0, 0.01 ));
-        while (!isStarted()) {
-            initMenu.update();
-            initMenu.display();
-        }
-        robot.initCameraServo(initMenu.get(0));*/
     }
 
 }
