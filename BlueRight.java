@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+  package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -11,14 +11,14 @@ public class BlueRight extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
 
     private OpenCvInternalCamera phoneCam;
-    private final DuckDetector detector = new DuckDetector("blue");
+    private final duckID2 detector = new duckID2("blue");
     final double BOB = .72;
     int duckLevel = 3;
     final double DRIVE_POWER = .4;
     int FORWARD_TICKS = 75;
     long SLEEPY = 3000;
     final double TURN_POWER =.2;
-    final double G_SERVO_POSITION = .5;
+    final double G_SERVO_POSITION = 0;
 
     public void runOpMode() {
         initRobot();
@@ -29,7 +29,7 @@ public class BlueRight extends LinearOpMode {
         duckSpinnerDrive();
         driveToHub();
         robot.deliverBlock(duckLevel);
-        //parkInStorage();
+        parkInStorage();
     }
 
 
@@ -68,35 +68,36 @@ public class BlueRight extends LinearOpMode {
         int STRAFE_TICKS = 150;
         long SLEEP = 100;
         int TURN_LEFT = -575;
-        int TICK_FORWARD = 405;
-        int TICK_FORWARD_TWO = 404;
+        int TICK_FORWARD = 400;
+        //int TICK_FORWARD_TWO = 590;
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
         robot.autoTurn(TURN_POWER, TURN_LEFT);
         sleep(SLEEP);
-        if (duckLevel == 2) {
+        robot.driveForward(TURN_POWER, TICK_FORWARD);
+        /*if (duckLevel == 2) {
             robot.driveForward(TURN_POWER, TICK_FORWARD_TWO);
         } else {
             robot.driveForward(TURN_POWER, TICK_FORWARD);
-        }
+        }*/
         sleep(SLEEP);
         robot.setPowerAll(0);
     }
     public void parkInStorage(){
         int TURN_TICKS = 175;
         int STRAFE2 = 90;
-        int BACKWARDS = -700;
+        int BACKWARDS = -510;
         int STRAFE = 70;
         double PARKING_POWER = .2;
+        long NAP = 500;
 
-        robot.autoTurn(TURN_POWER,TURN_TICKS);
+        robot.autoTurnDegrees(TURN_POWER,-35);
+        sleep(NAP);
 
-        if (duckLevel == 2) {
-            robot.autoStrafe6(TURN_POWER, STRAFE2);
-        } else {
-            robot.autoStrafe6(TURN_POWER, STRAFE);
-        }
-        sleep(SLEEPY);
+        //robot.autoStrafe6(TURN_POWER, STRAFE);
+
+        //sleep(SLEEPY);
         robot.driveForward(PARKING_POWER,BACKWARDS);
+        sleep(SLEEPY);
         robot.turnOnGrabberMotor();
         sleep(500);
         robot.turnOffGrabberMotor();

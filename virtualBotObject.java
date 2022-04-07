@@ -25,7 +25,7 @@ class virtualBotObject {
     final double SAFETY = 1;
     final double DUMP = .65;
     final double MOTOR = .5;
-    int[] ticksForLevels = {0, 1050, 1480, 1840};
+    int[] ticksForLevels = {0, 997, 1346, 1708};
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
 

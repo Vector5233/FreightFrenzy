@@ -5,7 +5,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="redLeft", group = "GROUP_NAME")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name ="redLeft", group = "red", preselectTeleOp = "Gru")
 //properties file
 public class redLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
@@ -20,7 +20,7 @@ public class redLeft extends LinearOpMode {
     int GRABBER_SPEED= 20;
     long SLEEPY = 3000;
     final double TURN_POWER =.2;
-    final double G_SERVO_POSITION = .5;
+    final double G_SERVO_POSITION = 0;
 
     //robot must start with black line on duck spinner brace parallel to the metal part of the carousel with three fingers in between the duck spinner and the carousel
 
@@ -50,20 +50,18 @@ public class redLeft extends LinearOpMode {
         int STRAFE_POWER = 1;
         int STRAFE_TICKS = -150;         //sign change
         long SLEEP = 100;
-        int TURN_RIGHT = 625;
-        int TICK_FORWARD = 480;
-        int TICK_FORWARD_TWO = 412;
+        int TURN_RIGHT = 615;
+        int TICK_FORWARD = 431;
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
+
         robot.autoTurn(TURN_POWER, TURN_RIGHT);
         sleep(SLEEP);
-        if (duckLevel == 2) {
-            robot.driveForward(TURN_POWER, TICK_FORWARD_TWO);
-        } else {
-            robot.driveForward(TURN_POWER, TICK_FORWARD);
-        }
+        robot.driveForward(TURN_POWER, TICK_FORWARD);
         sleep(SLEEP);
         robot.setPowerAll(0);
     }
+
+
 
     public void parkInStorage(){
         int TURN_TICKS = 175;

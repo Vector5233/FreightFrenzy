@@ -6,7 +6,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "RedRight", group = "GROUP_NAME")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "RedRight", group = "red", preselectTeleOp = "Gru")
 public class RedRight extends LinearOpMode {
 
     virtualBotObject robot = new virtualBotObject(this);
@@ -21,7 +21,7 @@ public class RedRight extends LinearOpMode {
     int STRAFE_TICKS = 30;
     long SLEEPY_TIME = 3000;
     final double TURN_POWER =.2;
-    final double G_SERVO_POSITION = .5;
+    final double G_SERVO_POSITION = 0;
 
 
     public void runOpMode() {
@@ -55,11 +55,10 @@ public class RedRight extends LinearOpMode {
 
 
     public void turnAwayFromWall() {
-        int DRIVE_TICKS = 50;
         int STRAFE_POWER = 1;
         int STRAFE_TICKS = -110;
         long SLEEP = 100;
-        int TURN_DEGREES = 90;
+        int TURN_DEGREES = 92;
         robot.initGrabberServo(G_SERVO_POSITION);
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
         sleep(SLEEP);
@@ -70,9 +69,10 @@ public class RedRight extends LinearOpMode {
 
 
     public void driveToHub () {
-        int DRIVE_TICKS = 200;
+        int DRIVE_TICKS = 140;
         long SLEEP = 100;
         robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
+        robot.setPowerAll(0);
         sleep(SLEEP);
     }
 
@@ -82,10 +82,14 @@ public class RedRight extends LinearOpMode {
         long SLEEP = 100;
         int BACKWARDS_DRIVE_TICKS = -100;
         int TURN_DEGREES = 90;
+        double S_POWER = .6;
         robot.driveForward(DRIVE_POWER, BACKWARDS_DRIVE_TICKS);
+        robot.setPowerAll(0);
         sleep(SLEEP);
         robot.autoTurnDegrees(TURN_POWER, TURN_DEGREES);
         sleep(SLEEP);
         robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
+        robot.setPowerAll(0);
+        robot.autoStrafe6(S_POWER,150);
     }
 }

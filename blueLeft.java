@@ -5,15 +5,15 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "blueLeft", group = "GROUP_NAME")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous (name = "blueLeft", group = "blue", preselectTeleOp = "Gru")
 
 public class blueLeft extends LinearOpMode {
     virtualBotObject robot = new virtualBotObject(this);
     private OpenCvInternalCamera phoneCam;
-    private DuckDetector detector = new DuckDetector("blue");
+    private duckID2 detector = new duckID2("blue");
     final double BLUE_LEFT = .69;
     int duckLevel = 3;
-    final double G_SERVO_POSITION = 1;
+    final double G_SERVO_POSITION = 0;
     final double POWER2 = .2;
 
     //does not read level one properly, black bar may be interfering. Either check put a different value or
@@ -27,8 +27,6 @@ public class blueLeft extends LinearOpMode {
         driveToHub();
         robot.deliverBlock(duckLevel);
         parkInWarehouse();
-
-
     }
     public void initRobot(){
         robot.init();
@@ -38,7 +36,7 @@ public class blueLeft extends LinearOpMode {
     public void strafeOut(){
         int STRAFE_POWER = 1;
         int STRAFE_TICKS = 120;
-        long SLEEP = 100;
+        long SLEEP = 1000;
         int TURN_DEGREES = -75;
         robot.initGrabberServo(G_SERVO_POSITION);
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
@@ -50,7 +48,7 @@ public class blueLeft extends LinearOpMode {
 
     public void driveToHub(){
             double DRIVE_POWER =.2;
-            int DRIVE_TICKS = 250;
+            int DRIVE_TICKS = 220;
             long SLEEP = 100;
             robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
             sleep(SLEEP);
