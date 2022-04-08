@@ -17,7 +17,7 @@ public class BlueRight extends LinearOpMode {
     final double DRIVE_POWER = .4;
     int FORWARD_TICKS = 75;
     long SLEEPY = 3000;
-    final double TURN_POWER =.2;
+    final double TURN_POWER =.3;
     final double G_SERVO_POSITION = 0;
 
     public void runOpMode() {
@@ -71,10 +71,10 @@ public class BlueRight extends LinearOpMode {
         int STRAFE_POWER = 1;
         int STRAFE_TICKS = 150;
         long SLEEP = 100;
-        int TURN_LEFT = -575;
+        int TURN_LEFT = -570;
         int TURN_LEFT_ONE = -590;
-        int TICK_FORWARD = 418;
-        int TICK_FORWARD_ONE = 450;
+        int TICK_FORWARD = 350;
+        int TICK_FORWARD_ONE = 350;
         //int TICK_FORWARD_TWO = 590;
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
         //robot.autoTurn(TURN_POWER, TURN_LEFT);
@@ -98,7 +98,7 @@ public class BlueRight extends LinearOpMode {
     public void parkInStorage(){
         int TURN_TICKS = 175;
         int STRAFE2 = 90;
-        int BACKWARDS = -570;
+        int BACKWARDS = -590;
         int STRAFE = -50;
         double PARKING_POWER = .2;
         long NAP = 500;
