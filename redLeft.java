@@ -36,12 +36,15 @@ public class redLeft extends LinearOpMode {
     }
 
     public void duckSpinnerDrive(){
+        double TIMEOUT = 5000;
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
         robot.initGrabberServo(G_SERVO_POSITION);
+        sleep(900);
         robot.turnOnDuckSpinner();
         robot.driveForward(DRIVE_POWER, FORWARD_TICKS);
-        robot.autoStrafe6(TURN_POWER, STRAFE_TICKS);
+        robot.strafeTimeout(TURN_POWER,STRAFE_TICKS, TIMEOUT);
+        //robot.autoStrafe6(TURN_POWER, STRAFE_TICKS);
         sleep(SLEEPY);
         robot.turnOffDuckSpinner();
     }

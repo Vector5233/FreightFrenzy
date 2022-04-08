@@ -46,12 +46,12 @@ public class duckID2 extends OpenCvPipeline {
             CENTERROWEND = 125;
             RIGHTROWSTART = 70;
             RIGHTROWEND = 170;
-            LEFTCOLSTART = 1;
-            LEFTCOLEND = 100;
-            CENTERCOLSTART = 105;
-            CENTERCOLEND = 205;
-            RIGHTCOLSTART = 205;
-            RIGHTCOLEND = 305;
+            LEFTCOLSTART = 25;//1;
+            LEFTCOLEND = 75;//100;
+            CENTERCOLSTART = 130;//105;
+            CENTERCOLEND = 180;//205;
+            RIGHTCOLSTART = 230;//205;
+            RIGHTCOLEND = 280;//305;
         } else {
             ;
         }

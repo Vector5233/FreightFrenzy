@@ -31,12 +31,12 @@ public class DuckDetector extends OpenCvPipeline {
             CENTERROWEND = 175;
             RIGHTROWSTART = 70;
             RIGHTROWEND = 170;
-            LEFTCOLSTART = 1;
-            LEFTCOLEND = 100;
-            CENTERCOLSTART = 105;
-            CENTERCOLEND = 205;
-            RIGHTCOLSTART = 205;
-            RIGHTCOLEND = 305;
+            LEFTCOLSTART = 25;
+            LEFTCOLEND = 75;
+            CENTERCOLSTART = 130;
+            CENTERCOLEND = 180;
+            RIGHTCOLSTART = 230;
+            RIGHTCOLEND = 280;
         } else if (side == "blue") {
             LEFTROWSTART = 25;
             LEFTROWEND = 125;

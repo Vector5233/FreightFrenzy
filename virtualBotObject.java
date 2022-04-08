@@ -25,6 +25,7 @@ class virtualBotObject {
     final double SAFETY = 1;
     final double DUMP = .65;
     final double MOTOR = .5;
+    final double AUTOMOTOR = .1;
     int[] ticksForLevels = {0, 997, 1346, 1708};
     private int motorTolerance = 30;
     private double motorAdjustment = 0.30;
@@ -69,6 +70,10 @@ class virtualBotObject {
     }
     public void turnOffGrabberMotor() {
         grabberMotor.setPower(0);
+    }
+
+    public void turnOnGrabberMotorAuto() {
+        grabberMotor.setPower(AUTOMOTOR);
     }
 
     //Turns off the duck spinners
@@ -312,6 +317,7 @@ class virtualBotObject {
 
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+
     public void setLambda(double val) {
         LAMBDA = val;
     }

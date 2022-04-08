@@ -48,9 +48,10 @@ public class blueLeft extends LinearOpMode {
 
     public void driveToHub(){
             double DRIVE_POWER =.2;
-            int DRIVE_TICKS = 220;
+            int DRIVE_TICKS = 180;
             long SLEEP = 100;
             robot.driveForward(DRIVE_POWER, DRIVE_TICKS);
+            robot.setPowerAll(0);
             sleep(SLEEP);
 
     }
@@ -58,10 +59,11 @@ public class blueLeft extends LinearOpMode {
     public void parkInWarehouse(){
         double DRIVE_POWER = .2;
         double PARK_POWER = .5;
-        int TURN = -100;
-        int DRIVE = 1100;
+        int TURN = -115;
+        int DRIVE = 1200;
         robot.autoTurnDegrees(DRIVE_POWER, TURN);
         robot.driveForward(PARK_POWER, DRIVE);
+        robot.setPowerAll(0);
         robot.autoStrafe6(DRIVE_POWER,50);
     }
 

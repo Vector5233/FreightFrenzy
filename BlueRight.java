@@ -27,6 +27,7 @@ public class BlueRight extends LinearOpMode {
         waitForStart();
 
         duckSpinnerDrive();
+
         driveToHub();
         robot.deliverBlock(duckLevel);
         parkInStorage();
@@ -52,12 +53,15 @@ public class BlueRight extends LinearOpMode {
     public void duckSpinnerDrive(){
         int STRAFE = -25;
         double STRAFE_POWER = .9;
+        double TIMEOUT = 5000;
         telemetry.addData("Duck Level:", duckLevel);
         telemetry.update();
         robot.initGrabberServo(G_SERVO_POSITION);
+        sleep(900);
         robot.turnOnDuckSpinner();
         robot.driveForward(DRIVE_POWER, FORWARD_TICKS);
-        robot.autoStrafe6(STRAFE_POWER, STRAFE);
+        robot.strafeTimeout(STRAFE_POWER,STRAFE, TIMEOUT);
+        //robot.autoStrafe6(STRAFE_POWER, STRAFE);
         sleep(SLEEPY);
         robot.turnOffDuckSpinner();
     }
@@ -68,38 +72,48 @@ public class BlueRight extends LinearOpMode {
         int STRAFE_TICKS = 150;
         long SLEEP = 100;
         int TURN_LEFT = -575;
-        int TICK_FORWARD = 400;
+        int TURN_LEFT_ONE = -590;
+        int TICK_FORWARD = 418;
+        int TICK_FORWARD_ONE = 450;
         //int TICK_FORWARD_TWO = 590;
         robot.autoStrafe6(STRAFE_POWER, STRAFE_TICKS);
-        robot.autoTurn(TURN_POWER, TURN_LEFT);
+        //robot.autoTurn(TURN_POWER, TURN_LEFT);
+        if (duckLevel == 1) {
+            robot.autoTurn(TURN_POWER, TURN_LEFT_ONE);
+        } else {
+            robot.autoTurn(TURN_POWER, TURN_LEFT);
+        }
         sleep(SLEEP);
-        robot.driveForward(TURN_POWER, TICK_FORWARD);
-        /*if (duckLevel == 2) {
-            robot.driveForward(TURN_POWER, TICK_FORWARD_TWO);
+        //robot.driveForward(TURN_POWER, TICK_FORWARD);
+        if (duckLevel == 1) {
+            robot.driveForward(TURN_POWER, TICK_FORWARD_ONE);
         } else {
             robot.driveForward(TURN_POWER, TICK_FORWARD);
-        }*/
+        }
         sleep(SLEEP);
         robot.setPowerAll(0);
     }
+
+
     public void parkInStorage(){
         int TURN_TICKS = 175;
         int STRAFE2 = 90;
-        int BACKWARDS = -510;
-        int STRAFE = 70;
+        int BACKWARDS = -570;
+        int STRAFE = -50;
         double PARKING_POWER = .2;
         long NAP = 500;
 
         robot.autoTurnDegrees(TURN_POWER,-35);
         sleep(NAP);
 
-        //robot.autoStrafe6(TURN_POWER, STRAFE);
+        robot.autoStrafe6(TURN_POWER, STRAFE);
 
         //sleep(SLEEPY);
         robot.driveForward(PARKING_POWER,BACKWARDS);
         sleep(SLEEPY);
         robot.turnOnGrabberMotor();
-        sleep(500);
+        robot.turnOnGrabberMotorAuto() ;
+        sleep(1200);
         robot.turnOffGrabberMotor();
         sleep(SLEEPY);
 
