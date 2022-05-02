@@ -6,38 +6,24 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+//driving-only code for outreach events, open houses, etc.
+
 
 @TeleOp(name="OpenHouse", group="")
-@Disabled
+
 public class OpenHouse extends OpMode {
     DcMotor frontLeft, frontRight, backLeft, backRight, leftDuckSpinner, rightDuckSpinner, freightLift, grabberMotor;
 
     Servo grabberServo, cameraServo, bucketServo;
 
-
-    //ADD JAVADOC?
-
-    final double APPROACHSPEED = .4;
-    final double DUCKSPINNERPOWER = .5;
-    final double FREIGHTLIFTPOWER = 1;
-    final double SAFETYBUCKET = 1;
-    final double BUCKETCOLLECT = .8;
-    final double BUCKETDUMP = .7;
-    final double THRESHOLD = .1;
-    final double GRABBERSPEED = 1;
-    final double GRABBERSERVO = 0;
-    int[] ticks = {0, 2355, 3485, 4560};
-    final int levelZero = 0;
-    final int firstLevel = 1;
-    final int secondLevel = 2;
-    final int thirdLevel = 3;
     final int manualLevel = -1;
     int level = (manualLevel);
-    final double CAMERASERVO = 0;
-    final double MAXTICKS = 4570;
-    final double SAFETICKS = 1200;
-    final double LIFTGRABBER = .5;
-    final double FIRSTLEVELGRABBER = 1;
+    final double SAFETYBUCKET = 1;
+    final double BUCKETCOLLECT = .8;
+    final double BUCKETDUMP = .70;
+    final double THRESHOLD = .1;
+    final double GRABBERSPEED = 1;
+    final double SAFETICKS = 165;
 
     //Define Servos, Motors, set values
 
@@ -95,6 +81,9 @@ public class OpenHouse extends OpMode {
             frontRight.setPower(frontRightPower);
             backLeft.setPower(backLeftPower);
             backRight.setPower(backRightPower);
+
+            setBucketPosition();
+            setBucketGrabber();
         }
 
         public double trimPower( double power){
@@ -108,4 +97,24 @@ public class OpenHouse extends OpMode {
 
             return power;
         }
+
+    public void setBucketGrabber() {
+        if (gamepad1.left_trigger > THRESHOLD) {
+            grabberMotor.setPower(GRABBERSPEED);
+        } else if (gamepad2.right_trigger > THRESHOLD) {
+            grabberMotor.setPower(-GRABBERSPEED);
+        } else {
+            grabberMotor.setPower(0);
+        }
+    }
+
+    public void setBucketPosition() {
+        if (gamepad1.a) {
+            bucketServo.setPosition(BUCKETCOLLECT);
+        } else if ((freightLift.getCurrentPosition() >= SAFETICKS) && (gamepad1.x)) {
+            bucketServo.setPosition(BUCKETDUMP);
+        } else {
+            bucketServo.setPosition(SAFETYBUCKET);
+        }
+    }
 }

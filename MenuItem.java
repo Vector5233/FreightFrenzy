@@ -7,6 +7,8 @@ public class MenuItem {
     double min;
     double increment;
 
+
+    //assigns fields then uses them as parameters to change different variables during init of OpModes
     public MenuItem(double v, String L, double M, double m, double i) {
         value = v;
         label = L;
