@@ -14,8 +14,10 @@ class Motion {
 
     public final Boolean FORWARD = true;
     public final Boolean BACKWARD = true;
+    LinearOpMode parent;
 
-    public Motion(LinearOpMode parent) {
+    public Motion(LinearOpMode p) {
+        parent = p;
         FL = parent.hardwareMap.dcMotor.get("frontLeft");
         FR = parent.hardwareMap.dcMotor.get("frontRight");
         BL = parent.hardwareMap.dcMotor.get("backLeft");
@@ -48,10 +50,10 @@ class Motion {
 
     public void driveStraight(double power, int ticks, boolean direction) {
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setTargetAll(ticks);
+        setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerAll(power);
-        while (FL.isBusy() && linearOpMode.opModeIsActive()) {
+        while (FL.isBusy() && parent.opModeIsActive()) {
         }
         setPowerAll(0);
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

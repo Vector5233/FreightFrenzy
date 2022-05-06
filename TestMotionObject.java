@@ -13,6 +13,8 @@ public class TestMotionObject extends LinearOpMode  {
         motion = new Motion(this);
         waitForStart();
         motion.driveStraight(0.5, 200, FORWARD);
+        sleep(2000);
+        motion.driveStraight(0.5, 200, BACKWARD);
     }
 }
 
