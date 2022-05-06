@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -14,11 +15,11 @@ class Motion {
     public final Boolean FORWARD = true;
     public final Boolean BACKWARD = true;
 
-    public Motion() {
-        FL = hardwareMap.dcMotor.get("frontLeft");
-        FR = hardwareMap.dcMotor.get("frontRight");
-        BL = hardwareMap.dcMotor.get("backLeft");
-        BR = hardwareMap.dcMotor.get("backRight");
+    public Motion(LinearOpMode parent) {
+        FL = parent.hardwareMap.dcMotor.get("frontLeft");
+        FR = parent.hardwareMap.dcMotor.get("frontRight");
+        BL = parent.hardwareMap.dcMotor.get("backLeft");
+        BR = parent.hardwareMap.dcMotor.get("backRight");
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
     }

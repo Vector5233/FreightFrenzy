@@ -18,7 +18,7 @@ class TestingOpMode extends LinearOpMode {
     }
 
     public void initialize() {
-        motion = new Motion();
+        motion = new Motion(this);
         menu = new Menu(this);
         menu.add(new MenuItem(0.0, "power", 0.0, 1.0, 0.05));
         while (!isStarted()) {

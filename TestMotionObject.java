@@ -10,7 +10,7 @@ public class TestMotionObject extends LinearOpMode  {
     boolean BACKWARD = false;
 
     public void runOpMode() {
-        motion = new Motion();
+        motion = new Motion(this);
         waitForStart();
         motion.driveStraight(0.5, 200, FORWARD);
     }
