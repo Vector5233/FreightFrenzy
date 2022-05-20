@@ -9,9 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-class Motion {
+class Motion2 {
 
     DcMotor FL, FR, BL, BR;
 
@@ -24,7 +23,10 @@ class Motion {
     int BLFinalPosition = 0;
     int BRFinalPosition = 0;
 
-    public Motion(LinearOpMode p) {
+    final int DECEL_TICKS = 75;
+    final double DECEL_POWER = 0.15;
+
+    public Motion2(LinearOpMode p) {
         parent = p;
         FL = parent.hardwareMap.dcMotor.get("frontLeft");
         FR = parent.hardwareMap.dcMotor.get("frontRight");
@@ -50,9 +52,8 @@ class Motion {
     public void setPowerAll(double power) {
         FL.setPower(power);
         FR.setPower(power);
-        BR.setPower(power);
         BL.setPower(power);
-
+        BR.setPower(power);
     }
 
 
@@ -63,60 +64,65 @@ class Motion {
         BR.setTargetPosition(target);
     }
 
-    public void driveStraight(double power, int ticks, boolean direction) {
-        double currentFL, currentBL, currentFR, currentBR;
-        double tInit=0, tBR=0, tBL=0, tFR=0, tFL=0;
+    private double adjustPower(double power, int currentPos, int leadPos) {
+        /*
+         * return power for motor based on current position
+         * relative to the lead motor position
+         */
 
-        ElapsedTime timer = new ElapsedTime();
-        final double LAMBDA = 0.03;
-        final int SLOWDOWN_TICKS = 150;
-        final double SLOWDOWN_POWER = 0.15;
+        final double LAMBDA = 0.01;
+
+        power = power* (1+LAMBDA*(leadPos - currentPos));
+        if (power < 0) {
+            power = 0;
+        }
+        else if (power > 1) {
+            power = 1;
+        }
+        return power;
+    }
+    public void driveStraight(double power, int ticks, boolean direction) {
+        int oldFL, oldFR, oldBL, oldBR;
+        int currentFL, currentFR, currentBL, currentBR;
+        //double lambda;
+        int remaining;
+
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        parent.sleep(10);
-        if(direction == FORWARD) {
+        parent.sleep(50);
+        if (direction == FORWARD) {
             setTargetAll(ticks);
-        }else{
+        }
+        else {
             setTargetAll(-ticks);
         }
+
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+        oldFL = FL.getCurrentPosition();
+        oldFR = FR.getCurrentPosition();
+        oldBL = BL.getCurrentPosition();
+        oldBR = BR.getCurrentPosition();
         setPowerAll(power);
         while (FL.isBusy() && parent.opModeIsActive()) {
-            tInit = timer.milliseconds();
-            currentBL = BL.getCurrentPosition();
-            tBL = timer.milliseconds();
-            currentBR = BR.getCurrentPosition();
-            tBR = timer.milliseconds();
-            currentFR = FR.getCurrentPosition();
-            tFR = timer.milliseconds();
             currentFL = FL.getCurrentPosition();
-            tFL = timer.milliseconds();
-            //  Acceleration control -
-            if (ticks - currentFL < SLOWDOWN_TICKS && power > SLOWDOWN_POWER) {
-                power = SLOWDOWN_POWER;
-                FL.setPower(power);
+            currentFR = FR.getCurrentPosition();
+            currentBL = BL.getCurrentPosition();
+            currentBR = BR.getCurrentPosition();
+
+            FR.setPower(adjustPower(power, currentFR, currentFL));
+            BL.setPower(adjustPower(power, currentBL, currentFL));
+            BR.setPower(adjustPower(power, currentBR, currentFL));
+
+            remaining = currentFL - ticks;
+            if (remaining <= DECEL_TICKS) {
+                setPowerAll(DECEL_POWER);
             }
 
-
-
-            // PID control
-            if(direction == FORWARD) {
-                BL.setPower(power + LAMBDA * (currentFL - currentBL));
-                BR.setPower(power + LAMBDA * (currentFL - currentBR));
-                FR.setPower(power + LAMBDA * (currentFL - currentFR));
-            }else{
-                BL.setPower(power - LAMBDA * (currentFL - currentBL));
-                BR.setPower(power - LAMBDA * (currentFL - currentBR));
-                FR.setPower(power - LAMBDA * (currentFL - currentFR));
-            }
-
-             //
+            oldFL= FL.getCurrentPosition();
+            oldFR = FR.getCurrentPosition();
+            oldBL = BL.getCurrentPosition();
+            oldBR = BR.getCurrentPosition();
 
         }
-        parent.telemetry.addData("FL time", tFL-tFR);
-        parent.telemetry.addData("FR time", tFR-tBR);
-        parent.telemetry.addData("BR time", tBR-tBL);
-        parent.telemetry.addData("BL time", tBL-tInit);
-        parent.telemetry.update();
         setPowerAll(0);
         recordFinalPosition();
         setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -137,4 +143,13 @@ class Motion {
         return s;
     }
 
+    public String strAllEncoders() {
+
+        String s = String.format("...\nFL: %d   FR: %d \n BL: %d    BR: %d\n\n",
+                FL.getCurrentPosition(),
+                FR.getCurrentPosition(),
+                BL.getCurrentPosition(),
+                BR.getCurrentPosition());
+        return s;
+    }
 }

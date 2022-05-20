@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-@Autonomous(name ="TestMotionObject", group="experiments")
-public class TestMotionObject extends LinearOpMode  {
-    Motion motion;
+@Disabled
+@Autonomous(name ="TestMotion2Object", group="experiments")
+public class TestMotion2Object extends LinearOpMode  {
+    Motion2 motion;
     boolean FORWARD = true;
     boolean BACKWARD = false;
     double power = 0.0;
@@ -23,10 +24,10 @@ public class TestMotionObject extends LinearOpMode  {
             menu.update();
             menu.display();
         }
-        motion = new Motion(this);
+        motion = new Motion2(this);
         power = menu.get(0);
         ticks = (int)(menu.get(1));
-        Log.i(tag, "------\nSTART OF TEST: Motion.driveStraight\n-------\n");
+        Log.i(tag, "------\nSTART OF TEST: Motion2.driveStraight\n-------\n");
         Log.i(tag,String.format("power %f   ticks %d\n", power, ticks));
 
         waitForStart();
