@@ -64,8 +64,9 @@ class Motion {
     }
 
     public void driveStraight(double power, int ticks, boolean direction) {
-        double currentFL, currentBL, currentFR, currentBR;
+        int currentFL, currentBL, currentFR, currentBR;
         double tInit=0, tBR=0, tBL=0, tFR=0, tFL=0;
+
 
         ElapsedTime timer = new ElapsedTime();
         final double LAMBDA = 0.03;
@@ -81,41 +82,34 @@ class Motion {
         setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerAll(power);
         while (FL.isBusy() && parent.opModeIsActive()) {
-            tInit = timer.milliseconds();
-            currentBL = BL.getCurrentPosition();
-            tBL = timer.milliseconds();
-            currentBR = BR.getCurrentPosition();
-            tBR = timer.milliseconds();
-            currentFR = FR.getCurrentPosition();
-            tFR = timer.milliseconds();
+
             currentFL = FL.getCurrentPosition();
-            tFL = timer.milliseconds();
-            //  Acceleration control -
-            if (ticks - currentFL < SLOWDOWN_TICKS && power > SLOWDOWN_POWER) {
-                power = SLOWDOWN_POWER;
-                FL.setPower(power);
-            }
+            currentBL = BL.getCurrentPosition();
+            currentBR = BR.getCurrentPosition();
+            currentFR = FR.getCurrentPosition();
 
-
+            double BLpower = LAMBDA*(currentFL - currentBL);
+            double BRpower = LAMBDA*(currentFL - currentBR);
+            double FRpower = LAMBDA*(currentFL - currentFR);
 
             // PID control
             if(direction == FORWARD) {
-                BL.setPower(power + LAMBDA * (currentFL - currentBL));
-                BR.setPower(power + LAMBDA * (currentFL - currentBR));
-                FR.setPower(power + LAMBDA * (currentFL - currentFR));
+                BL.setPower(power + BLpower);
+                BR.setPower(power + BRpower);
+                FR.setPower(power + FRpower);
             }else{
-                BL.setPower(power - LAMBDA * (currentFL - currentBL));
-                BR.setPower(power - LAMBDA * (currentFL - currentBR));
-                FR.setPower(power - LAMBDA * (currentFL - currentFR));
+                BL.setPower(power - BLpower);
+                BR.setPower(power - BRpower);
+                FR.setPower(power - FRpower);
             }
 
              //
 
         }
-        parent.telemetry.addData("FL time", tFL-tFR);
-        parent.telemetry.addData("FR time", tFR-tBR);
-        parent.telemetry.addData("BR time", tBR-tBL);
-        parent.telemetry.addData("BL time", tBL-tInit);
+        //parent.telemetry.addData("FL time", tFL-tFR);
+        //parent.telemetry.addData("FR time", tFR-tBR);
+        //parent.telemetry.addData("BR time", tBR-tBL);
+        //parent.telemetry.addData("BL time", tBL-tInit);
         parent.telemetry.update();
         setPowerAll(0);
         recordFinalPosition();
