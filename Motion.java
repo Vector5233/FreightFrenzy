@@ -66,7 +66,9 @@ class Motion {
     public void driveStraight(double power, int ticks, boolean direction) {
         int currentFL, currentBL, currentFR, currentBR;
         double tInit=0, tBR=0, tBL=0, tFR=0, tFL=0;
+        String tag = "driveStraight";
 
+        final int SLOW_TICKS = 100;
 
         ElapsedTime timer = new ElapsedTime();
         final double LAMBDA = 0.03;
@@ -88,6 +90,14 @@ class Motion {
             currentBR = BR.getCurrentPosition();
             currentFR = FR.getCurrentPosition();
 
+            //acceleration control
+            if (Math.abs(ticks - currentFL) < SLOWDOWN_TICKS) {
+                power = SLOWDOWN_POWER;
+                FL.setPower(power);
+            }
+
+            Log.i(tag, "FL:"+currentFL+ " FR:"+
+                    currentFR+" BL:"+currentBL+" BR:"+currentBR);
             double BLpower = LAMBDA*(currentFL - currentBL);
             double BRpower = LAMBDA*(currentFL - currentBR);
             double FRpower = LAMBDA*(currentFL - currentFR);
